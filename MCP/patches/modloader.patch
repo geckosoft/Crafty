@@ -1,0 +1,133 @@
+diff -r net/minecraft/src/BlockDispenser.java
+--- a/net/minecraft/src/BlockDispenser.java	Sat Feb 26 05:57:07 2011 +0100
++++ b/net/minecraft/src/BlockDispenser.java	Sat Feb 26 06:38:18 2011 +0100
+@@ -138,6 +138,12 @@
+             world.playSoundEffect(i, j, k, "random.click", 1.0F, 1.2F);
+         } else
+         {
++            Entity entity = ModLoader.DispenseEntity(world, d, d1, d2, f, f1, itemstack.itemID);
++            if(entity != null)
++            {
++                world.entityJoinedWorld(entity);
++                world.playSoundEffect(i, j, k, "random.bow", 1.0F, 1.2F);
++            } else
+             if(itemstack.itemID == Item.arrow.shiftedIndex)
+             {
+                 EntityArrow entityarrow = new EntityArrow(world, d, d1, d2);
+diff -r net/minecraft/src/ChunkProviderLoadOrGenerate.java
+--- a/net/minecraft/src/ChunkProviderLoadOrGenerate.java	Sat Feb 26 05:57:07 2011 +0100
++++ b/net/minecraft/src/ChunkProviderLoadOrGenerate.java	Sat Feb 26 06:38:18 2011 +0100
+@@ -175,6 +175,7 @@
+             if(chunkProvider != null)
+             {
+                 chunkProvider.populate(ichunkprovider, i, j);
++                ModLoader.PopulateChunk(chunkProvider, i * 16, j * 16, worldObj);
+                 chunk.setChunkModified();
+             }
+         }
+diff -r net/minecraft/src/CraftingManager.java
+--- a/net/minecraft/src/CraftingManager.java	Sat Feb 26 05:57:07 2011 +0100
++++ b/net/minecraft/src/CraftingManager.java	Sat Feb 26 06:38:18 2011 +0100
+@@ -24,6 +24,7 @@
+         (new RecipesCrafting()).addRecipes(this);
+         (new RecipesArmor()).addRecipes(this);
+         (new RecipesDyes()).addRecipes(this);
++        ModLoader.AddAllRecipes(this);
+         addRecipe(new ItemStack(Item.paper, 3), new Object[] {
+             "###", Character.valueOf('#'), Item.reed
+         });
+diff -r net/minecraft/src/FontRenderer.java
+--- a/net/minecraft/src/FontRenderer.java	Sat Feb 26 05:57:07 2011 +0100
++++ b/net/minecraft/src/FontRenderer.java	Sat Feb 26 06:38:18 2011 +0100
+@@ -118,6 +118,7 @@
+             GL11.glEndList();
+         }
+ 
++        ModLoader.RegisterAllTextureOverrides(renderengine);
+     }
+ 
+     public void drawStringWithShadow(String s, int i, int j, int k)
+diff -r net/minecraft/src/GameSettings.java
+--- a/net/minecraft/src/GameSettings.java	Sat Feb 26 05:57:07 2011 +0100
++++ b/net/minecraft/src/GameSettings.java	Sat Feb 26 06:38:18 2011 +0100
+@@ -48,6 +48,7 @@
+         field_22271_G = 1.0F;
+         mc = minecraft;
+         optionsFile = new File(file, "options.txt");
++        keyBindings = ModLoader.RegisterAllKeys(keyBindings);
+         loadOptions();
+     }
+ 
+diff -r net/minecraft/src/GuiIngame.java
+--- a/net/minecraft/src/GuiIngame.java	Sat Feb 26 05:57:07 2011 +0100
++++ b/net/minecraft/src/GuiIngame.java	Sat Feb 26 06:38:18 2011 +0100
+@@ -167,6 +167,7 @@
+             GL11.glEnable(3008 /*GL_ALPHA_TEST*/);
+             GL11.glEnable(2929 /*GL_DEPTH_TEST*/);
+         }
++        ModLoader.RunOSDHooks(mc);
+         if(mc.gameSettings.showDebugInfo)
+         {
+             fontrenderer.drawStringWithShadow((new StringBuilder()).append("Minecraft Beta 1.3_01 (").append(mc.debug).append(")").toString(), 2, 2, 0xffffff);
+diff -r net/minecraft/src/PanelCrashReport.java
+--- a/net/minecraft/src/PanelCrashReport.java	Sat Feb 26 05:57:07 2011 +0100
++++ b/net/minecraft/src/PanelCrashReport.java	Sat Feb 26 06:38:18 2011 +0100
+@@ -8,6 +8,8 @@
+ import java.io.StringWriter;
+ import java.text.SimpleDateFormat;
+ import java.util.Date;
++import java.util.Iterator;
++
+ import org.lwjgl.Sys;
+ import org.lwjgl.opengl.GL11;
+ 
+@@ -42,6 +44,14 @@
+         s2 = (new StringBuilder()).append(s2).append("\n").toString();
+         s2 = (new StringBuilder()).append(s2).append(s).toString();
+         String s3 = "";
++        s3 = (new StringBuilder(String.valueOf(s3))).append("Mods loaded: ").append(ModLoader.getLoadedMods().size() + 1).append("\n").toString();
++        s3 = (new StringBuilder(String.valueOf(s3))).append("ModLoader Beta 1.3_01v3").append("\n").toString();
++        for(Iterator iterator = ModLoader.getLoadedMods().iterator(); iterator.hasNext();)
++        {
++            BaseMod basemod = (BaseMod)iterator.next();
++            s3 = (new StringBuilder(String.valueOf(s3))).append(basemod.getClass().getName()).append(" ").append(basemod.Version()).append("\n").toString();
++        }
++        
+         s3 = (new StringBuilder()).append(s3).append("\n").toString();
+         s3 = (new StringBuilder()).append(s3).append("\n").toString();
+         if(s.contains("Pixel format not accelerated"))
+diff -r net/minecraft/src/RenderBlocks.java
+--- a/net/minecraft/src/RenderBlocks.java	Sat Feb 26 05:57:07 2011 +0100
++++ b/net/minecraft/src/RenderBlocks.java	Sat Feb 26 06:38:18 2011 +0100
+@@ -102,7 +102,7 @@
+             return renderBlockRepeater(block, i, j, k);
+         } else
+         {
+-            return false;
++            return ModLoader.RenderBlock(this, blockAccess, i, j, k, block, l);
+         }
+     }
+ 
+diff -r net/minecraft/src/RenderManager.java
+--- a/net/minecraft/src/RenderManager.java	Sat Feb 26 05:57:07 2011 +0100
++++ b/net/minecraft/src/RenderManager.java	Sat Feb 26 06:38:18 2011 +0100
+@@ -38,6 +38,7 @@
+         entityRenderMap.put(EntityMinecart.class, new RenderMinecart());
+         entityRenderMap.put(EntityBoat.class, new RenderBoat());
+         entityRenderMap.put(EntityFish.class, new RenderFish());
++        ModLoader.AddAllRenderers(entityRenderMap);
+         Render render;
+         for(Iterator iterator = entityRenderMap.values().iterator(); iterator.hasNext(); render.setRenderManager(this))
+         {
+diff -r net/minecraft/src/TileEntityFurnace.java
+--- a/net/minecraft/src/TileEntityFurnace.java	Sat Feb 26 05:57:07 2011 +0100
++++ b/net/minecraft/src/TileEntityFurnace.java	Sat Feb 26 06:38:18 2011 +0100
+@@ -244,7 +244,7 @@
+         {
+             return 1600;
+         }
+-        return i != Item.bucketLava.shiftedIndex ? 0 : 20000;
++        return i != Item.bucketLava.shiftedIndex ? ModLoader.AddAllFuel(i) : 20000;
+     }
+ 
+     public boolean canInteractWith(EntityPlayer entityplayer)
