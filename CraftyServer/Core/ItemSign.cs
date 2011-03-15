@@ -47,7 +47,7 @@ namespace CraftyServer.Core
             {
                 world.setBlockAndMetadataWithNotify(i, j, k, Block.signPost.blockID,
                                                     MathHelper.floor_double(
-                                                        (double) (((entityplayer.rotationYaw + 180F)*16F)/360F) + 0.5D) &
+                                                        (((entityplayer.rotationYaw + 180F)*16F)/360F) + 0.5D) &
                                                     0xf);
             }
             else
@@ -55,7 +55,7 @@ namespace CraftyServer.Core
                 world.setBlockAndMetadataWithNotify(i, j, k, Block.signWall.blockID, l);
             }
             itemstack.stackSize--;
-            TileEntitySign tileentitysign = (TileEntitySign) world.getBlockTileEntity(i, j, k);
+            var tileentitysign = (TileEntitySign) world.getBlockTileEntity(i, j, k);
             if (tileentitysign != null)
             {
                 entityplayer.displayGUIEditSign(tileentitysign);

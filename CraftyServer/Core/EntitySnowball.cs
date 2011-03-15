@@ -1,11 +1,20 @@
-using java.util;
 using java.lang;
-
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class EntitySnowball : Entity
     {
+        private readonly EntityLiving owner;
+        private bool inGroundSnowball;
+        private int inTileSnowball;
+        public int shakeSnowball;
+        private int ticksInAir;
+        private int ticksOnGround;
+        private int xTileSnowball;
+        private int yTileSnowball;
+        private int zTileSnowball;
+
         public EntitySnowball(World world) : base(world)
         {
             xTileSnowball = -1;
@@ -16,10 +25,6 @@ namespace CraftyServer.Core
             shakeSnowball = 0;
             ticksInAir = 0;
             setSize(0.25F, 0.25F);
-        }
-
-        protected override void entityInit()
-        {
         }
 
         public EntitySnowball(World world, EntityLiving entityliving)
@@ -34,7 +39,7 @@ namespace CraftyServer.Core
             ticksInAir = 0;
             owner = entityliving;
             setSize(0.25F, 0.25F);
-            setLocationAndAngles(entityliving.posX, entityliving.posY + (double) entityliving.getEyeHeight(),
+            setLocationAndAngles(entityliving.posX, entityliving.posY + entityliving.getEyeHeight(),
                                  entityliving.posZ, entityliving.rotationYaw, entityliving.rotationPitch);
             posX -= MathHelper.cos((rotationYaw/180F)*3.141593F)*0.16F;
             posY -= 0.10000000149011612D;
@@ -64,6 +69,10 @@ namespace CraftyServer.Core
             yOffset = 0.0F;
         }
 
+        protected override void entityInit()
+        {
+        }
+
         public void func_6141_a(double d, double d1, double d2, float f,
                                 float f1)
         {
@@ -71,9 +80,9 @@ namespace CraftyServer.Core
             d /= f2;
             d1 /= f2;
             d2 /= f2;
-            d += rand.nextGaussian()*0.0074999998323619366D*(double) f1;
-            d1 += rand.nextGaussian()*0.0074999998323619366D*(double) f1;
-            d2 += rand.nextGaussian()*0.0074999998323619366D*(double) f1;
+            d += rand.nextGaussian()*0.0074999998323619366D*f1;
+            d1 += rand.nextGaussian()*0.0074999998323619366D*f1;
+            d2 += rand.nextGaussian()*0.0074999998323619366D*f1;
             d *= f;
             d1 *= f;
             d2 *= f;
@@ -141,7 +150,7 @@ namespace CraftyServer.Core
                 double d = 0.0D;
                 for (int l = 0; l < list.size(); l++)
                 {
-                    Entity entity1 = (Entity) list.get(l);
+                    var entity1 = (Entity) list.get(l);
                     if (!entity1.canBeCollidedWith() || entity1 == owner && ticksInAir < 5)
                     {
                         continue;
@@ -207,8 +216,8 @@ namespace CraftyServer.Core
                 for (int k = 0; k < 4; k++)
                 {
                     float f3 = 0.25F;
-                    worldObj.spawnParticle("bubble", posX - motionX*(double) f3, posY - motionY*(double) f3,
-                                           posZ - motionZ*(double) f3, motionX, motionY, motionZ);
+                    worldObj.spawnParticle("bubble", posX - motionX*f3, posY - motionY*f3,
+                                           posZ - motionZ*f3, motionX, motionY, motionZ);
                 }
 
                 f1 = 0.8F;
@@ -251,15 +260,5 @@ namespace CraftyServer.Core
                 setEntityDead();
             }
         }
-
-        private int xTileSnowball;
-        private int yTileSnowball;
-        private int zTileSnowball;
-        private int inTileSnowball;
-        private bool inGroundSnowball;
-        public int shakeSnowball;
-        private EntityLiving owner;
-        private int ticksOnGround;
-        private int ticksInAir;
     }
 }

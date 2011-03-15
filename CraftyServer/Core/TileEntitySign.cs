@@ -4,6 +4,12 @@ namespace CraftyServer.Core
 {
     public class TileEntitySign : TileEntity
     {
+        public int lineBeingEdited;
+
+        public string[] signText = {
+                                       "", "", "", ""
+                                   };
+
         public TileEntitySign()
         {
             lineBeingEdited = -1;
@@ -33,7 +39,7 @@ namespace CraftyServer.Core
 
         public override Packet getDescriptionPacket()
         {
-            string[] ask = new string[4];
+            var ask = new string[4];
             for (int i = 0; i < 4; i++)
             {
                 ask[i] = signText[i];
@@ -41,11 +47,5 @@ namespace CraftyServer.Core
 
             return new Packet130(xCoord, yCoord, zCoord, ask);
         }
-
-        public string[] signText = {
-                                       "", "", "", ""
-                                   };
-
-        public int lineBeingEdited;
     }
 }

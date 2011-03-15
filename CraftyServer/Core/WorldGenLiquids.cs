@@ -1,10 +1,11 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class WorldGenLiquids : WorldGenerator
     {
+        private readonly int liquidBlockId;
+
         public WorldGenLiquids(int i)
         {
             liquidBlockId = i;
@@ -67,7 +68,5 @@ namespace CraftyServer.Core
             }
             return true;
         }
-
-        private int liquidBlockId;
     }
 }

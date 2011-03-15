@@ -1,117 +1,17 @@
 using java.io;
-using java.util;
 using java.lang;
+using java.util;
 
 namespace CraftyServer.Core
 {
     public abstract class Packet
     {
-        public Packet()
-        {
-            isChunkDataPacket = false;
-        }
-
-        public static void addIdClassMapping(int i, Class class1)
-        {
-            if (packetIdToClassMap.containsKey(java.lang.Integer.valueOf(i)))
-            {
-                throw new IllegalArgumentException(
-                    (new StringBuilder()).append("Duplicate packet id:").append(i).toString());
-            }
-            if (packetClassToIdMap.containsKey(class1))
-            {
-                throw new IllegalArgumentException(
-                    (new StringBuilder()).append("Duplicate packet class:").append(class1).toString());
-            }
-            else
-            {
-                packetIdToClassMap.put(java.lang.Integer.valueOf(i), class1);
-                packetClassToIdMap.put(class1, java.lang.Integer.valueOf(i));
-                return;
-            }
-        }
-
-        public static Packet getNewPacket(int i)
-        {
-            try
-            {
-                Class class1 = (Class) packetIdToClassMap.get(java.lang.Integer.valueOf(i));
-                if (class1 == null)
-                {
-                    return null;
-                }
-                else
-                {
-                    return (Packet) class1.newInstance();
-                }
-            }
-            catch (Exception exception)
-            {
-                exception.printStackTrace();
-            }
-            java.lang.System.@out.println((new StringBuilder()).append("Skipping packet with id ").append(i).toString());
-            return null;
-        }
-
-        public int getPacketId()
-        {
-            return ((java.lang.Integer) packetClassToIdMap.get((Class) GetType())).intValue();
-        }
-
-        public static Packet readPacket(DataInputStream datainputstream)
-        {
-            int i = 0;
-            Packet packet = null;
-            datainputstream.mark(16384);
-            try
-            {
-                i = datainputstream.read();
-                if (i == -1)
-                {
-                    return null;
-                }
-                packet = getNewPacket(i);
-                if (packet == null)
-                {
-                    throw new IOException((new StringBuilder()).append("Bad packet id ").append(i).toString());
-                }
-                packet.readPacketData(datainputstream);
-            }
-            catch (EOFException eofexception)
-            {
-                java.lang.System.@out.println("Reached end of stream");
-                datainputstream.reset();
-                return null;
-            }
-            PacketCounter packetcounter = (PacketCounter) field_21904_c.get(java.lang.Integer.valueOf(i));
-            if (packetcounter == null)
-            {
-                packetcounter = new PacketCounter(null);
-                field_21904_c.put(java.lang.Integer.valueOf(i), packetcounter);
-            }
-            packetcounter.func_22150_a(packet.getPacketSize());
-            field_21903_d++;
-            if (field_21903_d%1000 != 0) ;
-            return packet;
-        }
-
-        public static void writePacket(Packet packet, DataOutputStream dataoutputstream)
-        {
-            dataoutputstream.write(packet.getPacketId());
-            packet.writePacketData(dataoutputstream);
-        }
-
-        public abstract void readPacketData(DataInputStream datainputstream);
-        public abstract void writePacketData(DataOutputStream dataoutputstream);
-        public abstract void processPacket(NetHandler nethandler);
-        public abstract int getPacketSize();
-
-        private static Map packetIdToClassMap = new HashMap();
-        private static Map packetClassToIdMap = new HashMap();
+        private static readonly Map packetIdToClassMap = new HashMap();
+        private static readonly Map packetClassToIdMap = new HashMap();
+        private static readonly HashMap field_21904_c = new HashMap();
+        private static int field_21903_d;
         public long creationTimeMillis = java.lang.System.currentTimeMillis();
         public bool isChunkDataPacket;
-        private static HashMap field_21904_c = new HashMap();
-        private static int field_21903_d = 0;
 
         static Packet()
         {
@@ -168,5 +68,105 @@ namespace CraftyServer.Core
             addIdClassMapping(130, typeof (Packet130));
             addIdClassMapping(255, typeof (Packet255KickDisconnect));
         }
+
+        public Packet()
+        {
+            isChunkDataPacket = false;
+        }
+
+        public static void addIdClassMapping(int i, Class class1)
+        {
+            if (packetIdToClassMap.containsKey(Integer.valueOf(i)))
+            {
+                throw new IllegalArgumentException(
+                    (new StringBuilder()).append("Duplicate packet id:").append(i).toString());
+            }
+            if (packetClassToIdMap.containsKey(class1))
+            {
+                throw new IllegalArgumentException(
+                    (new StringBuilder()).append("Duplicate packet class:").append(class1).toString());
+            }
+            else
+            {
+                packetIdToClassMap.put(Integer.valueOf(i), class1);
+                packetClassToIdMap.put(class1, Integer.valueOf(i));
+                return;
+            }
+        }
+
+        public static Packet getNewPacket(int i)
+        {
+            try
+            {
+                var class1 = (Class) packetIdToClassMap.get(Integer.valueOf(i));
+                if (class1 == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return (Packet) class1.newInstance();
+                }
+            }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            }
+            java.lang.System.@out.println((new StringBuilder()).append("Skipping packet with id ").append(i).toString());
+            return null;
+        }
+
+        public int getPacketId()
+        {
+            return ((Integer) packetClassToIdMap.get((Class) GetType())).intValue();
+        }
+
+        public static Packet readPacket(DataInputStream datainputstream)
+        {
+            int i = 0;
+            Packet packet = null;
+            datainputstream.mark(16384);
+            try
+            {
+                i = datainputstream.read();
+                if (i == -1)
+                {
+                    return null;
+                }
+                packet = getNewPacket(i);
+                if (packet == null)
+                {
+                    throw new IOException((new StringBuilder()).append("Bad packet id ").append(i).toString());
+                }
+                packet.readPacketData(datainputstream);
+            }
+            catch (EOFException eofexception)
+            {
+                java.lang.System.@out.println("Reached end of stream");
+                datainputstream.reset();
+                return null;
+            }
+            var packetcounter = (PacketCounter) field_21904_c.get(Integer.valueOf(i));
+            if (packetcounter == null)
+            {
+                packetcounter = new PacketCounter(null);
+                field_21904_c.put(Integer.valueOf(i), packetcounter);
+            }
+            packetcounter.func_22150_a(packet.getPacketSize());
+            field_21903_d++;
+            if (field_21903_d%1000 != 0) ;
+            return packet;
+        }
+
+        public static void writePacket(Packet packet, DataOutputStream dataoutputstream)
+        {
+            dataoutputstream.write(packet.getPacketId());
+            packet.writePacketData(dataoutputstream);
+        }
+
+        public abstract void readPacketData(DataInputStream datainputstream);
+        public abstract void writePacketData(DataOutputStream dataoutputstream);
+        public abstract void processPacket(NetHandler nethandler);
+        public abstract int getPacketSize();
     }
 }

@@ -4,6 +4,9 @@ namespace CraftyServer.Core
 {
     public class BlockRedstoneWire : Block
     {
+        private readonly Set field_21032_b;
+        private bool wiresProvidePower;
+
         public BlockRedstoneWire(int i, int j)
             : base(i, j, Material.circuits)
         {
@@ -35,11 +38,11 @@ namespace CraftyServer.Core
         private void updateAndPropagateCurrentStrength(World world, int i, int j, int k)
         {
             func_21031_a(world, i, j, k, i, j, k);
-            ArrayList arraylist = new ArrayList(field_21032_b);
+            var arraylist = new ArrayList(field_21032_b);
             field_21032_b.clear();
             for (int l = 0; l < arraylist.size(); l++)
             {
-                ChunkPosition chunkposition = (ChunkPosition) arraylist.get(l);
+                var chunkposition = (ChunkPosition) arraylist.get(l);
                 world.notifyBlocksOfNeighborChange(chunkposition.x, chunkposition.y, chunkposition.z, blockID);
             }
         }
@@ -412,7 +415,7 @@ namespace CraftyServer.Core
         public static bool isPowerProviderOrWire(IBlockAccess iblockaccess, int i, int j, int k)
         {
             int l = iblockaccess.getBlockId(i, j, k);
-            if (l == Block.redstoneWire.blockID)
+            if (l == redstoneWire.blockID)
             {
                 return true;
             }
@@ -420,10 +423,7 @@ namespace CraftyServer.Core
             {
                 return false;
             }
-            return Block.blocksList[l].canProvidePower();
+            return blocksList[l].canProvidePower();
         }
-
-        private bool wiresProvidePower;
-        private Set field_21032_b;
     }
 }

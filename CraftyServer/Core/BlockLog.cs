@@ -1,6 +1,5 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockLog : Block
@@ -17,7 +16,7 @@ namespace CraftyServer.Core
 
         public override int idDropped(int i, Random random)
         {
-            return Block.wood.blockID;
+            return wood.blockID;
         }
 
         public override void onBlockRemoval(World world, int i, int j, int k)
@@ -33,7 +32,7 @@ namespace CraftyServer.Core
                         for (int k1 = -byte0; k1 <= byte0; k1++)
                         {
                             int l1 = world.getBlockId(i + i1, j + j1, k + k1);
-                            if (l1 != Block.leaves.blockID)
+                            if (l1 != leaves.blockID)
                             {
                                 continue;
                             }

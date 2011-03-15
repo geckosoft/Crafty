@@ -4,6 +4,8 @@ namespace CraftyServer.Core
 {
     public class Packet4UpdateTime : Packet
     {
+        public long time;
+
         public Packet4UpdateTime()
         {
         }
@@ -32,7 +34,5 @@ namespace CraftyServer.Core
         {
             return 8;
         }
-
-        public long time;
     }
 }

@@ -2,6 +2,8 @@ namespace CraftyServer.Core
 {
     public class ItemFood : Item
     {
+        private readonly int healAmount;
+
         public ItemFood(int i, int j) : base(i)
         {
             healAmount = j;
@@ -14,7 +16,5 @@ namespace CraftyServer.Core
             entityplayer.heal(healAmount);
             return itemstack;
         }
-
-        private int healAmount;
     }
 }

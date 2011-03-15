@@ -4,6 +4,12 @@ namespace CraftyServer.Core
 {
     public class Packet54 : Packet
     {
+        public int instrumentType;
+        public int pitch;
+        public int xLocation;
+        public int yLocation;
+        public int zLocation;
+
         public Packet54()
         {
         }
@@ -44,11 +50,5 @@ namespace CraftyServer.Core
         {
             return 12;
         }
-
-        public int xLocation;
-        public int yLocation;
-        public int zLocation;
-        public int instrumentType;
-        public int pitch;
     }
 }

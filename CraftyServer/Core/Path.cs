@@ -1,9 +1,13 @@
+using System;
 using java.lang;
 
 namespace CraftyServer.Core
 {
     public class Path
     {
+        private int count;
+        private PathPoint[] pathPoints;
+
         public Path()
         {
             pathPoints = new PathPoint[1024];
@@ -18,8 +22,8 @@ namespace CraftyServer.Core
             }
             if (count == pathPoints.Length)
             {
-                PathPoint[] apathpoint = new PathPoint[count << 1];
-                System.Array.Copy(pathPoints, 0, apathpoint, 0, count);
+                var apathpoint = new PathPoint[count << 1];
+                Array.Copy(pathPoints, 0, apathpoint, 0, count);
                 pathPoints = apathpoint;
             }
             pathPoints[count] = pathpoint;
@@ -137,8 +141,5 @@ namespace CraftyServer.Core
         {
             return count == 0;
         }
-
-        private PathPoint[] pathPoints;
-        private int count;
     }
 }

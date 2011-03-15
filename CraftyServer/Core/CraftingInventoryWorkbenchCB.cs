@@ -2,6 +2,13 @@ namespace CraftyServer.Core
 {
     public class CraftingInventoryWorkbenchCB : CraftingInventoryCB
     {
+        private readonly int field_20147_j;
+        private readonly int field_20148_i;
+        private readonly int field_20149_h;
+        private readonly World field_20150_c;
+        public InventoryCrafting craftMatrix;
+        public IInventory craftResult;
+
         public CraftingInventoryWorkbenchCB(InventoryPlayer inventoryplayer, World world, int i, int j, int k)
         {
             craftMatrix = new InventoryCrafting(this, 3, 3);
@@ -60,15 +67,8 @@ namespace CraftyServer.Core
                 return false;
             }
             return
-                entityplayer.getDistanceSq((double) field_20149_h + 0.5D, (double) field_20148_i + 0.5D,
-                                           (double) field_20147_j + 0.5D) <= 64D;
+                entityplayer.getDistanceSq(field_20149_h + 0.5D, field_20148_i + 0.5D,
+                                           field_20147_j + 0.5D) <= 64D;
         }
-
-        public InventoryCrafting craftMatrix;
-        public IInventory craftResult;
-        private World field_20150_c;
-        private int field_20149_h;
-        private int field_20148_i;
-        private int field_20147_j;
     }
 }

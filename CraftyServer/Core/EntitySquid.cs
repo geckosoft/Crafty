@@ -1,10 +1,24 @@
 using java.lang;
 
-
 namespace CraftyServer.Core
 {
     public class EntitySquid : EntityWaterMob
     {
+        private float field_21050_at;
+        private float field_21051_as;
+        private float field_21052_ar;
+        private float field_21053_aq;
+        private float field_21054_ap;
+        private float field_21055_ao;
+        public float field_21056_an;
+        public float field_21057_am;
+        public float field_21058_al;
+        public float field_21059_f;
+        public float field_21060_ak;
+        public float field_21061_c;
+        public float field_21062_b;
+        public float field_21063_a;
+
         public EntitySquid(World world) : base(world)
         {
             field_21063_a = 0.0F;
@@ -103,7 +117,7 @@ namespace CraftyServer.Core
                 {
                     float f = field_21060_ak/3.141593F;
                     field_21057_am = MathHelper.sin(f*f*3.141593F)*3.141593F*0.25F;
-                    if ((double) f > 0.75D)
+                    if (f > 0.75D)
                     {
                         field_21055_ao = 1.0F;
                         field_21053_aq = 1.0F;
@@ -141,7 +155,7 @@ namespace CraftyServer.Core
                     motionY *= 0.98000001907348633D;
                     motionZ = 0.0D;
                 }
-                field_21063_a += (float) ((double) (-90F - field_21063_a)*0.02D);
+                field_21063_a += (float) ((-90F - field_21063_a)*0.02D);
             }
         }
 
@@ -161,20 +175,5 @@ namespace CraftyServer.Core
                 field_21050_at = MathHelper.sin(f)*0.2F;
             }
         }
-
-        public float field_21063_a;
-        public float field_21062_b;
-        public float field_21061_c;
-        public float field_21059_f;
-        public float field_21060_ak;
-        public float field_21058_al;
-        public float field_21057_am;
-        public float field_21056_an;
-        private float field_21055_ao;
-        private float field_21054_ap;
-        private float field_21053_aq;
-        private float field_21052_ar;
-        private float field_21051_as;
-        private float field_21050_at;
     }
 }

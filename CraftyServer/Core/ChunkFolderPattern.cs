@@ -6,9 +6,17 @@ namespace CraftyServer.Core
     public class ChunkFolderPattern
         : FileFilter
     {
+        public static Pattern field_22214_a = Pattern.compile("[0-9a-z]|([0-9a-z][0-9a-z])");
+
         public ChunkFolderPattern()
         {
         }
+
+        public ChunkFolderPattern(Empty2 empty2) : this()
+        {
+        }
+
+        #region FileFilter Members
 
         public bool accept(File file)
         {
@@ -23,10 +31,6 @@ namespace CraftyServer.Core
             }
         }
 
-        public ChunkFolderPattern(Empty2 empty2) : this()
-        {
-        }
-
-        public static Pattern field_22214_a = Pattern.compile("[0-9a-z]|([0-9a-z][0-9a-z])");
+        #endregion
     }
 }

@@ -4,6 +4,12 @@ namespace CraftyServer.Core
 {
     public class Packet23VehicleSpawn : Packet
     {
+        public int entityId;
+        public int type;
+        public int xPosition;
+        public int yPosition;
+        public int zPosition;
+
         public Packet23VehicleSpawn()
         {
         }
@@ -44,11 +50,5 @@ namespace CraftyServer.Core
         {
             return 17;
         }
-
-        public int entityId;
-        public int xPosition;
-        public int yPosition;
-        public int zPosition;
-        public int type;
     }
 }

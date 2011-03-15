@@ -4,9 +4,11 @@ namespace CraftyServer.Core
 {
     public class Packet14BlockDig : Packet
     {
-        public Packet14BlockDig()
-        {
-        }
+        public int face;
+        public int status;
+        public int xPosition;
+        public int yPosition;
+        public int zPosition;
 
         public override void readPacketData(DataInputStream datainputstream)
         {
@@ -35,11 +37,5 @@ namespace CraftyServer.Core
         {
             return 11;
         }
-
-        public int xPosition;
-        public int yPosition;
-        public int zPosition;
-        public int face;
-        public int status;
     }
 }

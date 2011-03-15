@@ -5,13 +5,9 @@ namespace CraftyServer.Core
 {
     public class CompressedStreamTools
     {
-        public CompressedStreamTools()
-        {
-        }
-
         public static NBTTagCompound func_770_a(InputStream inputstream)
         {
-            DataInputStream datainputstream = new DataInputStream(new GZIPInputStream(inputstream));
+            var datainputstream = new DataInputStream(new GZIPInputStream(inputstream));
             try
             {
                 NBTTagCompound nbttagcompound = func_774_a(datainputstream);
@@ -25,7 +21,7 @@ namespace CraftyServer.Core
 
         public static void writeGzippedCompoundToOutputStream(NBTTagCompound nbttagcompound, OutputStream outputstream)
         {
-            DataOutputStream dataoutputstream = new DataOutputStream(new GZIPOutputStream(outputstream));
+            var dataoutputstream = new DataOutputStream(new GZIPOutputStream(outputstream));
             try
             {
                 func_771_a(nbttagcompound, dataoutputstream);

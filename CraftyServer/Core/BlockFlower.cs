@@ -1,6 +1,5 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockFlower : Block
@@ -21,7 +20,7 @@ namespace CraftyServer.Core
 
         protected virtual bool canThisPlantGrowOnThisBlockID(int i)
         {
-            return i == Block.grass.blockID || i == Block.dirt.blockID || i == Block.tilledField.blockID;
+            return i == grass.blockID || i == dirt.blockID || i == tilledField.blockID;
         }
 
         public override void onNeighborBlockChange(World world, int i, int j, int k, int l)

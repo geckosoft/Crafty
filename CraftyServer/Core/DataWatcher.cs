@@ -1,18 +1,32 @@
 using java.io;
-using java.util;
 using java.lang;
+using java.util;
+using Exception = System.Exception;
 
 namespace CraftyServer.Core
 {
     public class DataWatcher
     {
-        public DataWatcher()
+        private static readonly HashMap dataTypes;
+        private readonly Map watchedObjects = new HashMap();
+        private bool objectChanged;
+
+        static DataWatcher()
         {
+            dataTypes = new HashMap();
+            dataTypes.put(typeof (Byte), Integer.valueOf(0));
+            dataTypes.put(typeof (sbyte), Integer.valueOf(0));
+            dataTypes.put(typeof (Short), Integer.valueOf(1));
+            dataTypes.put(typeof (Integer), Integer.valueOf(2));
+            dataTypes.put(typeof (Float), Integer.valueOf(3));
+            dataTypes.put(typeof (String), Integer.valueOf(4));
+            dataTypes.put(typeof (ItemStack), Integer.valueOf(5));
+            dataTypes.put(typeof (ChunkCoordinates), Integer.valueOf(6));
         }
 
         public void addObject(int i, object obj)
         {
-            Integer integer = (java.lang.Integer) dataTypes.get(obj.GetType());
+            var integer = (Integer) dataTypes.get(obj.GetType());
             if (integer == null)
             {
                 throw new IllegalArgumentException(
@@ -24,15 +38,15 @@ namespace CraftyServer.Core
                     (new StringBuilder()).append("Data value id is too big with ").append(i).append("! (Max is ").append
                         (31).append(")").toString());
             }
-            if (watchedObjects.containsKey(java.lang.Integer.valueOf(i)))
+            if (watchedObjects.containsKey(Integer.valueOf(i)))
             {
                 throw new IllegalArgumentException(
                     (new StringBuilder()).append("Duplicate id value for ").append(i).append("!").toString());
             }
             else
             {
-                WatchableObject watchableobject = new WatchableObject(integer.intValue(), i, obj);
-                watchedObjects.put(java.lang.Integer.valueOf(i), watchableobject);
+                var watchableobject = new WatchableObject(integer.intValue(), i, obj);
+                watchedObjects.put(Integer.valueOf(i), watchableobject);
                 return;
             }
         }
@@ -43,7 +57,7 @@ namespace CraftyServer.Core
             {
                 return ((Byte) ((WatchableObject) watchedObjects.get(Integer.valueOf(i))).getObject()).byteValue();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return (byte) ((WatchableObject) watchedObjects.get(Integer.valueOf(i))).getObject();
             }
@@ -56,7 +70,7 @@ namespace CraftyServer.Core
 
         public void updateObject(int i, object obj)
         {
-            WatchableObject watchableobject = (WatchableObject) watchedObjects.get(java.lang.Integer.valueOf(i));
+            var watchableobject = (WatchableObject) watchedObjects.get(Integer.valueOf(i));
             if (!obj.Equals(watchableobject.getObject()))
             {
                 watchableobject.setObject(obj);
@@ -97,7 +111,7 @@ namespace CraftyServer.Core
                     {
                         break;
                     }
-                    WatchableObject watchableobject = (WatchableObject) iterator.next();
+                    var watchableobject = (WatchableObject) iterator.next();
                     if (watchableobject.getWatching())
                     {
                         watchableobject.setWatching(false);
@@ -148,7 +162,7 @@ namespace CraftyServer.Core
                     break;
 
                 case 2: // '\002'
-                    dataoutputstream.writeInt(((java.lang.Integer) watchableobject.getObject()).intValue());
+                    dataoutputstream.writeInt(((Integer) watchableobject.getObject()).intValue());
                     break;
 
                 case 3: // '\003'
@@ -160,19 +174,19 @@ namespace CraftyServer.Core
                     break;
 
                 case 5: // '\005'
-                    ItemStack itemstack = (ItemStack) watchableobject.getObject();
+                    var itemstack = (ItemStack) watchableobject.getObject();
                     dataoutputstream.writeShort(itemstack.getItem().shiftedIndex);
                     dataoutputstream.writeByte(itemstack.stackSize);
                     dataoutputstream.writeShort(itemstack.getItemDamage());
                     // fall through (cant.. c# ...)
-                    ChunkCoordinates chunkcoordinates2 = (ChunkCoordinates) watchableobject.getObject();
+                    var chunkcoordinates2 = (ChunkCoordinates) watchableobject.getObject();
                     dataoutputstream.writeInt(chunkcoordinates2.posX);
                     dataoutputstream.writeInt(chunkcoordinates2.posY);
                     dataoutputstream.writeInt(chunkcoordinates2.posZ);
 
                     break;
                 case 6: // '\006'
-                    ChunkCoordinates chunkcoordinates = (ChunkCoordinates) watchableobject.getObject();
+                    var chunkcoordinates = (ChunkCoordinates) watchableobject.getObject();
                     dataoutputstream.writeInt(chunkcoordinates.posX);
                     dataoutputstream.writeInt(chunkcoordinates.posY);
                     dataoutputstream.writeInt(chunkcoordinates.posZ);
@@ -203,7 +217,7 @@ namespace CraftyServer.Core
                         break;
 
                     case 2: // '\002'
-                        watchableobject = new WatchableObject(i, j, java.lang.Integer.valueOf(datainputstream.readInt()));
+                        watchableobject = new WatchableObject(i, j, Integer.valueOf(datainputstream.readInt()));
                         break;
 
                     case 3: // '\003'
@@ -239,23 +253,6 @@ namespace CraftyServer.Core
             }
 
             return arraylist;
-        }
-
-        private static HashMap dataTypes;
-        private Map watchedObjects = new HashMap();
-        private bool objectChanged;
-
-        static DataWatcher()
-        {
-            dataTypes = new HashMap();
-            dataTypes.put(typeof (java.lang.Byte), java.lang.Integer.valueOf(0));
-            dataTypes.put(typeof (sbyte), java.lang.Integer.valueOf(0));
-            dataTypes.put(typeof (java.lang.Short), java.lang.Integer.valueOf(1));
-            dataTypes.put(typeof (java.lang.Integer), java.lang.Integer.valueOf(2));
-            dataTypes.put(typeof (java.lang.Float), java.lang.Integer.valueOf(3));
-            dataTypes.put(typeof (java.lang.String), java.lang.Integer.valueOf(4));
-            dataTypes.put(typeof (ItemStack), java.lang.Integer.valueOf(5));
-            dataTypes.put(typeof (ChunkCoordinates), java.lang.Integer.valueOf(6));
         }
     }
 }

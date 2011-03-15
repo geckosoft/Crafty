@@ -25,7 +25,7 @@ namespace CraftyServer.Core
 
         public override AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k)
         {
-            return AxisAlignedBB.getBoundingBoxFromPool(i, j, k, i + 1, (float) j + 1.5F, k + 1);
+            return AxisAlignedBB.getBoundingBoxFromPool(i, j, k, i + 1, j + 1.5F, k + 1);
         }
 
         public override bool isOpaqueCube()

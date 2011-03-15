@@ -1,3 +1,9 @@
+using System;
+using System.Collections.Specialized;
+using System.IO;
+using System.Text;
+using Random = java.util.Random;
+
 public class SupportClass
 {
     /// <summary>
@@ -5,7 +11,7 @@ public class SupportClass
     /// </summary>
     /// <param name="throwable">Exception to obtain information from</param>
     /// <param name="stream">Output sream used to write to</param>
-    public static void WriteStackTrace(System.Exception throwable, System.IO.TextWriter stream)
+    public static void WriteStackTrace(Exception throwable, TextWriter stream)
     {
         stream.Write(throwable.StackTrace);
         stream.Flush();
@@ -18,7 +24,7 @@ public class SupportClass
     /// </summary>
     /// <param name="random">The last random obtained</param>
     /// <returns>Returns a new positive random number</returns>
-    public static long NextLong(java.util.Random random)
+    public static long NextLong(Random random)
     {
         return random.nextLong();
     }
@@ -67,76 +73,6 @@ public class SupportClass
 
     /*******************************/
 
-    /// <summary>
-    /// This class manages array operations.
-    /// </summary>
-    public class ArraySupport
-    {
-        /// <summary>
-        /// Compares the entire members of one array whith the other one.
-        /// </summary>
-        /// <param name="array1">The array to be compared.</param>
-        /// <param name="array2">The array to be compared with.</param>
-        /// <returns>True if both arrays are equals otherwise it returns false.</returns>
-        /// <remarks>Two arrays are equal if they contains the same elements in the same order.</remarks>
-        public static bool Equals(System.Array array1, System.Array array2)
-        {
-            bool result = false;
-            if ((array1 == null) && (array2 == null))
-                result = true;
-            else if ((array1 != null) && (array2 != null))
-            {
-                if (array1.Length == array2.Length)
-                {
-                    int length = array1.Length;
-                    result = true;
-                    for (int index = 0; index < length; index++)
-                    {
-                        if (!(array1.GetValue(index).Equals(array2.GetValue(index))))
-                        {
-                            result = false;
-                            break;
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Fills the array with an specific value from an specific index to an specific index.
-        /// </summary>
-        /// <param name="array">The array to be filled.</param>
-        /// <param name="fromindex">The first index to be filled.</param>
-        /// <param name="toindex">The last index to be filled.</param>
-        /// <param name="val">The value to fill the array with.</param>
-        public static void Fill(System.Array array, System.Int32 fromindex, System.Int32 toindex, System.Object val)
-        {
-            System.Object Temp_Object = val;
-            System.Type elementtype = array.GetType().GetElementType();
-            if (elementtype != val.GetType())
-                Temp_Object = System.Convert.ChangeType(val, elementtype);
-            if (array.Length == 0)
-                throw (new System.NullReferenceException());
-            if (fromindex > toindex)
-                throw (new System.ArgumentException());
-            if ((fromindex < 0) || ((System.Array) array).Length < toindex)
-                throw (new System.IndexOutOfRangeException());
-            for (int index = (fromindex > 0) ? fromindex-- : fromindex; index < toindex; index++)
-                array.SetValue(Temp_Object, index);
-        }
-
-        /// <summary>
-        /// Fills the array with an specific value.
-        /// </summary>
-        /// <param name="array">The array to be filled.</param>
-        /// <param name="val">The value to fill the array with.</param>
-        public static void Fill(System.Array array, System.Object val)
-        {
-            Fill(array, 0, array.Length, val);
-        }
-    }
-
 
     /*******************************/
 
@@ -165,7 +101,7 @@ public class SupportClass
     /// <returns>The new array of bytes</returns>
     public static byte[] ToByteArray(string sourceString)
     {
-        return System.Text.UTF8Encoding.UTF8.GetBytes(sourceString);
+        return Encoding.UTF8.GetBytes(sourceString);
     }
 
     /// <summary>
@@ -173,7 +109,7 @@ public class SupportClass
     /// </summary>
     /// <param name="tempObjectArray">Array to convert.</param>
     /// <returns>An array of byte type elements.</returns>
-    public static byte[] ToByteArray(System.Object[] tempObjectArray)
+    public static byte[] ToByteArray(Object[] tempObjectArray)
     {
         byte[] byteArray = null;
         if (tempObjectArray != null)
@@ -246,13 +182,13 @@ public class SupportClass
     /// <param name="start">The starting index of the target array.</param>
     /// <param name="count">The maximum number of characters to read from the source Stream.</param>
     /// <returns>The number of characters read. The number will be less than or equal to count depending on the data available in the source Stream. Returns -1 if the end of the stream is reached.</returns>
-    public static System.Int32 ReadInput(System.IO.Stream sourceStream, sbyte[] target, int start, int count)
+    public static Int32 ReadInput(Stream sourceStream, sbyte[] target, int start, int count)
     {
         // Returns 0 bytes if not enough space in target
         if (target.Length == 0)
             return 0;
 
-        byte[] receiver = new byte[target.Length];
+        var receiver = new byte[target.Length];
         int bytesRead = sourceStream.Read(receiver, start, count);
 
         // Returns -1 if EOF
@@ -271,12 +207,12 @@ public class SupportClass
     /// <param name="start">The starting index of the target array.</param>
     /// <param name="count">The maximum number of characters to read from the source TextReader.</param>
     /// <returns>The number of characters read. The number will be less than or equal to count depending on the data available in the source TextReader. Returns -1 if the end of the stream is reached.</returns>
-    public static System.Int32 ReadInput(System.IO.TextReader sourceTextReader, sbyte[] target, int start, int count)
+    public static Int32 ReadInput(TextReader sourceTextReader, sbyte[] target, int start, int count)
     {
         // Returns 0 bytes if not enough space in target
         if (target.Length == 0) return 0;
 
-        char[] charArray = new char[target.Length];
+        var charArray = new char[target.Length];
         int bytesRead = sourceTextReader.Read(charArray, start, count);
 
         // Returns -1 if EOF
@@ -296,14 +232,88 @@ public class SupportClass
     /// <param name="collection">The NameValueCollection to look in.</param>
     /// <param name="key">The key to look for.</param>
     /// <returns>If key exist in the NameValueCollection returns true, otherwise false.</returns>
-    public static bool ContainsKeySupport(System.Collections.Specialized.NameValueCollection collection, string key)
+    public static bool ContainsKeySupport(NameValueCollection collection, string key)
     {
         bool exists = false;
         if (collection != null)
         {
             string[] keys = collection.AllKeys;
-            exists = !(System.Array.IndexOf(keys, key) == -1);
+            exists = !(Array.IndexOf(keys, key) == -1);
         }
         return exists;
     }
+
+    #region Nested type: ArraySupport
+
+    /// <summary>
+    /// This class manages array operations.
+    /// </summary>
+    public class ArraySupport
+    {
+        /// <summary>
+        /// Compares the entire members of one array whith the other one.
+        /// </summary>
+        /// <param name="array1">The array to be compared.</param>
+        /// <param name="array2">The array to be compared with.</param>
+        /// <returns>True if both arrays are equals otherwise it returns false.</returns>
+        /// <remarks>Two arrays are equal if they contains the same elements in the same order.</remarks>
+        public static bool Equals(Array array1, Array array2)
+        {
+            bool result = false;
+            if ((array1 == null) && (array2 == null))
+                result = true;
+            else if ((array1 != null) && (array2 != null))
+            {
+                if (array1.Length == array2.Length)
+                {
+                    int length = array1.Length;
+                    result = true;
+                    for (int index = 0; index < length; index++)
+                    {
+                        if (!(array1.GetValue(index).Equals(array2.GetValue(index))))
+                        {
+                            result = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Fills the array with an specific value from an specific index to an specific index.
+        /// </summary>
+        /// <param name="array">The array to be filled.</param>
+        /// <param name="fromindex">The first index to be filled.</param>
+        /// <param name="toindex">The last index to be filled.</param>
+        /// <param name="val">The value to fill the array with.</param>
+        public static void Fill(Array array, Int32 fromindex, Int32 toindex, Object val)
+        {
+            Object Temp_Object = val;
+            Type elementtype = array.GetType().GetElementType();
+            if (elementtype != val.GetType())
+                Temp_Object = Convert.ChangeType(val, elementtype);
+            if (array.Length == 0)
+                throw (new NullReferenceException());
+            if (fromindex > toindex)
+                throw (new ArgumentException());
+            if ((fromindex < 0) || (array).Length < toindex)
+                throw (new IndexOutOfRangeException());
+            for (int index = (fromindex > 0) ? fromindex-- : fromindex; index < toindex; index++)
+                array.SetValue(Temp_Object, index);
+        }
+
+        /// <summary>
+        /// Fills the array with an specific value.
+        /// </summary>
+        /// <param name="array">The array to be filled.</param>
+        /// <param name="val">The value to fill the array with.</param>
+        public static void Fill(Array array, Object val)
+        {
+            Fill(array, 0, array.Length, val);
+        }
+    }
+
+    #endregion
 }

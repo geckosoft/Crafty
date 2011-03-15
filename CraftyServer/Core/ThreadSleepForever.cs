@@ -5,6 +5,8 @@ namespace CraftyServer.Core
 {
     public class ThreadSleepForever : Thread
     {
+        private MinecraftServer mc; /* synthetic field */
+
         public ThreadSleepForever(MinecraftServer minecraftserver)
         {
             mc = minecraftserver;
@@ -19,14 +21,12 @@ namespace CraftyServer.Core
             {
                 try
                 {
-                    Thread.sleep(0x7fffffffL);
+                    sleep(0x7fffffffL);
                 }
                 catch (InterruptedException)
                 {
                 }
             } while (true);
         }
-
-        private MinecraftServer mc; /* synthetic field */
     }
 }

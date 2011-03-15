@@ -1,13 +1,12 @@
+using java.lang;
 using java.util;
 
 namespace CraftyServer.Core
 {
     public class FurnaceRecipes
     {
-        public static FurnaceRecipes smelting()
-        {
-            return smeltingBase;
-        }
+        private static readonly FurnaceRecipes smeltingBase = new FurnaceRecipes();
+        private readonly Map smeltingList;
 
         private FurnaceRecipes()
         {
@@ -24,17 +23,19 @@ namespace CraftyServer.Core
             addSmelting(Block.wood.blockID, new ItemStack(Item.coal, 1, 1));
         }
 
+        public static FurnaceRecipes smelting()
+        {
+            return smeltingBase;
+        }
+
         public void addSmelting(int i, ItemStack itemstack)
         {
-            smeltingList.put(java.lang.Integer.valueOf(i), itemstack);
+            smeltingList.put(Integer.valueOf(i), itemstack);
         }
 
         public ItemStack getSmeltingResult(int i)
         {
-            return (ItemStack) smeltingList.get(java.lang.Integer.valueOf(i));
+            return (ItemStack) smeltingList.get(Integer.valueOf(i));
         }
-
-        private static FurnaceRecipes smeltingBase = new FurnaceRecipes();
-        private Map smeltingList;
     }
 }

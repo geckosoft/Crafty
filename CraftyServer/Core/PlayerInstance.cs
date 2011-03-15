@@ -1,10 +1,24 @@
-using java.util;
 using java.lang;
+using java.util;
 
 namespace CraftyServer.Core
 {
     internal class PlayerInstance
     {
+        private readonly short[] field_1068_f;
+        private readonly ChunkCoordIntPair field_1069_e;
+        private readonly int field_1070_d;
+        private readonly int field_1071_c;
+        private readonly List field_1072_b;
+        private readonly PlayerManager field_1073_a; /* synthetic field */
+        private int field_1061_m;
+        private int field_1062_l;
+        private int field_1063_k;
+        private int field_1064_j;
+        private int field_1065_i;
+        private int field_1066_h;
+        private int field_1067_g;
+
         public PlayerInstance(PlayerManager playermanager, int i, int j)
         {
             field_1073_a = playermanager;
@@ -50,7 +64,7 @@ namespace CraftyServer.Core
             field_1072_b.remove(entityplayermp);
             if (field_1072_b.size() == 0)
             {
-                long l = (long) field_1071_c + 0x7fffffffL | (long) field_1070_d + 0x7fffffffL << 32;
+                long l = field_1071_c + 0x7fffffffL | field_1070_d + 0x7fffffffL << 32;
                 PlayerManager.func_539_b(field_1073_a).func_670_b(l);
                 if (field_1067_g > 0)
                 {
@@ -101,7 +115,7 @@ namespace CraftyServer.Core
             }
             if (field_1067_g < 10)
             {
-                short word0 = (short) (i << 12 | k << 8 | j);
+                var word0 = (short) (i << 12 | k << 8 | j);
                 for (int l = 0; l < field_1067_g; l++)
                 {
                     if (field_1068_f[l] == word0)
@@ -118,7 +132,7 @@ namespace CraftyServer.Core
         {
             for (int i = 0; i < field_1072_b.size(); i++)
             {
-                EntityPlayerMP entityplayermp = (EntityPlayerMP) field_1072_b.get(i);
+                var entityplayermp = (EntityPlayerMP) field_1072_b.get(i);
                 if (entityplayermp.field_420_ah.contains(field_1069_e))
                 {
                     entityplayermp.playerNetServerHandler.sendPacket(packet);
@@ -197,19 +211,5 @@ namespace CraftyServer.Core
                 }
             }
         }
-
-        private List field_1072_b;
-        private int field_1071_c;
-        private int field_1070_d;
-        private ChunkCoordIntPair field_1069_e;
-        private short[] field_1068_f;
-        private int field_1067_g;
-        private int field_1066_h;
-        private int field_1065_i;
-        private int field_1064_j;
-        private int field_1063_k;
-        private int field_1062_l;
-        private int field_1061_m;
-        private PlayerManager field_1073_a; /* synthetic field */
     }
 }

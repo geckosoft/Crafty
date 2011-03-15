@@ -6,11 +6,16 @@ namespace CraftyServer.Core
     public class ConvertProgressUpdater
         : IProgressUpdate
     {
+        private long field_22071_b;
+        private MinecraftServer field_22072_a; /* synthetic field */
+
         public ConvertProgressUpdater(MinecraftServer minecraftserver)
         {
             field_22072_a = minecraftserver;
             field_22071_b = java.lang.System.currentTimeMillis();
         }
+
+        #region IProgressUpdate Members
 
         public void func_438_a(string s)
         {
@@ -30,7 +35,6 @@ namespace CraftyServer.Core
         {
         }
 
-        private long field_22071_b;
-        private MinecraftServer field_22072_a; /* synthetic field */
+        #endregion
     }
 }

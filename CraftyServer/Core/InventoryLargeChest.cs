@@ -3,12 +3,18 @@ namespace CraftyServer.Core
     public class InventoryLargeChest
         : IInventory
     {
+        private readonly IInventory lowerChest;
+        private readonly string name;
+        private readonly IInventory upperChest;
+
         public InventoryLargeChest(string s, IInventory iinventory, IInventory iinventory1)
         {
             name = s;
             upperChest = iinventory;
             lowerChest = iinventory1;
         }
+
+        #region IInventory Members
 
         public int getSizeInventory()
         {
@@ -72,8 +78,6 @@ namespace CraftyServer.Core
             return upperChest.canInteractWith(entityplayer) && lowerChest.canInteractWith(entityplayer);
         }
 
-        private string name;
-        private IInventory upperChest;
-        private IInventory lowerChest;
+        #endregion
     }
 }

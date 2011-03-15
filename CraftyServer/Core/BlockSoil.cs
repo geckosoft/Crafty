@@ -1,6 +1,5 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockSoil : Block
@@ -57,7 +56,7 @@ namespace CraftyServer.Core
                     }
                     else if (!isCropsNearby(world, i, j, k))
                     {
-                        world.setBlockWithNotify(i, j, k, Block.dirt.blockID);
+                        world.setBlockWithNotify(i, j, k, dirt.blockID);
                     }
                 }
             }
@@ -67,7 +66,7 @@ namespace CraftyServer.Core
         {
             if (world.rand.nextInt(4) == 0)
             {
-                world.setBlockWithNotify(i, j, k, Block.dirt.blockID);
+                world.setBlockWithNotify(i, j, k, dirt.blockID);
             }
         }
 
@@ -78,7 +77,7 @@ namespace CraftyServer.Core
             {
                 for (int j1 = k - l; j1 <= k + l; j1++)
                 {
-                    if (world.getBlockId(i1, j + 1, j1) == Block.crops.blockID)
+                    if (world.getBlockId(i1, j + 1, j1) == crops.blockID)
                     {
                         return true;
                     }
@@ -113,13 +112,13 @@ namespace CraftyServer.Core
             Material material = world.getBlockMaterial(i, j + 1, k);
             if (material.isSolid())
             {
-                world.setBlockWithNotify(i, j, k, Block.dirt.blockID);
+                world.setBlockWithNotify(i, j, k, dirt.blockID);
             }
         }
 
         public override int idDropped(int i, Random random)
         {
-            return Block.dirt.idDropped(0, random);
+            return dirt.idDropped(0, random);
         }
     }
 }

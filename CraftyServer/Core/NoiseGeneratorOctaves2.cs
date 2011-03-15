@@ -1,10 +1,12 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class NoiseGeneratorOctaves2 : NoiseGenerator
     {
+        private readonly int field_4307_b;
+        private readonly NoiseGenerator2[] field_4308_a;
+
         public NoiseGeneratorOctaves2(Random random, int i)
         {
             field_4307_b = i;
@@ -48,8 +50,5 @@ namespace CraftyServer.Core
 
             return ad;
         }
-
-        private NoiseGenerator2[] field_4308_a;
-        private int field_4307_b;
     }
 }

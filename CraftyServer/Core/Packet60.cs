@@ -5,6 +5,12 @@ namespace CraftyServer.Core
 {
     public class Packet60 : Packet
     {
+        public Set destroyedBlockPositions;
+        public float explosionSize;
+        public double explosionX;
+        public double explosionY;
+        public double explosionZ;
+
         public Packet60()
         {
         }
@@ -27,9 +33,9 @@ namespace CraftyServer.Core
             explosionSize = datainputstream.readFloat();
             int i = datainputstream.readInt();
             destroyedBlockPositions = new HashSet();
-            int j = (int) explosionX;
-            int k = (int) explosionY;
-            int l = (int) explosionZ;
+            var j = (int) explosionX;
+            var k = (int) explosionY;
+            var l = (int) explosionZ;
             for (int i1 = 0; i1 < i; i1++)
             {
                 int j1 = datainputstream.readByte() + j;
@@ -46,15 +52,15 @@ namespace CraftyServer.Core
             dataoutputstream.writeDouble(explosionZ);
             dataoutputstream.writeFloat(explosionSize);
             dataoutputstream.writeInt(destroyedBlockPositions.size());
-            int i = (int) explosionX;
-            int j = (int) explosionY;
-            int k = (int) explosionZ;
+            var i = (int) explosionX;
+            var j = (int) explosionY;
+            var k = (int) explosionZ;
             int j1;
             for (Iterator iterator = destroyedBlockPositions.iterator();
                  iterator.hasNext();
                  dataoutputstream.writeByte(j1))
             {
-                ChunkPosition chunkposition = (ChunkPosition) iterator.next();
+                var chunkposition = (ChunkPosition) iterator.next();
                 int l = chunkposition.x - i;
                 int i1 = chunkposition.y - j;
                 j1 = chunkposition.z - k;
@@ -72,11 +78,5 @@ namespace CraftyServer.Core
         {
             return 32 + destroyedBlockPositions.size()*3;
         }
-
-        public double explosionX;
-        public double explosionY;
-        public double explosionZ;
-        public float explosionSize;
-        public Set destroyedBlockPositions;
     }
 }

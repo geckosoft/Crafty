@@ -4,9 +4,15 @@ namespace CraftyServer.Core
 {
     public class Packet10Flying : Packet
     {
-        public Packet10Flying()
-        {
-        }
+        public bool moving;
+        public bool onGround;
+        public float pitch;
+        public bool rotating;
+        public double stance;
+        public double xPosition;
+        public double yPosition;
+        public float yaw;
+        public double zPosition;
 
         public override void processPacket(NetHandler nethandler)
         {
@@ -27,15 +33,5 @@ namespace CraftyServer.Core
         {
             return 1;
         }
-
-        public double xPosition;
-        public double yPosition;
-        public double zPosition;
-        public double stance;
-        public float yaw;
-        public float pitch;
-        public bool onGround;
-        public bool moving;
-        public bool rotating;
     }
 }

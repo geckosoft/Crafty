@@ -3,8 +3,16 @@ using java.lang;
 namespace CraftyServer.Core
 {
     public class NextTickListEntry
-        : java.lang.Object, Comparable
+        : Object, Comparable
     {
+        private static long nextTickEntryID;
+        private readonly long tickEntryID;
+        public int blockID;
+        public long scheduledTime;
+        public int xCoord;
+        public int yCoord;
+        public int zCoord;
+
         public NextTickListEntry(int i, int j, int k, int l)
         {
             tickEntryID = nextTickEntryID++;
@@ -14,11 +22,20 @@ namespace CraftyServer.Core
             blockID = l;
         }
 
+        #region Comparable Members
+
+        public int CompareTo(object obj)
+        {
+            return comparer((NextTickListEntry) obj);
+        }
+
+        #endregion
+
         public override bool equals(object obj)
         {
             if (obj is NextTickListEntry)
             {
-                NextTickListEntry nextticklistentry = (NextTickListEntry) obj;
+                var nextticklistentry = (NextTickListEntry) obj;
                 return xCoord == nextticklistentry.xCoord && yCoord == nextticklistentry.yCoord &&
                        zCoord == nextticklistentry.zCoord && blockID == nextticklistentry.blockID;
             }
@@ -60,18 +77,5 @@ namespace CraftyServer.Core
         {
             return comparer((NextTickListEntry) obj);
         }
-
-        public int CompareTo(object obj)
-        {
-            return comparer((NextTickListEntry) obj);
-        }
-
-        private static long nextTickEntryID = 0L;
-        public int xCoord;
-        public int yCoord;
-        public int zCoord;
-        public int blockID;
-        public long scheduledTime;
-        private long tickEntryID;
     }
 }

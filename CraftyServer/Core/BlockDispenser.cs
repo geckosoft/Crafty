@@ -1,6 +1,5 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockDispenser : BlockContainer
@@ -17,7 +16,7 @@ namespace CraftyServer.Core
 
         public override int idDropped(int i, Random random)
         {
-            return Block.dispenser.blockID;
+            return dispenser.blockID;
         }
 
         public override void onBlockAdded(World world, int i, int j, int k)
@@ -33,19 +32,19 @@ namespace CraftyServer.Core
             int j1 = world.getBlockId(i - 1, j, k);
             int k1 = world.getBlockId(i + 1, j, k);
             byte byte0 = 3;
-            if (Block.opaqueCubeLookup[l] && !Block.opaqueCubeLookup[i1])
+            if (opaqueCubeLookup[l] && !opaqueCubeLookup[i1])
             {
                 byte0 = 3;
             }
-            if (Block.opaqueCubeLookup[i1] && !Block.opaqueCubeLookup[l])
+            if (opaqueCubeLookup[i1] && !opaqueCubeLookup[l])
             {
                 byte0 = 2;
             }
-            if (Block.opaqueCubeLookup[j1] && !Block.opaqueCubeLookup[k1])
+            if (opaqueCubeLookup[j1] && !opaqueCubeLookup[k1])
             {
                 byte0 = 5;
             }
-            if (Block.opaqueCubeLookup[k1] && !Block.opaqueCubeLookup[j1])
+            if (opaqueCubeLookup[k1] && !opaqueCubeLookup[j1])
             {
                 byte0 = 4;
             }
@@ -80,7 +79,7 @@ namespace CraftyServer.Core
             }
             else
             {
-                TileEntityDispenser tileentitydispenser = (TileEntityDispenser) world.getBlockTileEntity(i, j, k);
+                var tileentitydispenser = (TileEntityDispenser) world.getBlockTileEntity(i, j, k);
                 entityplayer.displayGUIDispenser(tileentitydispenser);
                 return true;
             }
@@ -107,11 +106,11 @@ namespace CraftyServer.Core
             {
                 f = -1F;
             }
-            TileEntityDispenser tileentitydispenser = (TileEntityDispenser) world.getBlockTileEntity(i, j, k);
+            var tileentitydispenser = (TileEntityDispenser) world.getBlockTileEntity(i, j, k);
             ItemStack itemstack = tileentitydispenser.getRandomStackFromInventory();
-            double d = (double) i + (double) f*0.5D + 0.5D;
-            double d1 = (double) j + 0.5D;
-            double d2 = (double) k + (double) f1*0.5D + 0.5D;
+            double d = i + f*0.5D + 0.5D;
+            double d1 = j + 0.5D;
+            double d2 = k + f1*0.5D + 0.5D;
             if (itemstack == null)
             {
                 world.playSoundEffect(i, j, k, "random.click", 1.0F, 1.2F);
@@ -120,32 +119,32 @@ namespace CraftyServer.Core
             {
                 if (itemstack.itemID == Item.arrow.shiftedIndex)
                 {
-                    EntityArrow entityarrow = new EntityArrow(world, d, d1, d2);
+                    var entityarrow = new EntityArrow(world, d, d1, d2);
                     entityarrow.setArrowHeading(f, 0.10000000149011612D, f1, 1.1F, 6F);
                     world.entityJoinedWorld(entityarrow);
                     world.playSoundEffect(i, j, k, "random.bow", 1.0F, 1.2F);
                 }
                 else if (itemstack.itemID == Item.egg.shiftedIndex)
                 {
-                    EntityEgg entityegg = new EntityEgg(world, d, d1, d2);
+                    var entityegg = new EntityEgg(world, d, d1, d2);
                     entityegg.func_20078_a(f, 0.10000000149011612D, f1, 1.1F, 6F);
                     world.entityJoinedWorld(entityegg);
                     world.playSoundEffect(i, j, k, "random.bow", 1.0F, 1.2F);
                 }
                 else if (itemstack.itemID == Item.snowball.shiftedIndex)
                 {
-                    EntitySnowball entitysnowball = new EntitySnowball(world, d, d1, d2);
+                    var entitysnowball = new EntitySnowball(world, d, d1, d2);
                     entitysnowball.func_6141_a(f, 0.10000000149011612D, f1, 1.1F, 6F);
                     world.entityJoinedWorld(entitysnowball);
                     world.playSoundEffect(i, j, k, "random.bow", 1.0F, 1.2F);
                 }
                 else
                 {
-                    EntityItem entityitem = new EntityItem(world, d, d1 - 0.29999999999999999D, d2, itemstack);
+                    var entityitem = new EntityItem(world, d, d1 - 0.29999999999999999D, d2, itemstack);
                     double d3 = random.nextDouble()*0.10000000000000001D + 0.20000000000000001D;
-                    entityitem.motionX = (double) f*d3;
+                    entityitem.motionX = f*d3;
                     entityitem.motionY = 0.20000000298023224D;
-                    entityitem.motionZ = (double) f1*d3;
+                    entityitem.motionZ = f1*d3;
                     entityitem.motionX += random.nextGaussian()*0.0074999998323619366D*6D;
                     entityitem.motionY += random.nextGaussian()*0.0074999998323619366D*6D;
                     entityitem.motionZ += random.nextGaussian()*0.0074999998323619366D*6D;
@@ -155,12 +154,12 @@ namespace CraftyServer.Core
                 for (int i1 = 0; i1 < 10; i1++)
                 {
                     double d4 = random.nextDouble()*0.20000000000000001D + 0.01D;
-                    double d5 = d + (double) f*0.01D + (random.nextDouble() - 0.5D)*(double) f1*0.5D;
+                    double d5 = d + f*0.01D + (random.nextDouble() - 0.5D)*f1*0.5D;
                     double d6 = d1 + (random.nextDouble() - 0.5D)*0.5D;
-                    double d7 = d2 + (double) f1*0.01D + (random.nextDouble() - 0.5D)*(double) f*0.5D;
-                    double d8 = (double) f*d4 + random.nextGaussian()*0.01D;
+                    double d7 = d2 + f1*0.01D + (random.nextDouble() - 0.5D)*f*0.5D;
+                    double d8 = f*d4 + random.nextGaussian()*0.01D;
                     double d9 = -0.029999999999999999D + random.nextGaussian()*0.01D;
-                    double d10 = (double) f1*d4 + random.nextGaussian()*0.01D;
+                    double d10 = f1*d4 + random.nextGaussian()*0.01D;
                     world.spawnParticle("smoke", d5, d6, d7, d8, d9, d10);
                 }
             }
@@ -168,7 +167,7 @@ namespace CraftyServer.Core
 
         public override void onNeighborBlockChange(World world, int i, int j, int k, int l)
         {
-            if (l > 0 && Block.blocksList[l].canProvidePower())
+            if (l > 0 && blocksList[l].canProvidePower())
             {
                 bool flag = world.isBlockIndirectlyGettingPowered(i, j, k) ||
                             world.isBlockIndirectlyGettingPowered(i, j + 1, k);
@@ -194,7 +193,7 @@ namespace CraftyServer.Core
 
         public override void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving)
         {
-            int l = MathHelper.floor_double((double) ((entityliving.rotationYaw*4F)/360F) + 0.5D) & 3;
+            int l = MathHelper.floor_double(((entityliving.rotationYaw*4F)/360F) + 0.5D) & 3;
             if (l == 0)
             {
                 world.setBlockMetadataWithNotify(i, j, k, 2);

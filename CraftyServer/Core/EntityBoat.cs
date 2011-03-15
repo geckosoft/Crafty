@@ -1,11 +1,20 @@
-using java.util;
 using java.lang;
-
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class EntityBoat : Entity
     {
+        public int damageTaken;
+        private double field_9171_al;
+        private double field_9172_f;
+        private double field_9173_ak;
+        private double field_9174_e;
+        private double field_9175_aj;
+        private int field_9176_d;
+        public int field_9177_b;
+        public int forwardDirection;
+
         public EntityBoat(World world)
             : base(world)
         {
@@ -16,6 +25,18 @@ namespace CraftyServer.Core
             setSize(1.5F, 0.6F);
             yOffset = height/2.0F;
             entityWalks = false;
+        }
+
+        public EntityBoat(World world, double d, double d1, double d2)
+            : this(world)
+        {
+            setPosition(d, d1 + yOffset, d2);
+            motionX = 0.0D;
+            motionY = 0.0D;
+            motionZ = 0.0D;
+            prevPosX = d;
+            prevPosY = d1;
+            prevPosZ = d2;
         }
 
         protected override void entityInit()
@@ -37,21 +58,9 @@ namespace CraftyServer.Core
             return true;
         }
 
-        public EntityBoat(World world, double d, double d1, double d2)
-            : this(world)
-        {
-            setPosition(d, d1 + (double) yOffset, d2);
-            motionX = 0.0D;
-            motionY = 0.0D;
-            motionZ = 0.0D;
-            prevPosX = d;
-            prevPosY = d1;
-            prevPosZ = d2;
-        }
-
         public override double getMountedYOffset()
         {
-            return (double) height*0.0D - 0.30000001192092896D;
+            return height*0.0D - 0.30000001192092896D;
         }
 
         public override bool attackEntityFrom(Entity entity, int i)
@@ -104,16 +113,16 @@ namespace CraftyServer.Core
             double d = 0.0D;
             for (int j = 0; j < i; j++)
             {
-                double d4 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY)*(double) (j + 0))/(double) i) -
+                double d4 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY)*(j + 0))/i) -
                             0.125D;
-                double d8 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY)*(double) (j + 1))/(double) i) -
+                double d8 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY)*(j + 1))/i) -
                             0.125D;
                 AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBoxFromPool(boundingBox.minX, d4,
                                                                                    boundingBox.minZ, boundingBox.maxX,
                                                                                    d8, boundingBox.maxZ);
                 if (worldObj.isAABBInMaterial(axisalignedbb, Material.water))
                 {
-                    d += 1.0D/(double) i;
+                    d += 1.0D/i;
                 }
             }
 
@@ -121,18 +130,18 @@ namespace CraftyServer.Core
             {
                 if (field_9176_d > 0)
                 {
-                    double d1 = posX + (field_9174_e - posX)/(double) field_9176_d;
-                    double d5 = posY + (field_9172_f - posY)/(double) field_9176_d;
-                    double d9 = posZ + (field_9175_aj - posZ)/(double) field_9176_d;
+                    double d1 = posX + (field_9174_e - posX)/field_9176_d;
+                    double d5 = posY + (field_9172_f - posY)/field_9176_d;
+                    double d9 = posZ + (field_9175_aj - posZ)/field_9176_d;
                     double d12;
-                    for (d12 = field_9173_ak - (double) rotationYaw; d12 < -180D; d12 += 360D)
+                    for (d12 = field_9173_ak - rotationYaw; d12 < -180D; d12 += 360D)
                     {
                     }
                     for (; d12 >= 180D; d12 -= 360D)
                     {
                     }
-                    rotationYaw += (float) (d12/(double) field_9176_d);
-                    rotationPitch += (float) ((field_9171_al - (double) rotationPitch)/(double) field_9176_d);
+                    rotationYaw += (float) (d12/field_9176_d);
+                    rotationPitch += (float) ((field_9171_al - rotationPitch)/field_9176_d);
                     field_9176_d--;
                     setPosition(d1, d5, d9);
                     setRotation(rotationYaw, rotationPitch);
@@ -189,12 +198,12 @@ namespace CraftyServer.Core
             double d11 = Math.sqrt(motionX*motionX + motionZ*motionZ);
             if (d11 > 0.14999999999999999D)
             {
-                double d13 = Math.cos(((double) rotationYaw*3.1415926535897931D)/180D);
-                double d15 = Math.sin(((double) rotationYaw*3.1415926535897931D)/180D);
-                for (int i1 = 0; (double) i1 < 1.0D + d11*60D; i1++)
+                double d13 = Math.cos((rotationYaw*3.1415926535897931D)/180D);
+                double d15 = Math.sin((rotationYaw*3.1415926535897931D)/180D);
+                for (int i1 = 0; i1 < 1.0D + d11*60D; i1++)
                 {
                     double d18 = rand.nextFloat()*2.0F - 1.0F;
-                    double d20 = (double) (rand.nextInt(2)*2 - 1)*0.69999999999999996D;
+                    double d20 = (rand.nextInt(2)*2 - 1)*0.69999999999999996D;
                     if (rand.nextBoolean())
                     {
                         double d21 = (posX - d13*d18*0.80000000000000004D) + d15*d20;
@@ -240,7 +249,7 @@ namespace CraftyServer.Core
                 d14 = (float) ((Math.atan2(d17, d16)*180D)/3.1415926535897931D);
             }
             double d19;
-            for (d19 = d14 - (double) rotationYaw; d19 >= 180D; d19 -= 360D)
+            for (d19 = d14 - rotationYaw; d19 >= 180D; d19 -= 360D)
             {
             }
             for (; d19 < -180D; d19 += 360D)
@@ -263,7 +272,7 @@ namespace CraftyServer.Core
             {
                 for (int j1 = 0; j1 < list.size(); j1++)
                 {
-                    Entity entity = (Entity) list.get(j1);
+                    var entity = (Entity) list.get(j1);
                     if (entity != riddenByEntity && entity.canBePushed() && (entity is EntityBoat))
                     {
                         entity.applyEntityCollision(this);
@@ -284,8 +293,8 @@ namespace CraftyServer.Core
             }
             else
             {
-                double d = Math.cos(((double) rotationYaw*3.1415926535897931D)/180D)*0.40000000000000002D;
-                double d1 = Math.sin(((double) rotationYaw*3.1415926535897931D)/180D)*0.40000000000000002D;
+                double d = Math.cos((rotationYaw*3.1415926535897931D)/180D)*0.40000000000000002D;
+                double d1 = Math.sin((rotationYaw*3.1415926535897931D)/180D)*0.40000000000000002D;
                 riddenByEntity.setPosition(posX + d, posY + getMountedYOffset() + riddenByEntity.getYOffset(), posZ + d1);
                 return;
             }
@@ -311,15 +320,5 @@ namespace CraftyServer.Core
             }
             return true;
         }
-
-        public int damageTaken;
-        public int field_9177_b;
-        public int forwardDirection;
-        private int field_9176_d;
-        private double field_9174_e;
-        private double field_9172_f;
-        private double field_9175_aj;
-        private double field_9173_ak;
-        private double field_9171_al;
     }
 }

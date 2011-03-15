@@ -4,6 +4,10 @@ namespace CraftyServer.Core
 {
     internal class RegionFileChunkBuffer : ByteArrayOutputStream
     {
+        private readonly int field_22156_b;
+        private readonly RegionFile field_22157_a; /* synthetic field */
+        private readonly int field_22158_c;
+
         public RegionFileChunkBuffer(RegionFile regionfile, int i, int j)
             : base(8096)
         {
@@ -16,9 +20,5 @@ namespace CraftyServer.Core
         {
             field_22157_a.write(field_22156_b, field_22158_c, buf, count);
         }
-
-        private int field_22156_b;
-        private int field_22158_c;
-        private RegionFile field_22157_a; /* synthetic field */
     }
 }

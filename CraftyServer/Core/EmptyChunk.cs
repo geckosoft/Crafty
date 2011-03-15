@@ -1,5 +1,5 @@
-using java.util;
 using java.lang;
+using java.util;
 
 namespace CraftyServer.Core
 {
@@ -144,15 +144,15 @@ namespace CraftyServer.Core
             int j2 = j1 - k;
             int k2 = l1*i2*j2;
             int l2 = k2 + (k2/2)*3;
-            Arrays.fill(abyte0, k1, k1 + l2, (byte) 0);
+            Arrays.fill(abyte0, k1, k1 + l2, 0);
             return l2;
         }
 
         public override Random func_334_a(long l)
         {
             return
-                new Random(worldObj.func_22079_j() + (long) (xPosition*xPosition*0x4c1906) + (long) (xPosition*0x5ac0db) +
-                           (long) (zPosition*zPosition)*0x4307a7L + (long) (zPosition*0x5f24f) ^ l);
+                new Random(worldObj.func_22079_j() + (xPosition*xPosition*0x4c1906) + (xPosition*0x5ac0db) +
+                           (zPosition*zPosition)*0x4307a7L + (zPosition*0x5f24f) ^ l);
         }
 
         public override bool func_21101_g()

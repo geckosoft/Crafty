@@ -1,14 +1,9 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class WorldGenCactus : WorldGenerator
     {
-        public WorldGenCactus()
-        {
-        }
-
         public override bool generate(World world, Random random, int i, int j, int k)
         {
             for (int l = 0; l < 10; l++)

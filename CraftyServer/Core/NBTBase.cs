@@ -4,6 +4,8 @@ namespace CraftyServer.Core
 {
     public abstract class NBTBase
     {
+        private string key;
+
         public NBTBase()
         {
             key = null;
@@ -143,7 +145,5 @@ namespace CraftyServer.Core
             }
             return "UNKNOWN";
         }
-
-        private string key;
     }
 }

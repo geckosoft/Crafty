@@ -4,9 +4,8 @@ namespace CraftyServer.Core
 {
     public class Packet19 : Packet
     {
-        public Packet19()
-        {
-        }
+        public int entityId;
+        public int state;
 
         public override void readPacketData(DataInputStream datainputstream)
         {
@@ -29,8 +28,5 @@ namespace CraftyServer.Core
         {
             return 5;
         }
-
-        public int entityId;
-        public int state;
     }
 }

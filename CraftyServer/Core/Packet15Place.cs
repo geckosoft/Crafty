@@ -4,9 +4,11 @@ namespace CraftyServer.Core
 {
     public class Packet15Place : Packet
     {
-        public Packet15Place()
-        {
-        }
+        public int direction;
+        public ItemStack itemStack;
+        public int xPosition;
+        public int yPosition;
+        public int zPosition;
 
         public override void readPacketData(DataInputStream datainputstream)
         {
@@ -54,11 +56,5 @@ namespace CraftyServer.Core
         {
             return 15;
         }
-
-        public int xPosition;
-        public int yPosition;
-        public int zPosition;
-        public int direction;
-        public ItemStack itemStack;
     }
 }

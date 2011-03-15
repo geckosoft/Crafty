@@ -10,7 +10,7 @@ namespace CraftyServer.Core
 
         protected override bool canThisPlantGrowOnThisBlockID(int i)
         {
-            return Block.opaqueCubeLookup[i];
+            return opaqueCubeLookup[i];
         }
 
         public override bool canBlockStay(World world, int i, int j, int k)

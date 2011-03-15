@@ -4,9 +4,11 @@ namespace CraftyServer.Core
 {
     public class Packet102 : Packet
     {
-        public Packet102()
-        {
-        }
+        public short action;
+        public int inventorySlot;
+        public ItemStack itemStack;
+        public int mouseClick;
+        public int window_Id;
 
         public override void processPacket(NetHandler nethandler)
         {
@@ -54,11 +56,5 @@ namespace CraftyServer.Core
         {
             return 11;
         }
-
-        public int window_Id;
-        public int inventorySlot;
-        public int mouseClick;
-        public short action;
-        public ItemStack itemStack;
     }
 }

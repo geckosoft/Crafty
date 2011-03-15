@@ -2,6 +2,8 @@ namespace CraftyServer.Core
 {
     public class ItemBlock : Item
     {
+        private readonly int blockID;
+
         public ItemBlock(int i) : base(i)
         {
             blockID = i + 256;
@@ -53,7 +55,7 @@ namespace CraftyServer.Core
                 {
                     Block.blocksList[blockID].onBlockPlaced(world, i, j, k, l);
                     Block.blocksList[blockID].onBlockPlacedBy(world, i, j, k, entityplayer);
-                    world.playSoundEffect((float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F,
+                    world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F,
                                           block.stepSound.func_737_c(), (block.stepSound.func_738_a() + 1.0F)/2.0F,
                                           block.stepSound.func_739_b()*0.8F);
                     itemstack.stackSize--;
@@ -66,7 +68,5 @@ namespace CraftyServer.Core
         {
             return Block.blocksList[blockID].getBlockName();
         }
-
-        private int blockID;
     }
 }

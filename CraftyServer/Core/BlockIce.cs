@@ -1,6 +1,5 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockIce : BlockBreakable
@@ -22,7 +21,7 @@ namespace CraftyServer.Core
             Material material = world.getBlockMaterial(i, j - 1, k);
             if (material.getIsSolid() || material.getIsLiquid())
             {
-                world.setBlockWithNotify(i, j, k, Block.waterStill.blockID);
+                world.setBlockWithNotify(i, j, k, waterStill.blockID);
             }
         }
 
@@ -33,10 +32,10 @@ namespace CraftyServer.Core
 
         public override void updateTick(World world, int i, int j, int k, Random random)
         {
-            if (world.getSavedLightValue(EnumSkyBlock.Block, i, j, k) > 11 - Block.lightOpacity[blockID])
+            if (world.getSavedLightValue(EnumSkyBlock.Block, i, j, k) > 11 - lightOpacity[blockID])
             {
                 dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k));
-                world.setBlockWithNotify(i, j, k, Block.waterMoving.blockID);
+                world.setBlockWithNotify(i, j, k, waterMoving.blockID);
             }
         }
     }

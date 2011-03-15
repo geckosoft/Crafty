@@ -6,14 +6,18 @@ namespace CraftyServer.Core
     public class McRegionChunkLoader
         : IChunkLoader
     {
+        private readonly File field_22110_a;
+
         public McRegionChunkLoader(File file)
         {
             field_22110_a = file;
         }
 
+        #region IChunkLoader Members
+
         public Chunk loadChunk(World world, int i, int j)
         {
-            java.io.DataInputStream datainputstream = RegionFileCache.func_22124_c(field_22110_a, i, j);
+            DataInputStream datainputstream = RegionFileCache.func_22124_c(field_22110_a, i, j);
             NBTTagCompound nbttagcompound;
             if (datainputstream != null)
             {
@@ -58,15 +62,14 @@ namespace CraftyServer.Core
             {
                 DataOutputStream dataoutputstream = RegionFileCache.func_22120_d(field_22110_a, chunk.xPosition,
                                                                                  chunk.zPosition);
-                NBTTagCompound nbttagcompound = new NBTTagCompound();
-                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                var nbttagcompound = new NBTTagCompound();
+                var nbttagcompound1 = new NBTTagCompound();
                 nbttagcompound.setTag("Level", nbttagcompound1);
                 ChunkLoader.storeChunkInCompound(chunk, world, nbttagcompound1);
                 CompressedStreamTools.func_771_a(nbttagcompound, dataoutputstream);
                 dataoutputstream.close();
                 WorldInfo worldinfo = world.getWorldInfo();
                 worldinfo.func_22177_b(worldinfo.func_22182_g() +
-                                       (long)
                                        RegionFileCache.func_22121_b(field_22110_a, chunk.xPosition, chunk.zPosition));
             }
             catch (Exception exception)
@@ -87,6 +90,6 @@ namespace CraftyServer.Core
         {
         }
 
-        private File field_22110_a;
+        #endregion
     }
 }

@@ -1,10 +1,11 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockChest : BlockContainer
     {
+        private readonly Random random;
+
         public BlockChest(int i)
             : base(i, Material.wood)
         {
@@ -93,7 +94,7 @@ namespace CraftyServer.Core
 
         public override void onBlockRemoval(World world, int i, int j, int k)
         {
-            TileEntityChest tileentitychest = (TileEntityChest) world.getBlockTileEntity(i, j, k);
+            var tileentitychest = (TileEntityChest) world.getBlockTileEntity(i, j, k);
 
             for (int l = 0; l < tileentitychest.getSizeInventory(); l++)
             {
@@ -117,8 +118,8 @@ namespace CraftyServer.Core
                         i1 = itemstack.stackSize;
                     }
                     itemstack.stackSize -= i1;
-                    EntityItem entityitem = new EntityItem(world, (float) i + f, (float) j + f1, (float) k + f2,
-                                                           new ItemStack(itemstack.itemID, i1, itemstack.getItemDamage()));
+                    var entityitem = new EntityItem(world, i + f, j + f1, k + f2,
+                                                    new ItemStack(itemstack.itemID, i1, itemstack.getItemDamage()));
                     float f3 = 0.05F;
                     entityitem.motionX = (float) random.nextGaussian()*f3;
                     entityitem.motionY = (float) random.nextGaussian()*f3 + 0.2F;
@@ -132,7 +133,7 @@ namespace CraftyServer.Core
 
         public override bool blockActivated(World world, int i, int j, int k, EntityPlayer entityplayer)
         {
-            object obj = (TileEntityChest) world.getBlockTileEntity(i, j, k);
+            object obj = world.getBlockTileEntity(i, j, k);
             if (world.isBlockOpaqueCube(i, j + 1, k))
             {
                 return true;
@@ -188,7 +189,5 @@ namespace CraftyServer.Core
         {
             return new TileEntityChest();
         }
-
-        private Random random;
     }
 }

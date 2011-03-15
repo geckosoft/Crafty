@@ -4,6 +4,11 @@ namespace CraftyServer.Core
 {
     public class HashEntry2
     {
+        public object field_1024_b;
+        public long field_1025_a;
+        public int field_1026_d;
+        public HashEntry2 field_1027_c;
+
         public HashEntry2(int i, long l, object obj, HashEntry2 hashentry2)
         {
             field_1024_b = obj;
@@ -28,7 +33,7 @@ namespace CraftyServer.Core
             {
                 return false;
             }
-            HashEntry2 hashentry2 = (HashEntry2) obj;
+            var hashentry2 = (HashEntry2) obj;
             Long long1 = Long.valueOf(func_736_a());
             Long long2 = Long.valueOf(hashentry2.func_736_a());
             if (long1 == long2 || long1 != null && long1.Equals(long2))
@@ -52,10 +57,5 @@ namespace CraftyServer.Core
         {
             return (new StringBuilder()).append(func_736_a()).append("=").append(func_735_b()).toString();
         }
-
-        public long field_1025_a;
-        public object field_1024_b;
-        public HashEntry2 field_1027_c;
-        public int field_1026_d;
     }
 }

@@ -16,10 +16,10 @@ namespace CraftyServer.Core
 
         public override void onNeighborBlockChange(World world, int i, int j, int k, int l)
         {
-            if (l > 0 && Block.blocksList[l].canProvidePower())
+            if (l > 0 && blocksList[l].canProvidePower())
             {
                 bool flag = world.isBlockGettingPowered(i, j, k);
-                TileEntityNote tileentitynote = (TileEntityNote) world.getBlockTileEntity(i, j, k);
+                var tileentitynote = (TileEntityNote) world.getBlockTileEntity(i, j, k);
                 if (tileentitynote.previousRedstoneState != flag)
                 {
                     if (flag)
@@ -39,7 +39,7 @@ namespace CraftyServer.Core
             }
             else
             {
-                TileEntityNote tileentitynote = (TileEntityNote) world.getBlockTileEntity(i, j, k);
+                var tileentitynote = (TileEntityNote) world.getBlockTileEntity(i, j, k);
                 tileentitynote.changePitch();
                 tileentitynote.triggerNote(world, i, j, k);
                 return true;
@@ -54,7 +54,7 @@ namespace CraftyServer.Core
             }
             else
             {
-                TileEntityNote tileentitynote = (TileEntityNote) world.getBlockTileEntity(i, j, k);
+                var tileentitynote = (TileEntityNote) world.getBlockTileEntity(i, j, k);
                 tileentitynote.triggerNote(world, i, j, k);
                 return;
             }
@@ -67,7 +67,7 @@ namespace CraftyServer.Core
 
         public override void playBlock(World world, int i, int j, int k, int l, int i1)
         {
-            float f = (float) Math.pow(2D, (double) (i1 - 12)/12D);
+            var f = (float) Math.pow(2D, (i1 - 12)/12D);
             string s = "harp";
             if (l == 1)
             {
@@ -85,9 +85,9 @@ namespace CraftyServer.Core
             {
                 s = "bassattack";
             }
-            world.playSoundEffect((double) i + 0.5D, (double) j + 0.5D, (double) k + 0.5D,
+            world.playSoundEffect(i + 0.5D, j + 0.5D, k + 0.5D,
                                   (new StringBuilder()).append("note.").append(s).toString(), 3F, f);
-            world.spawnParticle("note", (double) i + 0.5D, (double) j + 1.2D, (double) k + 0.5D, (double) i1/24D, 0.0D,
+            world.spawnParticle("note", i + 0.5D, j + 1.2D, k + 0.5D, i1/24D, 0.0D,
                                 0.0D);
         }
     }

@@ -4,6 +4,8 @@ namespace CraftyServer.Core
 {
     public class Packet255KickDisconnect : Packet
     {
+        public string reason;
+
         public Packet255KickDisconnect()
         {
         }
@@ -32,7 +34,5 @@ namespace CraftyServer.Core
         {
             return reason.Length;
         }
-
-        public string reason;
     }
 }

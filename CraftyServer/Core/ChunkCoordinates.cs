@@ -3,8 +3,12 @@ using java.lang;
 namespace CraftyServer.Core
 {
     public class ChunkCoordinates
-        : java.lang.Object, Comparable
+        : Object, Comparable
     {
+        public int posX;
+        public int posY;
+        public int posZ;
+
         public ChunkCoordinates()
         {
         }
@@ -16,6 +20,15 @@ namespace CraftyServer.Core
             posZ = k;
         }
 
+        #region Comparable Members
+
+        public int CompareTo(object obj)
+        {
+            return func_22215_a((ChunkCoordinates) obj);
+        }
+
+        #endregion
+
         public override bool equals(object obj)
         {
             if (!(obj is ChunkCoordinates))
@@ -24,7 +37,7 @@ namespace CraftyServer.Core
             }
             else
             {
-                ChunkCoordinates chunkcoordinates = (ChunkCoordinates) obj;
+                var chunkcoordinates = (ChunkCoordinates) obj;
                 return posX == chunkcoordinates.posX && posY == chunkcoordinates.posY && posZ == chunkcoordinates.posZ;
             }
         }
@@ -57,18 +70,5 @@ namespace CraftyServer.Core
         {
             return func_22215_a((ChunkCoordinates) obj);
         }
-
-        public int posX;
-        public int posY;
-        public int posZ;
-
-        #region IComparable Members
-
-        public int CompareTo(object obj)
-        {
-            return func_22215_a((ChunkCoordinates) obj);
-        }
-
-        #endregion
     }
 }

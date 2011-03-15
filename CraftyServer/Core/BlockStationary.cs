@@ -1,6 +1,5 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockStationary : BlockFluids
@@ -50,12 +49,12 @@ namespace CraftyServer.Core
                             func_4033_j(world, i, j, k - 1) || func_4033_j(world, i, j, k + 1) ||
                             func_4033_j(world, i, j - 1, k) || func_4033_j(world, i, j + 1, k))
                         {
-                            world.setBlockWithNotify(i, j, k, Block.fire.blockID);
+                            world.setBlockWithNotify(i, j, k, fire.blockID);
                             return;
                         }
                         continue;
                     }
-                    if (Block.blocksList[j1].blockMaterial.getIsSolid())
+                    if (blocksList[j1].blockMaterial.getIsSolid())
                     {
                         return;
                     }

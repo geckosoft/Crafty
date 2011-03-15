@@ -1,14 +1,9 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class WorldGenReed : WorldGenerator
     {
-        public WorldGenReed()
-        {
-        }
-
         public override bool generate(World world, Random random, int i, int j, int k)
         {
             for (int l = 0; l < 20; l++)

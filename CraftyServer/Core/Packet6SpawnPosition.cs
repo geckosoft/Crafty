@@ -4,6 +4,10 @@ namespace CraftyServer.Core
 {
     public class Packet6SpawnPosition : Packet
     {
+        public int xPosition;
+        public int yPosition;
+        public int zPosition;
+
         public Packet6SpawnPosition()
         {
         }
@@ -38,9 +42,5 @@ namespace CraftyServer.Core
         {
             return 12;
         }
-
-        public int xPosition;
-        public int yPosition;
-        public int zPosition;
     }
 }

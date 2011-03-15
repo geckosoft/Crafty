@@ -1,11 +1,19 @@
 using java.lang;
 
-
 namespace CraftyServer.Core
 {
     public class EntityGhast : EntityFlying
                                , IMobs
     {
+        private int aggroCooldown;
+        public int attackCounter;
+        public int courseChangeCooldown;
+        public int prevAttackCounter;
+        private Entity targetedEntity;
+        public double waypointX;
+        public double waypointY;
+        public double waypointZ;
+
         public EntityGhast(World world)
             : base(world)
         {
@@ -32,9 +40,9 @@ namespace CraftyServer.Core
             double d3 = MathHelper.sqrt_double(d*d + d1*d1 + d2*d2);
             if (d3 < 1.0D || d3 > 60D)
             {
-                waypointX = posX + (double) ((rand.nextFloat()*2.0F - 1.0F)*16F);
-                waypointY = posY + (double) ((rand.nextFloat()*2.0F - 1.0F)*16F);
-                waypointZ = posZ + (double) ((rand.nextFloat()*2.0F - 1.0F)*16F);
+                waypointX = posX + ((rand.nextFloat()*2.0F - 1.0F)*16F);
+                waypointY = posY + ((rand.nextFloat()*2.0F - 1.0F)*16F);
+                waypointZ = posZ + ((rand.nextFloat()*2.0F - 1.0F)*16F);
             }
             if (courseChangeCooldown-- <= 0)
             {
@@ -68,8 +76,8 @@ namespace CraftyServer.Core
             if (targetedEntity != null && targetedEntity.getDistanceSqToEntity(this) < d4*d4)
             {
                 double d5 = targetedEntity.posX - posX;
-                double d6 = (targetedEntity.boundingBox.minY + (double) (targetedEntity.height/2.0F)) -
-                            (posY + (double) (height/2.0F));
+                double d6 = (targetedEntity.boundingBox.minY + (targetedEntity.height/2.0F)) -
+                            (posY + (height/2.0F));
                 double d7 = targetedEntity.posZ - posZ;
                 renderYawOffset = rotationYaw = (-(float) Math.atan2(d5, d7)*180F)/3.141593F;
                 if (canEntityBeSeen(targetedEntity))
@@ -84,11 +92,11 @@ namespace CraftyServer.Core
                     {
                         worldObj.playSoundAtEntity(this, "mob.ghast.fireball", getSoundVolume(),
                                                    (rand.nextFloat() - rand.nextFloat())*0.2F + 1.0F);
-                        EntityFireball entityfireball = new EntityFireball(worldObj, this, d5, d6, d7);
+                        var entityfireball = new EntityFireball(worldObj, this, d5, d6, d7);
                         double d8 = 4D;
                         Vec3D vec3d = getLook(1.0F);
                         entityfireball.posX = posX + vec3d.xCoord*d8;
-                        entityfireball.posY = posY + (double) (height/2.0F) + 0.5D;
+                        entityfireball.posY = posY + (height/2.0F) + 0.5D;
                         entityfireball.posZ = posZ + vec3d.zCoord*d8;
                         worldObj.entityJoinedWorld(entityfireball);
                         attackCounter = -40;
@@ -116,7 +124,7 @@ namespace CraftyServer.Core
             double d5 = (waypointY - posY)/d3;
             double d6 = (waypointZ - posZ)/d3;
             AxisAlignedBB axisalignedbb = boundingBox.copy();
-            for (int i = 1; (double) i < d3; i++)
+            for (int i = 1; i < d3; i++)
             {
                 axisalignedbb.offset(d4, d5, d6);
                 if (worldObj.getCollidingBoundingBoxes(this, axisalignedbb).size() > 0)
@@ -162,14 +170,5 @@ namespace CraftyServer.Core
         {
             return 1;
         }
-
-        public int courseChangeCooldown;
-        public double waypointX;
-        public double waypointY;
-        public double waypointZ;
-        private Entity targetedEntity;
-        private int aggroCooldown;
-        public int prevAttackCounter;
-        public int attackCounter;
     }
 }

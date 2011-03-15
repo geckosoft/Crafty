@@ -1,6 +1,5 @@
-using java.util;
 using java.lang;
-
+using java.util;
 
 namespace CraftyServer.Core
 {
@@ -41,13 +40,13 @@ namespace CraftyServer.Core
         {
             int l = 0;
             int i1 = 0;
-            if (world.getBlockId(i - 1, j, k) == Block.obsidian.blockID ||
-                world.getBlockId(i + 1, j, k) == Block.obsidian.blockID)
+            if (world.getBlockId(i - 1, j, k) == obsidian.blockID ||
+                world.getBlockId(i + 1, j, k) == obsidian.blockID)
             {
                 l = 1;
             }
-            if (world.getBlockId(i, j, k - 1) == Block.obsidian.blockID ||
-                world.getBlockId(i, j, k + 1) == Block.obsidian.blockID)
+            if (world.getBlockId(i, j, k - 1) == obsidian.blockID ||
+                world.getBlockId(i, j, k + 1) == obsidian.blockID)
             {
                 i1 = 1;
             }
@@ -73,13 +72,13 @@ namespace CraftyServer.Core
                     int j2 = world.getBlockId(i + l*j1, j + l1, k + i1*j1);
                     if (flag)
                     {
-                        if (j2 != Block.obsidian.blockID)
+                        if (j2 != obsidian.blockID)
                         {
                             return false;
                         }
                         continue;
                     }
-                    if (j2 != 0 && j2 != Block.fire.blockID)
+                    if (j2 != 0 && j2 != fire.blockID)
                     {
                         return false;
                     }
@@ -91,7 +90,7 @@ namespace CraftyServer.Core
             {
                 for (int i2 = 0; i2 < 3; i2++)
                 {
-                    world.setBlockWithNotify(i + l*k1, j + i2, k + i1*k1, Block.portal.blockID);
+                    world.setBlockWithNotify(i + l*k1, j + i2, k + i1*k1, portal.blockID);
                 }
             }
 
@@ -112,7 +111,7 @@ namespace CraftyServer.Core
             for (k1 = j; world.getBlockId(i, k1 - 1, k) == blockID; k1--)
             {
             }
-            if (world.getBlockId(i, k1 - 1, k) != Block.obsidian.blockID)
+            if (world.getBlockId(i, k1 - 1, k) != obsidian.blockID)
             {
                 world.setBlockWithNotify(i, j, k, 0);
                 return;
@@ -121,7 +120,7 @@ namespace CraftyServer.Core
             for (l1 = 1; l1 < 4 && world.getBlockId(i, k1 + l1, k) == blockID; l1++)
             {
             }
-            if (l1 != 3 || world.getBlockId(i, k1 + l1, k) != Block.obsidian.blockID)
+            if (l1 != 3 || world.getBlockId(i, k1 + l1, k) != obsidian.blockID)
             {
                 world.setBlockWithNotify(i, j, k, 0);
                 return;
@@ -133,9 +132,9 @@ namespace CraftyServer.Core
                 world.setBlockWithNotify(i, j, k, 0);
                 return;
             }
-            if ((world.getBlockId(i + i1, j, k + j1) != Block.obsidian.blockID ||
+            if ((world.getBlockId(i + i1, j, k + j1) != obsidian.blockID ||
                  world.getBlockId(i - i1, j, k - j1) != blockID) &&
-                (world.getBlockId(i - i1, j, k - j1) != Block.obsidian.blockID ||
+                (world.getBlockId(i - i1, j, k - j1) != obsidian.blockID ||
                  world.getBlockId(i + i1, j, k + j1) != blockID))
             {
                 world.setBlockWithNotify(i, j, k, 0);

@@ -4,6 +4,15 @@ namespace CraftyServer.Core
 {
     public class Packet20NamedEntitySpawn : Packet
     {
+        public int currentItem;
+        public int entityId;
+        public string name;
+        public byte pitch;
+        public byte rotation;
+        public int xPosition;
+        public int yPosition;
+        public int zPosition;
+
         public Packet20NamedEntitySpawn()
         {
         }
@@ -54,14 +63,5 @@ namespace CraftyServer.Core
         {
             return 28;
         }
-
-        public int entityId;
-        public string name;
-        public int xPosition;
-        public int yPosition;
-        public int zPosition;
-        public byte rotation;
-        public byte pitch;
-        public int currentItem;
     }
 }

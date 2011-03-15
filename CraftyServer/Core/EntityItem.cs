@@ -1,10 +1,16 @@
 using java.lang;
 
-
 namespace CraftyServer.Core
 {
     public class EntityItem : Entity
     {
+        public int age;
+        public int delayBeforeCanPickup;
+        public float field_432_ae;
+        private int field_9170_e;
+        private int health;
+        public ItemStack item;
+
         public EntityItem(World world, double d, double d1, double d2,
                           ItemStack itemstack) : base(world)
         {
@@ -94,9 +100,9 @@ namespace CraftyServer.Core
             int i = MathHelper.floor_double(d);
             int j = MathHelper.floor_double(d1);
             int k = MathHelper.floor_double(d2);
-            double d3 = d - (double) i;
-            double d4 = d1 - (double) j;
-            double d5 = d2 - (double) k;
+            double d3 = d - i;
+            double d4 = d1 - j;
+            double d5 = d2 - k;
             if (Block.opaqueCubeLookup[worldObj.getBlockId(i, j, k)])
             {
                 bool flag = !Block.opaqueCubeLookup[worldObj.getBlockId(i - 1, j, k)];
@@ -212,12 +218,5 @@ namespace CraftyServer.Core
                 setEntityDead();
             }
         }
-
-        public ItemStack item;
-        private int field_9170_e;
-        public int age;
-        public int delayBeforeCanPickup;
-        private int health;
-        public float field_432_ae;
     }
 }

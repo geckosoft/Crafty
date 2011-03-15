@@ -2,6 +2,9 @@ namespace CraftyServer.Core
 {
     public class EntityCreeper : EntityMobs
     {
+        private int lastActiveTime;
+        private int timeSinceIgnited;
+
         public EntityCreeper(World world)
             : base(world)
         {
@@ -110,8 +113,5 @@ namespace CraftyServer.Core
         {
             dataWatcher.updateObject(16, (sbyte) i);
         }
-
-        private int timeSinceIgnited;
-        private int lastActiveTime;
     }
 }

@@ -1,14 +1,23 @@
 using CraftyServer.Server;
+using java.lang;
 using java.net;
 using java.util;
-using java.lang;
 using java.util.logging;
-
 
 namespace CraftyServer.Core
 {
     public class NetLoginHandler : NetHandler
     {
+        public static Logger logger = Logger.getLogger("Minecraft");
+        private static readonly Random rand = new Random();
+        private readonly MinecraftServer mcServer;
+        private Packet1Login field_9004_h;
+        public bool finishedProcessing;
+        private int loginTimer;
+        public NetworkManager netManager;
+        private string serverId;
+        private string username;
+
         public NetLoginHandler(MinecraftServer minecraftserver, Socket socket, string s)
         {
             finishedProcessing = false;
@@ -103,7 +112,7 @@ namespace CraftyServer.Core
                     (new StringBuilder()).append(getUserAndIPString()).append(" logged in with entity id ").append(
                         entityplayermp.entityId).toString());
                 ChunkCoordinates chunkcoordinates = mcServer.worldMngr.func_22078_l();
-                NetServerHandler netserverhandler = new NetServerHandler(mcServer, netManager, entityplayermp);
+                var netserverhandler = new NetServerHandler(mcServer, netManager, entityplayermp);
                 netserverhandler.sendPacket(new Packet1Login("", "", entityplayermp.entityId,
                                                              mcServer.worldMngr.func_22079_j(),
                                                              (byte) mcServer.worldMngr.worldProvider.worldType));
@@ -157,15 +166,5 @@ namespace CraftyServer.Core
         {
             return netloginhandler.field_9004_h = packet1login;
         }
-
-        public static Logger logger = Logger.getLogger("Minecraft");
-        private static Random rand = new Random();
-        public NetworkManager netManager;
-        public bool finishedProcessing;
-        private MinecraftServer mcServer;
-        private int loginTimer;
-        private string username;
-        private Packet1Login field_9004_h;
-        private string serverId;
     }
 }

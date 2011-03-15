@@ -3,6 +3,10 @@ namespace CraftyServer.Core
     public class InventoryCrafting
         : IInventory
     {
+        private readonly CraftingInventoryCB eventHandler;
+        private readonly int field_21085_b;
+        private readonly ItemStack[] stackList;
+
         public InventoryCrafting(CraftingInventoryCB craftinginventorycb, int i, int j)
         {
             int k = i*j;
@@ -10,6 +14,8 @@ namespace CraftyServer.Core
             eventHandler = craftinginventorycb;
             field_21085_b = i;
         }
+
+        #region IInventory Members
 
         public int getSizeInventory()
         {
@@ -25,19 +31,6 @@ namespace CraftyServer.Core
             else
             {
                 return stackList[i];
-            }
-        }
-
-        public ItemStack func_21084_a(int i, int j)
-        {
-            if (i < 0 || i >= field_21085_b)
-            {
-                return null;
-            }
-            else
-            {
-                int k = i + j*field_21085_b;
-                return getStackInSlot(k);
             }
         }
 
@@ -91,8 +84,19 @@ namespace CraftyServer.Core
             return true;
         }
 
-        private ItemStack[] stackList;
-        private int field_21085_b;
-        private CraftingInventoryCB eventHandler;
+        #endregion
+
+        public ItemStack func_21084_a(int i, int j)
+        {
+            if (i < 0 || i >= field_21085_b)
+            {
+                return null;
+            }
+            else
+            {
+                int k = i + j*field_21085_b;
+                return getStackInSlot(k);
+            }
+        }
     }
 }

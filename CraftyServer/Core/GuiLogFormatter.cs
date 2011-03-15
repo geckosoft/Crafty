@@ -1,11 +1,13 @@
 using java.io;
-using java.util.logging;
 using java.lang;
+using java.util.logging;
 
 namespace CraftyServer.Core
 {
     public class GuiLogFormatter : Formatter
     {
+        private GuiLogOutputHandler outputHandler; /* synthetic field */
+
         public GuiLogFormatter(GuiLogOutputHandler guilogoutputhandler)
         {
             outputHandler = guilogoutputhandler;
@@ -13,7 +15,7 @@ namespace CraftyServer.Core
 
         public override string format(LogRecord logrecord)
         {
-            StringBuilder stringbuilder = new StringBuilder();
+            var stringbuilder = new StringBuilder();
             Level level = logrecord.getLevel();
             if (level == Level.FINEST)
             {
@@ -46,16 +48,14 @@ namespace CraftyServer.Core
             }
             stringbuilder.append(logrecord.getMessage());
             stringbuilder.append('\n');
-            Throwable throwable = logrecord.getThrown() as Throwable;
+            var throwable = logrecord.getThrown() as Throwable;
             if (throwable != null)
             {
-                StringWriter stringwriter = new StringWriter();
+                var stringwriter = new StringWriter();
                 throwable.printStackTrace(new PrintWriter(stringwriter));
                 stringbuilder.append(stringwriter.toString());
             }
             return stringbuilder.toString();
         }
-
-        private GuiLogOutputHandler outputHandler; /* synthetic field */
     }
 }

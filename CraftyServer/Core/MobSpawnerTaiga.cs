@@ -1,14 +1,9 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class MobSpawnerTaiga : MobSpawnerBase
     {
-        public MobSpawnerTaiga()
-        {
-        }
-
         public override WorldGenerator getRandomWorldGenForTrees(Random random)
         {
             if (random.nextInt(3) == 0)

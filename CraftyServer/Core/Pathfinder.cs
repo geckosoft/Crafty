@@ -2,6 +2,11 @@ namespace CraftyServer.Core
 {
     public class Pathfinder
     {
+        private readonly Path path;
+        private readonly PathPoint[] pathOptions;
+        private readonly MCHashTable pointMap;
+        private readonly IBlockAccess worldMap;
+
         public Pathfinder(IBlockAccess iblockaccess)
         {
             path = new Path();
@@ -17,7 +22,7 @@ namespace CraftyServer.Core
 
         public PathEntity createEntityPathTo(Entity entity, int i, int j, int k, float f)
         {
-            return createEntityPathTo(entity, (float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F, f);
+            return createEntityPathTo(entity, i + 0.5F, j + 0.5F, k + 0.5F, f);
         }
 
         private PathEntity createEntityPathTo(Entity entity, double d, double d1, double d2,
@@ -28,12 +33,12 @@ namespace CraftyServer.Core
             PathPoint pathpoint = openPoint(MathHelper.floor_double(entity.boundingBox.minX),
                                             MathHelper.floor_double(entity.boundingBox.minY),
                                             MathHelper.floor_double(entity.boundingBox.minZ));
-            PathPoint pathpoint1 = openPoint(MathHelper.floor_double(d - (double) (entity.width/2.0F)),
+            PathPoint pathpoint1 = openPoint(MathHelper.floor_double(d - (entity.width/2.0F)),
                                              MathHelper.floor_double(d1),
-                                             MathHelper.floor_double(d2 - (double) (entity.width/2.0F)));
-            PathPoint pathpoint2 = new PathPoint(MathHelper.floor_float(entity.width + 1.0F),
-                                                 MathHelper.floor_float(entity.height + 1.0F),
-                                                 MathHelper.floor_float(entity.width + 1.0F));
+                                             MathHelper.floor_double(d2 - (entity.width/2.0F)));
+            var pathpoint2 = new PathPoint(MathHelper.floor_float(entity.width + 1.0F),
+                                           MathHelper.floor_float(entity.height + 1.0F),
+                                           MathHelper.floor_float(entity.width + 1.0F));
             PathEntity pathentity = addToPath(entity, pathpoint, pathpoint1, pathpoint2, f);
             return pathentity;
         }
@@ -167,7 +172,7 @@ namespace CraftyServer.Core
         private PathPoint openPoint(int i, int j, int k)
         {
             int l = PathPoint.func_22203_a(i, j, k);
-            PathPoint pathpoint = (PathPoint) pointMap.lookup(l);
+            var pathpoint = (PathPoint) pointMap.lookup(l);
             if (pathpoint == null)
             {
                 pathpoint = new PathPoint(i, j, k);
@@ -208,7 +213,7 @@ namespace CraftyServer.Core
                 i++;
             }
 
-            PathPoint[] apathpoint = new PathPoint[i];
+            var apathpoint = new PathPoint[i];
             PathPoint pathpoint3 = pathpoint1;
             for (apathpoint[--i] = pathpoint3; pathpoint3.previous != null; apathpoint[--i] = pathpoint3)
             {
@@ -217,10 +222,5 @@ namespace CraftyServer.Core
 
             return new PathEntity(apathpoint);
         }
-
-        private IBlockAccess worldMap;
-        private Path path;
-        private MCHashTable pointMap;
-        private PathPoint[] pathOptions;
     }
 }

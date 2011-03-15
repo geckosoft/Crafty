@@ -1,15 +1,10 @@
-using java.util;
 using java.lang;
-
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class WorldGenTaiga1 : WorldGenerator
     {
-        public WorldGenTaiga1()
-        {
-        }
-
         public override bool generate(World world, Random random, int i, int j, int k)
         {
             int l = random.nextInt(5) + 7;

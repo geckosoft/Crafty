@@ -32,7 +32,7 @@ namespace CraftyServer.Core
             {
                 byte0 = 3;
             }
-            EntityPainting entitypainting = new EntityPainting(world, i, j, k, byte0);
+            var entitypainting = new EntityPainting(world, i, j, k, byte0);
             if (entitypainting.onValidSurface())
             {
                 if (!world.singleplayerWorld)

@@ -4,10 +4,6 @@ namespace CraftyServer.Core
 {
     public class RecipesFood
     {
-        public RecipesFood()
-        {
-        }
-
         public void addRecipes(CraftingManager craftingmanager)
         {
             craftingmanager.addRecipe(new ItemStack(Item.bowlSoup), new object[]

@@ -2,6 +2,11 @@ namespace CraftyServer.Core
 {
     public class ItemTool : Item
     {
+        private readonly Block[] blocksEffectiveAgainst;
+        private readonly int damageVsEntity;
+        private readonly float efficiencyOnProperMaterial;
+        protected EnumToolMaterial toolMaterial;
+
         protected ItemTool(int i, int j, EnumToolMaterial enumtoolmaterial, Block[] ablock) : base(i)
         {
             efficiencyOnProperMaterial = 4F;
@@ -40,10 +45,5 @@ namespace CraftyServer.Core
         {
             return damageVsEntity;
         }
-
-        private Block[] blocksEffectiveAgainst;
-        private float efficiencyOnProperMaterial;
-        private int damageVsEntity;
-        protected EnumToolMaterial toolMaterial;
     }
 }

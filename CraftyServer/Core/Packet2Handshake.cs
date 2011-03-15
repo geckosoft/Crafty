@@ -4,6 +4,8 @@ namespace CraftyServer.Core
 {
     public class Packet2Handshake : Packet
     {
+        public string username;
+
         public Packet2Handshake()
         {
         }
@@ -32,7 +34,5 @@ namespace CraftyServer.Core
         {
             return 4 + username.Length + 4;
         }
-
-        public string username;
     }
 }

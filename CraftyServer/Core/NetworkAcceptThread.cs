@@ -1,13 +1,16 @@
 using CraftyServer.Server;
 using java.io;
-using java.net;
 using java.lang;
+using java.net;
 using java.util;
 
 namespace CraftyServer.Core
 {
     public class NetworkAcceptThread : Thread
     {
+        private readonly NetworkListenThread field_985_b; /* synthetic field */
+        private readonly MinecraftServer mcServer; /* synthetic field */
+
         public NetworkAcceptThread(NetworkListenThread networklistenthread, string s, MinecraftServer minecraftserver)
             : base(s)
         {
@@ -17,7 +20,7 @@ namespace CraftyServer.Core
 
         public override void run()
         {
-            HashMap hashmap = new HashMap();
+            var hashmap = new HashMap();
             do
             {
                 if (!field_985_b.field_973_b)
@@ -39,11 +42,11 @@ namespace CraftyServer.Core
                         else
                         {
                             hashmap.put(inetaddress, Long.valueOf(java.lang.System.currentTimeMillis()));
-                            NetLoginHandler netloginhandler = new NetLoginHandler(mcServer, socket,
-                                                                                  (new StringBuilder()).append(
-                                                                                      "Connection #").append(
-                                                                                          NetworkListenThread.func_712_b
-                                                                                              (field_985_b)).toString());
+                            var netloginhandler = new NetLoginHandler(mcServer, socket,
+                                                                      (new StringBuilder()).append(
+                                                                          "Connection #").append(
+                                                                              NetworkListenThread.func_712_b
+                                                                                  (field_985_b)).toString());
                             NetworkListenThread.func_716_a(field_985_b, netloginhandler);
                         }
                     }
@@ -54,8 +57,5 @@ namespace CraftyServer.Core
                 }
             } while (true);
         }
-
-        private MinecraftServer mcServer; /* synthetic field */
-        private NetworkListenThread field_985_b; /* synthetic field */
     }
 }

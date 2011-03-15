@@ -4,6 +4,10 @@ namespace CraftyServer.Core
 {
     public class WorldChunkManagerHell : WorldChunkManager
     {
+        private readonly double field_4260_g;
+        private readonly double field_4261_f;
+        private readonly MobSpawnerBase field_4262_e;
+
         public WorldChunkManagerHell(MobSpawnerBase mobspawnerbase, double d, double d1)
         {
             field_4262_e = mobspawnerbase;
@@ -51,9 +55,5 @@ namespace CraftyServer.Core
             Arrays.fill(temperature, 0, k*l, field_4261_f);
             return amobspawnerbase;
         }
-
-        private MobSpawnerBase field_4262_e;
-        private double field_4261_f;
-        private double field_4260_g;
     }
 }

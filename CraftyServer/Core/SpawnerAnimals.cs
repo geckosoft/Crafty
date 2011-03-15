@@ -1,12 +1,19 @@
-using java.util;
 using java.lang;
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class SpawnerAnimals
     {
-        public SpawnerAnimals()
+        private static readonly Set eligibleChunksForSpawning = new HashSet();
+        protected static Class[] field_22213_a;
+
+        static SpawnerAnimals()
         {
+            field_22213_a = (new Class[]
+                             {
+                                 typeof (EntitySpider), typeof (EntityZombie), typeof (EntitySkeleton)
+                             });
         }
 
         protected static ChunkPosition getRandomSpawningPointInChunk(World world, int i, int j)
@@ -31,7 +38,7 @@ namespace CraftyServer.Core
                 int var6;
                 for (var3 = 0; var3 < var0.playerEntities.size(); ++var3)
                 {
-                    EntityPlayer var4 = (EntityPlayer) var0.playerEntities.get(var3);
+                    var var4 = (EntityPlayer) var0.playerEntities.get(var3);
                     int var5 = MathHelper.floor_double(var4.posX/16.0D);
                     var6 = MathHelper.floor_double(var4.posZ/16.0D);
                     byte var7 = 8;
@@ -61,7 +68,7 @@ namespace CraftyServer.Core
 
                         while (var37.hasNext())
                         {
-                            ChunkCoordIntPair var10 = (ChunkCoordIntPair) var37.next();
+                            var var10 = (ChunkCoordIntPair) var37.next();
                             MobSpawnerBase var11 = var0.getWorldChunkManager().func_4066_a(var10);
                             Class[] var12 = var11.getEntitiesForType(var36);
                             if (var12 != null && var12.Length != 0)
@@ -91,16 +98,16 @@ namespace CraftyServer.Core
                                             var22 += var0.rand.nextInt(var23) - var0.rand.nextInt(var23);
                                             if (func_21167_a(var36, var0, var20, var21, var22))
                                             {
-                                                float var25 = (float) var20 + 0.5F;
-                                                float var26 = (float) var21;
-                                                float var27 = (float) var22 + 0.5F;
+                                                float var25 = var20 + 0.5F;
+                                                float var26 = var21;
+                                                float var27 = var22 + 0.5F;
                                                 if (
-                                                    var0.getClosestPlayer((double) var25, (double) var26, (double) var27,
+                                                    var0.getClosestPlayer(var25, var26, var27,
                                                                           24.0D) == null)
                                                 {
-                                                    float var28 = var25 - (float) var33.posX;
-                                                    float var29 = var26 - (float) var33.posY;
-                                                    float var30 = var27 - (float) var33.posZ;
+                                                    float var28 = var25 - var33.posX;
+                                                    float var29 = var26 - var33.posY;
+                                                    float var30 = var27 - var33.posZ;
                                                     float var31 = var28*var28 + var29*var29 + var30*var30;
                                                     if (var31 >= 576.0F)
                                                     {
@@ -118,13 +125,13 @@ namespace CraftyServer.Core
                                                             return var3;
                                                         }
 
-                                                        var38.setLocationAndAngles((double) var25, (double) var26,
-                                                                                   (double) var27,
+                                                        var38.setLocationAndAngles(var25, var26,
+                                                                                   var27,
                                                                                    var0.rand.nextFloat()*360.0F, 0.0F);
                                                         if (var38.getCanSpawnHere())
                                                         {
                                                             ++var18;
-                                                            var0.entityJoinedWorld((Entity) var38);
+                                                            var0.entityJoinedWorld(var38);
                                                             func_21166_a(var38, var0, var25, var26, var27);
                                                             if (var18 >= var38.getMaxSpawnedInChunk())
                                                             {
@@ -165,7 +172,7 @@ namespace CraftyServer.Core
         {
             if ((entityliving is EntitySpider) && world.rand.nextInt(100) == 0)
             {
-                EntitySkeleton entityskeleton = new EntitySkeleton(world);
+                var entityskeleton = new EntitySkeleton(world);
                 entityskeleton.setLocationAndAngles(f, f1, f2, entityliving.rotationYaw, 0.0F);
                 world.entityJoinedWorld(entityskeleton);
                 entityskeleton.mountEntity(entityliving);
@@ -179,7 +186,7 @@ namespace CraftyServer.Core
         public static bool performSleepSpawning(World world, List list)
         {
             bool flag = false;
-            Pathfinder pathfinder = new Pathfinder(world);
+            var pathfinder = new Pathfinder(world);
             Iterator iterator = list.iterator();
             do
             {
@@ -187,8 +194,8 @@ namespace CraftyServer.Core
                 {
                     break;
                 }
-                EntityPlayer entityplayer = (EntityPlayer) iterator.next();
-                java.lang.Class[] aclass = field_22213_a;
+                var entityplayer = (EntityPlayer) iterator.next();
+                Class[] aclass = field_22213_a;
                 if (aclass != null && aclass.Length != 0)
                 {
                     bool flag1 = false;
@@ -225,9 +232,9 @@ namespace CraftyServer.Core
                         }
                         else
                         {
-                            float f = (float) j + 0.5F;
+                            float f = j + 0.5F;
                             float f1 = j1;
-                            float f2 = (float) k + 0.5F;
+                            float f2 = k + 0.5F;
                             EntityLiving entityliving;
                             try
                             {
@@ -251,9 +258,9 @@ namespace CraftyServer.Core
                                 if (pathentity != null && pathentity.pathLength > 1)
                                 {
                                     PathPoint pathpoint = pathentity.func_22211_c();
-                                    if (Math.abs((double) pathpoint.xCoord - entityplayer.posX) < 1.5D &&
-                                        Math.abs((double) pathpoint.zCoord - entityplayer.posZ) < 1.5D &&
-                                        Math.abs((double) pathpoint.yCoord - entityplayer.posY) < 1.5D)
+                                    if (Math.abs(pathpoint.xCoord - entityplayer.posX) < 1.5D &&
+                                        Math.abs(pathpoint.zCoord - entityplayer.posZ) < 1.5D &&
+                                        Math.abs(pathpoint.yCoord - entityplayer.posY) < 1.5D)
                                     {
                                         ChunkCoordinates chunkcoordinates = BlockBed.func_22021_g(world,
                                                                                                   MathHelper.
@@ -268,13 +275,13 @@ namespace CraftyServer.Core
                                                                                                       floor_double(
                                                                                                           entityplayer.
                                                                                                               posZ), 1);
-                                        entityliving.setLocationAndAngles((float) chunkcoordinates.posX + 0.5F,
+                                        entityliving.setLocationAndAngles(chunkcoordinates.posX + 0.5F,
                                                                           chunkcoordinates.posY,
-                                                                          (float) chunkcoordinates.posZ + 0.5F, 0.0F,
+                                                                          chunkcoordinates.posZ + 0.5F, 0.0F,
                                                                           0.0F);
                                         world.entityJoinedWorld(entityliving);
-                                        func_21166_a(entityliving, world, (float) chunkcoordinates.posX + 0.5F,
-                                                     chunkcoordinates.posY, (float) chunkcoordinates.posZ + 0.5F);
+                                        func_21166_a(entityliving, world, chunkcoordinates.posX + 0.5F,
+                                                     chunkcoordinates.posY, chunkcoordinates.posZ + 0.5F);
                                         entityplayer.wakeUpPlayer(true, false);
                                         entityliving.func_22056_G();
                                         flag = true;
@@ -288,17 +295,6 @@ namespace CraftyServer.Core
                 }
             } while (true);
             return flag;
-        }
-
-        private static Set eligibleChunksForSpawning = new HashSet();
-        protected static java.lang.Class[] field_22213_a;
-
-        static SpawnerAnimals()
-        {
-            field_22213_a = (new java.lang.Class[]
-                             {
-                                 typeof (EntitySpider), typeof (EntityZombie), typeof (EntitySkeleton)
-                             });
         }
     }
 }

@@ -2,6 +2,8 @@ namespace CraftyServer.Core
 {
     public class CraftingInventoryDispenserCB : CraftingInventoryCB
     {
+        private readonly TileEntityDispenser field_21133_a;
+
         public CraftingInventoryDispenserCB(IInventory iinventory, TileEntityDispenser tileentitydispenser)
         {
             field_21133_a = tileentitydispenser;
@@ -31,7 +33,5 @@ namespace CraftyServer.Core
         {
             return field_21133_a.canInteractWith(entityplayer);
         }
-
-        private TileEntityDispenser field_21133_a;
     }
 }

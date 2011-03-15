@@ -6,13 +6,15 @@ namespace CraftyServer.Core
 {
     public class ServerWindowAdapter : WindowAdapter
     {
+        private readonly MinecraftServer mcServer; /* synthetic field */
+
         public ServerWindowAdapter(MinecraftServer minecraftserver)
         {
             mcServer = minecraftserver;
 //        
         }
 
-        public override void windowClosing(java.awt.@event.WindowEvent windowevent)
+        public override void windowClosing(WindowEvent windowevent)
         {
             mcServer.initiateShutdown();
             while (!mcServer.serverStopped)
@@ -28,7 +30,5 @@ namespace CraftyServer.Core
             }
             java.lang.System.exit(0);
         }
-
-        private MinecraftServer mcServer; /* synthetic field */
     }
 }

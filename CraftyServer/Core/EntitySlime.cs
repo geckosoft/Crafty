@@ -2,6 +2,11 @@ namespace CraftyServer.Core
 {
     public class EntitySlime : EntityLiving, IMobs
     {
+        public float field_400_b;
+        public float field_401_a;
+        public int slimeSize;
+        private int ticksTillJump;
+
         public EntitySlime(World world)
             : base(world)
         {
@@ -17,7 +22,7 @@ namespace CraftyServer.Core
         public void setSlimeSize(int i)
         {
             slimeSize = i;
-            setSize(0.6F*(float) i, 0.6F*(float) i);
+            setSize(0.6F*i, 0.6F*i);
             health = i*i;
             setPosition(posX, posY, posZ);
         }
@@ -45,9 +50,9 @@ namespace CraftyServer.Core
                 {
                     float f = rand.nextFloat()*3.141593F*2.0F;
                     float f1 = rand.nextFloat()*0.5F + 0.5F;
-                    float f2 = MathHelper.sin(f)*(float) slimeSize*0.5F*f1;
-                    float f3 = MathHelper.cos(f)*(float) slimeSize*0.5F*f1;
-                    worldObj.spawnParticle("slime", posX + (double) f2, boundingBox.minY, posZ + (double) f3, 0.0D, 0.0D,
+                    float f2 = MathHelper.sin(f)*slimeSize*0.5F*f1;
+                    float f3 = MathHelper.cos(f)*slimeSize*0.5F*f1;
+                    worldObj.spawnParticle("slime", posX + f2, boundingBox.minY, posZ + f3, 0.0D, 0.0D,
                                            0.0D);
                 }
 
@@ -101,11 +106,11 @@ namespace CraftyServer.Core
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    float f = (((float) (i%2) - 0.5F)*(float) slimeSize)/4F;
-                    float f1 = (((float) (i/2) - 0.5F)*(float) slimeSize)/4F;
-                    EntitySlime entityslime = new EntitySlime(worldObj);
+                    float f = (((i%2) - 0.5F)*slimeSize)/4F;
+                    float f1 = (((i/2) - 0.5F)*slimeSize)/4F;
+                    var entityslime = new EntitySlime(worldObj);
                     entityslime.setSlimeSize(slimeSize/2);
-                    entityslime.setLocationAndAngles(posX + (double) f, posY + 0.5D, posZ + (double) f1,
+                    entityslime.setLocationAndAngles(posX + f, posY + 0.5D, posZ + f1,
                                                      rand.nextFloat()*360F, 0.0F);
                     worldObj.entityJoinedWorld(entityslime);
                 }
@@ -116,7 +121,7 @@ namespace CraftyServer.Core
         public override void onCollideWithPlayer(EntityPlayer entityplayer)
         {
             if (slimeSize > 1 && canEntityBeSeen(entityplayer) &&
-                (double) getDistanceToEntity(entityplayer) < 0.59999999999999998D*(double) slimeSize &&
+                getDistanceToEntity(entityplayer) < 0.59999999999999998D*slimeSize &&
                 entityplayer.attackEntityFrom(this, slimeSize))
             {
                 worldObj.playSoundAtEntity(this, "mob.slimeattack", 1.0F,
@@ -157,10 +162,5 @@ namespace CraftyServer.Core
         {
             return 0.6F;
         }
-
-        public float field_401_a;
-        public float field_400_b;
-        private int ticksTillJump;
-        public int slimeSize;
     }
 }

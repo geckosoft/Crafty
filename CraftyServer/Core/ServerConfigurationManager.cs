@@ -1,13 +1,31 @@
+using System;
 using CraftyServer.Server;
 using java.io;
+using java.lang;
 using java.util;
 using java.util.logging;
-using java.lang;
+using Exception = java.lang.Exception;
 
 namespace CraftyServer.Core
 {
     public class ServerConfigurationManager
     {
+        public static Logger logger = Logger.getLogger("Minecraft");
+        private readonly Set bannedIPs;
+        private readonly Set bannedPlayers;
+        private readonly File bannedPlayersFile;
+        private readonly File ipBanFile;
+        private readonly int maxPlayers;
+        private readonly MinecraftServer mcServer;
+        private readonly File opFile;
+        private readonly Set ops;
+        private readonly PlayerManager playerManagerObj;
+        private readonly bool whiteListEnforced;
+        private readonly Set whiteListedIPs;
+        private readonly File whitelistPlayersFile;
+        public List playerEntities;
+        private IPlayerFileData playerNBTManagerObj;
+
         public ServerConfigurationManager(MinecraftServer minecraftserver)
         {
             playerEntities = new ArrayList();
@@ -97,7 +115,7 @@ namespace CraftyServer.Core
             }
             for (int i = 0; i < playerEntities.size(); i++)
             {
-                EntityPlayerMP entityplayermp = (EntityPlayerMP) playerEntities.get(i);
+                var entityplayermp = (EntityPlayerMP) playerEntities.get(i);
                 if (entityplayermp.username.ToLowerInvariant() == s.ToLowerInvariant())
                 {
                     entityplayermp.playerNetServerHandler.kickPlayer("You logged in from another location");
@@ -114,8 +132,8 @@ namespace CraftyServer.Core
             playerManagerObj.removePlayer(entityplayermp);
             playerEntities.remove(entityplayermp);
             mcServer.worldMngr.func_22073_e(entityplayermp);
-            EntityPlayerMP entityplayermp1 = new EntityPlayerMP(mcServer, mcServer.worldMngr, entityplayermp.username,
-                                                                new ItemInWorldManager(mcServer.worldMngr));
+            var entityplayermp1 = new EntityPlayerMP(mcServer, mcServer.worldMngr, entityplayermp.username,
+                                                     new ItemInWorldManager(mcServer.worldMngr));
             entityplayermp1.entityId = entityplayermp.entityId;
             entityplayermp1.playerNetServerHandler = entityplayermp.playerNetServerHandler;
             mcServer.worldMngr.field_20911_y.loadChunk((int) entityplayermp1.posX >> 4, (int) entityplayermp1.posZ >> 4);
@@ -150,7 +168,7 @@ namespace CraftyServer.Core
         {
             for (int i = 0; i < playerEntities.size(); i++)
             {
-                EntityPlayerMP entityplayermp = (EntityPlayerMP) playerEntities.get(i);
+                var entityplayermp = (EntityPlayerMP) playerEntities.get(i);
                 entityplayermp.playerNetServerHandler.sendPacket(packet);
             }
         }
@@ -187,7 +205,7 @@ namespace CraftyServer.Core
             try
             {
                 bannedPlayers.clear();
-                BufferedReader bufferedreader = new BufferedReader(new FileReader(bannedPlayersFile));
+                var bufferedreader = new BufferedReader(new FileReader(bannedPlayersFile));
                 for (string s = ""; (s = bufferedreader.readLine()) != null;)
                 {
                     bannedPlayers.add(s.Trim().ToLower());
@@ -205,7 +223,7 @@ namespace CraftyServer.Core
         {
             try
             {
-                PrintWriter printwriter = new PrintWriter(new FileWriter(bannedPlayersFile, false));
+                var printwriter = new PrintWriter(new FileWriter(bannedPlayersFile, false));
                 string s;
                 for (Iterator iterator = bannedPlayers.iterator(); iterator.hasNext(); printwriter.println(s))
                 {
@@ -237,7 +255,7 @@ namespace CraftyServer.Core
             try
             {
                 bannedIPs.clear();
-                BufferedReader bufferedreader = new BufferedReader(new FileReader(ipBanFile));
+                var bufferedreader = new BufferedReader(new FileReader(ipBanFile));
                 for (string s = ""; (s = bufferedreader.readLine()) != null;)
                 {
                     bannedIPs.add(s.Trim().ToLower());
@@ -255,7 +273,7 @@ namespace CraftyServer.Core
         {
             try
             {
-                PrintWriter printwriter = new PrintWriter(new FileWriter(ipBanFile, false));
+                var printwriter = new PrintWriter(new FileWriter(ipBanFile, false));
                 string s;
                 for (Iterator iterator = bannedIPs.iterator(); iterator.hasNext(); printwriter.println(s))
                 {
@@ -287,7 +305,7 @@ namespace CraftyServer.Core
             try
             {
                 ops.clear();
-                BufferedReader bufferedreader = new BufferedReader(new FileReader(opFile));
+                var bufferedreader = new BufferedReader(new FileReader(opFile));
                 for (string s = ""; (s = bufferedreader.readLine()) != null;)
                 {
                     ops.add(s.Trim().ToLower());
@@ -305,7 +323,7 @@ namespace CraftyServer.Core
         {
             try
             {
-                PrintWriter printwriter = new PrintWriter(new FileWriter(opFile, false));
+                var printwriter = new PrintWriter(new FileWriter(opFile, false));
                 string s;
                 for (Iterator iterator = ops.iterator(); iterator.hasNext(); printwriter.println(s))
                 {
@@ -325,7 +343,7 @@ namespace CraftyServer.Core
             try
             {
                 whiteListedIPs.clear();
-                BufferedReader bufferedreader = new BufferedReader(new FileReader(whitelistPlayersFile));
+                var bufferedreader = new BufferedReader(new FileReader(whitelistPlayersFile));
                 for (string s = ""; (s = bufferedreader.readLine()) != null;)
                 {
                     whiteListedIPs.add(s.Trim().ToLower());
@@ -343,7 +361,7 @@ namespace CraftyServer.Core
         {
             try
             {
-                PrintWriter printwriter = new PrintWriter(new FileWriter(whitelistPlayersFile, false));
+                var printwriter = new PrintWriter(new FileWriter(whitelistPlayersFile, false));
                 string s;
                 for (Iterator iterator = whiteListedIPs.iterator(); iterator.hasNext(); printwriter.println(s))
                 {
@@ -373,8 +391,8 @@ namespace CraftyServer.Core
         {
             for (int i = 0; i < playerEntities.size(); i++)
             {
-                EntityPlayerMP entityplayermp = (EntityPlayerMP) playerEntities.get(i);
-                if (entityplayermp.username.Equals(s, System.StringComparison.InvariantCultureIgnoreCase))
+                var entityplayermp = (EntityPlayerMP) playerEntities.get(i);
+                if (entityplayermp.username.Equals(s, StringComparison.InvariantCultureIgnoreCase))
                 {
                     return entityplayermp;
                 }
@@ -396,7 +414,7 @@ namespace CraftyServer.Core
         {
             for (int i = 0; i < playerEntities.size(); i++)
             {
-                EntityPlayerMP entityplayermp = (EntityPlayerMP) playerEntities.get(i);
+                var entityplayermp = (EntityPlayerMP) playerEntities.get(i);
                 double d4 = d - entityplayermp.posX;
                 double d5 = d1 - entityplayermp.posY;
                 double d6 = d2 - entityplayermp.posZ;
@@ -409,10 +427,10 @@ namespace CraftyServer.Core
 
         public void sendChatMessageToAllPlayers(string s)
         {
-            Packet3Chat packet3chat = new Packet3Chat(s);
+            var packet3chat = new Packet3Chat(s);
             for (int i = 0; i < playerEntities.size(); i++)
             {
-                EntityPlayerMP entityplayermp = (EntityPlayerMP) playerEntities.get(i);
+                var entityplayermp = (EntityPlayerMP) playerEntities.get(i);
                 if (isOp(entityplayermp.username))
                 {
                     entityplayermp.playerNetServerHandler.sendPacket(packet3chat);
@@ -467,21 +485,5 @@ namespace CraftyServer.Core
         {
             loadWhiteList();
         }
-
-        public static Logger logger = Logger.getLogger("Minecraft");
-        public List playerEntities;
-        private MinecraftServer mcServer;
-        private PlayerManager playerManagerObj;
-        private int maxPlayers;
-        private Set bannedPlayers;
-        private Set bannedIPs;
-        private Set ops;
-        private Set whiteListedIPs;
-        private File bannedPlayersFile;
-        private File ipBanFile;
-        private File opFile;
-        private File whitelistPlayersFile;
-        private IPlayerFileData playerNBTManagerObj;
-        private bool whiteListEnforced;
     }
 }

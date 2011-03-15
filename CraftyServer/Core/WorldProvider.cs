@@ -1,7 +1,18 @@
+using java.lang;
+
 namespace CraftyServer.Core
 {
     public class WorldProvider
     {
+        public bool field_4306_c;
+        private float[] field_6164_h;
+        public bool field_6167_c;
+        public bool isHellWorld;
+        public float[] lightBrightnessTable;
+        public WorldChunkManager worldChunkMgr;
+        public World worldObj;
+        public int worldType;
+
         public WorldProvider()
         {
             field_6167_c = false;
@@ -24,7 +35,7 @@ namespace CraftyServer.Core
             float f = 0.05F;
             for (int i = 0; i <= 15; i++)
             {
-                float f1 = 1.0F - (float) i/15F;
+                float f1 = 1.0F - i/15F;
                 lightBrightnessTable[i] = ((1.0F - f1)/(f1*3F + 1.0F))*(1.0F - f) + f;
             }
         }
@@ -47,8 +58,8 @@ namespace CraftyServer.Core
 
         public virtual float calculateCelestialAngle(long l, float f)
         {
-            int i = (int) (l%24000L);
-            float f1 = ((float) i + f)/24000F - 0.25F;
+            var i = (int) (l%24000L);
+            float f1 = (i + f)/24000F - 0.25F;
             if (f1 < 0.0F)
             {
                 f1++;
@@ -58,7 +69,7 @@ namespace CraftyServer.Core
                 f1--;
             }
             float f2 = f1;
-            f1 = 1.0F - (float) ((java.lang.Math.cos((double) f1*3.1415926535897931D) + 1.0D)/2D);
+            f1 = 1.0F - (float) ((Math.cos(f1*3.1415926535897931D) + 1.0D)/2D);
             f1 = f2 + (f1 - f2)/3F;
             return f1;
         }
@@ -78,14 +89,5 @@ namespace CraftyServer.Core
                 return null;
             }
         }
-
-        public World worldObj;
-        public WorldChunkManager worldChunkMgr;
-        public bool field_6167_c;
-        public bool isHellWorld;
-        public bool field_4306_c;
-        public float[] lightBrightnessTable;
-        public int worldType;
-        private float[] field_6164_h;
     }
 }

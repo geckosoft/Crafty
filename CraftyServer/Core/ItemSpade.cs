@@ -2,6 +2,17 @@ namespace CraftyServer.Core
 {
     public class ItemSpade : ItemTool
     {
+        private static readonly Block[] blocksEffectiveAgainst;
+
+        static ItemSpade()
+        {
+            blocksEffectiveAgainst = (new[]
+                                      {
+                                          Block.grass, Block.dirt, Block.sand, Block.gravel, Block.snow, Block.blockSnow
+                                          , Block.blockClay
+                                      });
+        }
+
         public ItemSpade(int i, EnumToolMaterial enumtoolmaterial)
             : base(i, 1, enumtoolmaterial, blocksEffectiveAgainst)
         {
@@ -14,17 +25,6 @@ namespace CraftyServer.Core
                 return true;
             }
             return block == Block.blockSnow;
-        }
-
-        private static Block[] blocksEffectiveAgainst;
-
-        static ItemSpade()
-        {
-            blocksEffectiveAgainst = (new Block[]
-                                      {
-                                          Block.grass, Block.dirt, Block.sand, Block.gravel, Block.snow, Block.blockSnow
-                                          , Block.blockClay
-                                      });
         }
     }
 }

@@ -1,10 +1,11 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class WorldGenHellLava : WorldGenerator
     {
+        private readonly int field_4250_a;
+
         public WorldGenHellLava(int i)
         {
             field_4250_a = i;
@@ -71,7 +72,5 @@ namespace CraftyServer.Core
             }
             return true;
         }
-
-        private int field_4250_a;
     }
 }

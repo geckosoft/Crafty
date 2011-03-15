@@ -1,6 +1,5 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockCrops : BlockFlower
@@ -16,7 +15,7 @@ namespace CraftyServer.Core
 
         protected override bool canThisPlantGrowOnThisBlockID(int i)
         {
-            return i == Block.tilledField.blockID;
+            return i == tilledField.blockID;
         }
 
         public override void updateTick(World world, int i, int j, int k, Random random)
@@ -62,7 +61,7 @@ namespace CraftyServer.Core
                 {
                     int j3 = world.getBlockId(l2, j - 1, i3);
                     float f1 = 0.0F;
-                    if (j3 == Block.tilledField.blockID)
+                    if (j3 == tilledField.blockID)
                     {
                         f1 = 1.0F;
                         if (world.getBlockMetadata(l2, j - 1, i3) > 0)
@@ -107,8 +106,8 @@ namespace CraftyServer.Core
                         float f1 = world.rand.nextFloat()*f + (1.0F - f)*0.5F;
                         float f2 = world.rand.nextFloat()*f + (1.0F - f)*0.5F;
                         float f3 = world.rand.nextFloat()*f + (1.0F - f)*0.5F;
-                        EntityItem entityitem = new EntityItem(world, (float) i + f1, (float) j + f2, (float) k + f3,
-                                                               new ItemStack(Item.seeds));
+                        var entityitem = new EntityItem(world, i + f1, j + f2, k + f3,
+                                                        new ItemStack(Item.seeds));
                         entityitem.delayBeforeCanPickup = 10;
                         world.entityJoinedWorld(entityitem);
                     }

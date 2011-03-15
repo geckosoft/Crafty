@@ -4,6 +4,12 @@ namespace CraftyServer.Core
 {
     public class Packet17Sleep : Packet
     {
+        public int field_22040_b;
+        public int field_22041_a;
+        public int field_22042_e;
+        public int field_22043_d;
+        public int field_22044_c;
+
         public Packet17Sleep()
         {
         }
@@ -44,11 +50,5 @@ namespace CraftyServer.Core
         {
             return 14;
         }
-
-        public int field_22041_a;
-        public int field_22040_b;
-        public int field_22044_c;
-        public int field_22043_d;
-        public int field_22042_e;
     }
 }

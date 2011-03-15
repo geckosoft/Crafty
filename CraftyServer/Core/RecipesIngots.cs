@@ -4,9 +4,11 @@ namespace CraftyServer.Core
 {
     public class RecipesIngots
     {
+        private readonly object[][] recipeItems;
+
         public RecipesIngots()
         {
-            recipeItems = (new object[][]
+            recipeItems = (new[]
                            {
                                new object[]
                                {
@@ -28,8 +30,8 @@ namespace CraftyServer.Core
         {
             for (int i = 0; i < recipeItems.Length; i++)
             {
-                Block block = (Block) recipeItems[i][0];
-                ItemStack itemstack = (ItemStack) recipeItems[i][1];
+                var block = (Block) recipeItems[i][0];
+                var itemstack = (ItemStack) recipeItems[i][1];
                 craftingmanager.addRecipe(new ItemStack(block), new object[]
                                                                 {
                                                                     "###", "###", "###", Character.valueOf('#'),
@@ -41,7 +43,5 @@ namespace CraftyServer.Core
                                                      });
             }
         }
-
-        private object[][] recipeItems;
     }
 }

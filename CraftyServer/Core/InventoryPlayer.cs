@@ -3,6 +3,13 @@ namespace CraftyServer.Core
     public class InventoryPlayer
         : IInventory
     {
+        private readonly EntityPlayer player;
+        public ItemStack[] armorInventory;
+        public int currentItem;
+        public bool inventoryChanged;
+        private ItemStack itemStack;
+        public ItemStack[] mainInventory;
+
         public InventoryPlayer(EntityPlayer entityplayer)
         {
             mainInventory = new ItemStack[36];
@@ -11,6 +18,90 @@ namespace CraftyServer.Core
             inventoryChanged = false;
             player = entityplayer;
         }
+
+        #region IInventory Members
+
+        public ItemStack decrStackSize(int i, int j)
+        {
+            ItemStack[] aitemstack = mainInventory;
+            if (i >= mainInventory.Length)
+            {
+                aitemstack = armorInventory;
+                i -= mainInventory.Length;
+            }
+            if (aitemstack[i] != null)
+            {
+                if (aitemstack[i].stackSize <= j)
+                {
+                    ItemStack itemstack = aitemstack[i];
+                    aitemstack[i] = null;
+                    return itemstack;
+                }
+                ItemStack itemstack1 = aitemstack[i].splitStack(j);
+                if (aitemstack[i].stackSize == 0)
+                {
+                    aitemstack[i] = null;
+                }
+                return itemstack1;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void setInventorySlotContents(int i, ItemStack itemstack)
+        {
+            ItemStack[] aitemstack = mainInventory;
+            if (i >= aitemstack.Length)
+            {
+                i -= aitemstack.Length;
+                aitemstack = armorInventory;
+            }
+            aitemstack[i] = itemstack;
+        }
+
+        public int getSizeInventory()
+        {
+            return mainInventory.Length + 4;
+        }
+
+        public ItemStack getStackInSlot(int i)
+        {
+            ItemStack[] aitemstack = mainInventory;
+            if (i >= aitemstack.Length)
+            {
+                i -= aitemstack.Length;
+                aitemstack = armorInventory;
+            }
+            return aitemstack[i];
+        }
+
+        public string getInvName()
+        {
+            return "Inventory";
+        }
+
+        public int getInventoryStackLimit()
+        {
+            return 64;
+        }
+
+        public void onInventoryChanged()
+        {
+            inventoryChanged = true;
+        }
+
+        public virtual bool canInteractWith(EntityPlayer entityplayer)
+        {
+            if (player.isDead)
+            {
+                return false;
+            }
+            return entityplayer.getDistanceSqToEntity(player) <= 64D;
+        }
+
+        #endregion
 
         public ItemStack getCurrentItem()
         {
@@ -146,46 +237,6 @@ namespace CraftyServer.Core
             }
         }
 
-        public ItemStack decrStackSize(int i, int j)
-        {
-            ItemStack[] aitemstack = mainInventory;
-            if (i >= mainInventory.Length)
-            {
-                aitemstack = armorInventory;
-                i -= mainInventory.Length;
-            }
-            if (aitemstack[i] != null)
-            {
-                if (aitemstack[i].stackSize <= j)
-                {
-                    ItemStack itemstack = aitemstack[i];
-                    aitemstack[i] = null;
-                    return itemstack;
-                }
-                ItemStack itemstack1 = aitemstack[i].splitStack(j);
-                if (aitemstack[i].stackSize == 0)
-                {
-                    aitemstack[i] = null;
-                }
-                return itemstack1;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public void setInventorySlotContents(int i, ItemStack itemstack)
-        {
-            ItemStack[] aitemstack = mainInventory;
-            if (i >= aitemstack.Length)
-            {
-                i -= aitemstack.Length;
-                aitemstack = armorInventory;
-            }
-            aitemstack[i] = itemstack;
-        }
-
         public virtual float getStrVsBlock(Block block)
         {
             float f = 1.0F;
@@ -202,7 +253,7 @@ namespace CraftyServer.Core
             {
                 if (mainInventory[i] != null)
                 {
-                    NBTTagCompound nbttagcompound = new NBTTagCompound();
+                    var nbttagcompound = new NBTTagCompound();
                     nbttagcompound.setByte("Slot", (byte) i);
                     mainInventory[i].writeToNBT(nbttagcompound);
                     nbttaglist.setTag(nbttagcompound);
@@ -213,7 +264,7 @@ namespace CraftyServer.Core
             {
                 if (armorInventory[j] != null)
                 {
-                    NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                    var nbttagcompound1 = new NBTTagCompound();
                     nbttagcompound1.setByte("Slot", (byte) (j + 100));
                     armorInventory[j].writeToNBT(nbttagcompound1);
                     nbttaglist.setTag(nbttagcompound1);
@@ -229,9 +280,9 @@ namespace CraftyServer.Core
             armorInventory = new ItemStack[4];
             for (int i = 0; i < nbttaglist.tagCount(); i++)
             {
-                NBTTagCompound nbttagcompound = (NBTTagCompound) nbttaglist.tagAt(i);
+                var nbttagcompound = (NBTTagCompound) nbttaglist.tagAt(i);
                 int j = nbttagcompound.getByte("Slot") & 0xff;
-                ItemStack itemstack = new ItemStack(nbttagcompound);
+                var itemstack = new ItemStack(nbttagcompound);
                 if (itemstack.getItem() == null)
                 {
                     continue;
@@ -245,32 +296,6 @@ namespace CraftyServer.Core
                     armorInventory[j - 100] = itemstack;
                 }
             }
-        }
-
-        public int getSizeInventory()
-        {
-            return mainInventory.Length + 4;
-        }
-
-        public ItemStack getStackInSlot(int i)
-        {
-            ItemStack[] aitemstack = mainInventory;
-            if (i >= aitemstack.Length)
-            {
-                i -= aitemstack.Length;
-                aitemstack = armorInventory;
-            }
-            return aitemstack[i];
-        }
-
-        public string getInvName()
-        {
-            return "Inventory";
-        }
-
-        public int getInventoryStackLimit()
-        {
-            return 64;
         }
 
         public virtual int getDamageVsEntity(Entity entity)
@@ -371,11 +396,6 @@ namespace CraftyServer.Core
             }
         }
 
-        public void onInventoryChanged()
-        {
-            inventoryChanged = true;
-        }
-
         public void setItemStack(ItemStack itemstack)
         {
             itemStack = itemstack;
@@ -386,21 +406,5 @@ namespace CraftyServer.Core
         {
             return itemStack;
         }
-
-        public virtual bool canInteractWith(EntityPlayer entityplayer)
-        {
-            if (player.isDead)
-            {
-                return false;
-            }
-            return entityplayer.getDistanceSqToEntity(player) <= 64D;
-        }
-
-        public ItemStack[] mainInventory;
-        public ItemStack[] armorInventory;
-        public int currentItem;
-        private EntityPlayer player;
-        private ItemStack itemStack;
-        public bool inventoryChanged;
     }
 }

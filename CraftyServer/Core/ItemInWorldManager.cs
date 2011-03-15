@@ -2,6 +2,22 @@ namespace CraftyServer.Core
 {
     public class ItemInWorldManager
     {
+        private readonly World thisWorld;
+        private int field_22046_o;
+        private int field_22047_n;
+        private int field_22048_m;
+        private int field_22049_l;
+        private bool field_22050_k;
+        private int field_22051_j;
+        private int field_22052_i;
+        private int field_22053_h;
+        private int field_22054_g;
+        private int field_22055_d;
+        private float field_670_f;
+        private int field_671_e;
+        private float field_672_d;
+        public EntityPlayer thisPlayer;
+
         public ItemInWorldManager(World world)
         {
             field_672_d = 0.0F;
@@ -20,7 +36,7 @@ namespace CraftyServer.Core
                 if (j != 0)
                 {
                     Block block = Block.blocksList[j];
-                    float f = block.blockStrength(thisPlayer)*(float) (i + 1);
+                    float f = block.blockStrength(thisPlayer)*(i + 1);
                     if (f >= 1.0F)
                     {
                         field_22050_k = false;
@@ -63,7 +79,7 @@ namespace CraftyServer.Core
                 if (i1 != 0)
                 {
                     Block block = Block.blocksList[i1];
-                    float f = block.blockStrength(thisPlayer)*(float) (l + 1);
+                    float f = block.blockStrength(thisPlayer)*(l + 1);
                     if (f >= 1.0F)
                     {
                         func_325_c(i, j, k);
@@ -154,21 +170,5 @@ namespace CraftyServer.Core
                 return itemstack.useItem(entityplayer, world, i, j, k, l);
             }
         }
-
-        private World thisWorld;
-        public EntityPlayer thisPlayer;
-        private float field_672_d;
-        private int field_22055_d;
-        private int field_671_e;
-        private float field_670_f;
-        private int field_22054_g;
-        private int field_22053_h;
-        private int field_22052_i;
-        private int field_22051_j;
-        private bool field_22050_k;
-        private int field_22049_l;
-        private int field_22048_m;
-        private int field_22047_n;
-        private int field_22046_o;
     }
 }

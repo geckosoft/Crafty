@@ -2,6 +2,12 @@ namespace CraftyServer.Core
 {
     public class ItemDye : Item
     {
+        public static string[] dyeColors = {
+                                               "black", "red", "green", "brown", "blue", "purple", "cyan", "silver",
+                                               "gray", "pink",
+                                               "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+                                           };
+
         public ItemDye(int i) : base(i)
         {
             setHasSubtypes(true);
@@ -34,7 +40,7 @@ namespace CraftyServer.Core
         {
             if (entityliving is EntitySheep)
             {
-                EntitySheep entitysheep = (EntitySheep) entityliving;
+                var entitysheep = (EntitySheep) entityliving;
                 int i = BlockCloth.func_21033_c(itemstack.getItemDamage());
                 if (!entitysheep.func_21069_f_() && entitysheep.getFleeceColor() != i)
                 {
@@ -43,11 +49,5 @@ namespace CraftyServer.Core
                 }
             }
         }
-
-        public static string[] dyeColors = {
-                                               "black", "red", "green", "brown", "blue", "purple", "cyan", "silver",
-                                               "gray", "pink",
-                                               "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-                                           };
     }
 }

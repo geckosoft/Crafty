@@ -1,10 +1,30 @@
-using java.util;
 using java.lang;
+using java.util;
 
 namespace CraftyServer.Core
 {
-    public class EntityTrackerEntry : java.lang.Object
+    public class EntityTrackerEntry : Object
     {
+        private readonly bool shouldSendMotionUpdates;
+        public int encodedPosX;
+        public int encodedPosY;
+        public int encodedPosZ;
+        public int encodedRotationPitch;
+        public int encodedRotationYaw;
+        public int field_9234_e;
+        private bool firstUpdateDone;
+        public double lastTrackedEntityMotionX;
+        public double lastTrackedEntityMotionY;
+        public double lastTrackedEntityMotionZ;
+        private double lastTrackedEntityPosX;
+        private double lastTrackedEntityPosY;
+        private double lastTrackedEntityPosZ;
+        public bool playerEntitiesUpdated;
+        public Entity trackedEntity;
+        public Set trackedPlayers;
+        public int trackingDistanceThreshold;
+        public int updateCounter;
+
         public EntityTrackerEntry(Entity entity, int i, int j, bool flag)
         {
             updateCounter = 0;
@@ -167,10 +187,10 @@ namespace CraftyServer.Core
             {
                 return;
             }
-            double d = entityplayermp.posX - (double) (encodedPosX/32);
-            double d1 = entityplayermp.posZ - (double) (encodedPosZ/32);
-            if (d >= (double) (-trackingDistanceThreshold) && d <= (double) trackingDistanceThreshold &&
-                d1 >= (double) (-trackingDistanceThreshold) && d1 <= (double) trackingDistanceThreshold)
+            double d = entityplayermp.posX - (encodedPosX/32);
+            double d1 = entityplayermp.posZ - (encodedPosZ/32);
+            if (d >= (-trackingDistanceThreshold) && d <= trackingDistanceThreshold &&
+                d1 >= (-trackingDistanceThreshold) && d1 <= trackingDistanceThreshold)
             {
                 if (!trackedPlayers.contains(entityplayermp))
                 {
@@ -213,11 +233,11 @@ namespace CraftyServer.Core
         {
             if (trackedEntity is EntityItem)
             {
-                EntityItem entityitem = (EntityItem) trackedEntity;
-                Packet21PickupSpawn packet21pickupspawn = new Packet21PickupSpawn(entityitem);
-                entityitem.posX = (double) packet21pickupspawn.xPosition/32D;
-                entityitem.posY = (double) packet21pickupspawn.yPosition/32D;
-                entityitem.posZ = (double) packet21pickupspawn.zPosition/32D;
+                var entityitem = (EntityItem) trackedEntity;
+                var packet21pickupspawn = new Packet21PickupSpawn(entityitem);
+                entityitem.posX = packet21pickupspawn.xPosition/32D;
+                entityitem.posY = packet21pickupspawn.yPosition/32D;
+                entityitem.posZ = packet21pickupspawn.zPosition/32D;
                 return packet21pickupspawn;
             }
             if (trackedEntity is EntityPlayerMP)
@@ -226,7 +246,7 @@ namespace CraftyServer.Core
             }
             if (trackedEntity is EntityMinecart)
             {
-                EntityMinecart entityminecart = (EntityMinecart) trackedEntity;
+                var entityminecart = (EntityMinecart) trackedEntity;
                 if (entityminecart.minecartType == 0)
                 {
                     return new Packet23VehicleSpawn(trackedEntity, 10);
@@ -270,7 +290,7 @@ namespace CraftyServer.Core
             }
             if (trackedEntity is EntityFallingSand)
             {
-                EntityFallingSand entityfallingsand = (EntityFallingSand) trackedEntity;
+                var entityfallingsand = (EntityFallingSand) trackedEntity;
                 if (entityfallingsand.blockID == Block.sand.blockID)
                 {
                     return new Packet23VehicleSpawn(trackedEntity, 70);
@@ -300,25 +320,5 @@ namespace CraftyServer.Core
                 entityplayermp.playerNetServerHandler.sendPacket(new Packet29DestroyEntity(trackedEntity.entityId));
             }
         }
-
-        public Entity trackedEntity;
-        public int trackingDistanceThreshold;
-        public int field_9234_e;
-        public int encodedPosX;
-        public int encodedPosY;
-        public int encodedPosZ;
-        public int encodedRotationYaw;
-        public int encodedRotationPitch;
-        public double lastTrackedEntityMotionX;
-        public double lastTrackedEntityMotionY;
-        public double lastTrackedEntityMotionZ;
-        public int updateCounter;
-        private double lastTrackedEntityPosX;
-        private double lastTrackedEntityPosY;
-        private double lastTrackedEntityPosZ;
-        private bool firstUpdateDone;
-        private bool shouldSendMotionUpdates;
-        public bool playerEntitiesUpdated;
-        public Set trackedPlayers;
     }
 }

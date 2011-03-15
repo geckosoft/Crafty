@@ -1,6 +1,5 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockSnow : Block
@@ -25,7 +24,7 @@ namespace CraftyServer.Core
         public override bool canPlaceBlockAt(World world, int i, int j, int k)
         {
             int l = world.getBlockId(i, j - 1, k);
-            if (l == 0 || !Block.blocksList[l].isOpaqueCube())
+            if (l == 0 || !blocksList[l].isOpaqueCube())
             {
                 return false;
             }
@@ -58,11 +57,11 @@ namespace CraftyServer.Core
         {
             int i1 = Item.snowball.shiftedIndex;
             float f = 0.7F;
-            double d = (double) (world.rand.nextFloat()*f) + (double) (1.0F - f)*0.5D;
-            double d1 = (double) (world.rand.nextFloat()*f) + (double) (1.0F - f)*0.5D;
-            double d2 = (double) (world.rand.nextFloat()*f) + (double) (1.0F - f)*0.5D;
-            EntityItem entityitem = new EntityItem(world, (double) i + d, (double) j + d1, (double) k + d2,
-                                                   new ItemStack(i1, 1, 0));
+            double d = (world.rand.nextFloat()*f) + (1.0F - f)*0.5D;
+            double d1 = (world.rand.nextFloat()*f) + (1.0F - f)*0.5D;
+            double d2 = (world.rand.nextFloat()*f) + (1.0F - f)*0.5D;
+            var entityitem = new EntityItem(world, i + d, j + d1, k + d2,
+                                            new ItemStack(i1, 1, 0));
             entityitem.delayBeforeCanPickup = 10;
             world.entityJoinedWorld(entityitem);
             world.setBlockWithNotify(i, j, k, 0);

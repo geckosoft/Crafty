@@ -4,6 +4,11 @@ namespace CraftyServer.Core
 {
     public class Packet100 : Packet
     {
+        public int inventoryType;
+        public int slotsCount;
+        public int windowId;
+        public string windowTitle;
+
         public Packet100()
         {
         }
@@ -41,10 +46,5 @@ namespace CraftyServer.Core
         {
             return 3 + windowTitle.Length;
         }
-
-        public int windowId;
-        public int inventoryType;
-        public string windowTitle;
-        public int slotsCount;
     }
 }

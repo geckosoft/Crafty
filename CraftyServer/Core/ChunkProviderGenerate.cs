@@ -1,11 +1,34 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class ChunkProviderGenerate
         : IChunkProvider
     {
+        private readonly MapGenBase field_695_u;
+        private readonly NoiseGeneratorOctaves field_701_o;
+        private readonly NoiseGeneratorOctaves field_702_n;
+        private readonly NoiseGeneratorOctaves field_703_m;
+        private readonly NoiseGeneratorOctaves field_704_l;
+        private readonly NoiseGeneratorOctaves field_705_k;
+        private readonly int[][] field_707_i;
+        private readonly Random rand;
+        private readonly World worldObj;
+        private MobSpawnerBase[] biomesForGeneration;
+        private double[] field_4224_q;
+        private double[] field_4225_h;
+        private double[] field_4226_g;
+        private double[] field_4227_f;
+        private double[] field_4228_e;
+        private double[] field_4229_d;
+        public NoiseGeneratorOctaves field_714_b;
+        public NoiseGeneratorOctaves field_715_a;
+        private double[] generatedTemperatures;
+        private double[] gravelNoise;
+        public NoiseGeneratorOctaves mobSpawnerNoise;
+        private double[] sandNoise;
+        private double[] stoneNoise;
+
         public ChunkProviderGenerate(World world, long l)
         {
             sandNoise = new double[256];
@@ -29,181 +52,13 @@ namespace CraftyServer.Core
             mobSpawnerNoise = new NoiseGeneratorOctaves(rand, 8);
         }
 
-        public void generateTerrain(int i, int j, byte[] abyte0, MobSpawnerBase[] amobspawnerbase, double[] ad)
-        {
-            byte byte0 = 4;
-            byte byte1 = 64;
-            int k = byte0 + 1;
-            byte byte2 = 17;
-            int l = byte0 + 1;
-            field_4224_q = func_4058_a(field_4224_q, i*byte0, 0, j*byte0, k, byte2, l);
-            for (int i1 = 0; i1 < byte0; i1++)
-            {
-                for (int j1 = 0; j1 < byte0; j1++)
-                {
-                    for (int k1 = 0; k1 < 16; k1++)
-                    {
-                        double d = 0.125D;
-                        double d1 = field_4224_q[((i1 + 0)*l + (j1 + 0))*byte2 + (k1 + 0)];
-                        double d2 = field_4224_q[((i1 + 0)*l + (j1 + 1))*byte2 + (k1 + 0)];
-                        double d3 = field_4224_q[((i1 + 1)*l + (j1 + 0))*byte2 + (k1 + 0)];
-                        double d4 = field_4224_q[((i1 + 1)*l + (j1 + 1))*byte2 + (k1 + 0)];
-                        double d5 = (field_4224_q[((i1 + 0)*l + (j1 + 0))*byte2 + (k1 + 1)] - d1)*d;
-                        double d6 = (field_4224_q[((i1 + 0)*l + (j1 + 1))*byte2 + (k1 + 1)] - d2)*d;
-                        double d7 = (field_4224_q[((i1 + 1)*l + (j1 + 0))*byte2 + (k1 + 1)] - d3)*d;
-                        double d8 = (field_4224_q[((i1 + 1)*l + (j1 + 1))*byte2 + (k1 + 1)] - d4)*d;
-                        for (int l1 = 0; l1 < 8; l1++)
-                        {
-                            double d9 = 0.25D;
-                            double d10 = d1;
-                            double d11 = d2;
-                            double d12 = (d3 - d1)*d9;
-                            double d13 = (d4 - d2)*d9;
-                            for (int i2 = 0; i2 < 4; i2++)
-                            {
-                                int j2 = i2 + i1*4 << 11 | 0 + j1*4 << 7 | k1*8 + l1;
-                                char c = '\x0080'; // '\200';
-                                double d14 = 0.25D;
-                                double d15 = d10;
-                                double d16 = (d11 - d10)*d14;
-                                for (int k2 = 0; k2 < 4; k2++)
-                                {
-                                    double d17 = ad[(i1*4 + i2)*16 + (j1*4 + k2)];
-                                    int l2 = 0;
-                                    if (k1*8 + l1 < byte1)
-                                    {
-                                        if (d17 < 0.5D && k1*8 + l1 >= byte1 - 1)
-                                        {
-                                            l2 = Block.ice.blockID;
-                                        }
-                                        else
-                                        {
-                                            l2 = Block.waterMoving.blockID;
-                                        }
-                                    }
-                                    if (d15 > 0.0D)
-                                    {
-                                        l2 = Block.stone.blockID;
-                                    }
-                                    abyte0[j2] = (byte) l2;
-                                    j2 += c;
-                                    d15 += d16;
-                                }
-
-                                d10 += d12;
-                                d11 += d13;
-                            }
-
-                            d1 += d5;
-                            d2 += d6;
-                            d3 += d7;
-                            d4 += d8;
-                        }
-                    }
-                }
-            }
-        }
-
-        public void replaceBlocksForBiome(int i, int j, byte[] abyte0, MobSpawnerBase[] amobspawnerbase)
-        {
-            byte byte0 = 64;
-            double d = 0.03125D;
-            sandNoise = field_702_n.generateNoiseOctaves(sandNoise, i*16, j*16, 0.0D, 16, 16, 1, d, d, 1.0D);
-            gravelNoise = field_702_n.generateNoiseOctaves(gravelNoise, i*16, 109.0134D, j*16, 16, 1, 16, d, 1.0D, d);
-            stoneNoise = field_701_o.generateNoiseOctaves(stoneNoise, i*16, j*16, 0.0D, 16, 16, 1, d*2D, d*2D, d*2D);
-            for (int k = 0; k < 16; k++)
-            {
-                for (int l = 0; l < 16; l++)
-                {
-                    MobSpawnerBase mobspawnerbase = amobspawnerbase[k + l*16];
-                    bool flag = sandNoise[k + l*16] + rand.nextDouble()*0.20000000000000001D > 0.0D;
-                    bool flag1 = gravelNoise[k + l*16] + rand.nextDouble()*0.20000000000000001D > 3D;
-                    int i1 = (int) (stoneNoise[k + l*16]/3D + 3D + rand.nextDouble()*0.25D);
-                    int j1 = -1;
-                    byte byte1 = mobspawnerbase.topBlock;
-                    byte byte2 = mobspawnerbase.fillerBlock;
-                    for (int k1 = 127; k1 >= 0; k1--)
-                    {
-                        int l1 = (l*16 + k)*128 + k1;
-                        if (k1 <= 0 + rand.nextInt(5))
-                        {
-                            abyte0[l1] = (byte) Block.bedrock.blockID;
-                            continue;
-                        }
-                        byte byte3 = abyte0[l1];
-                        if (byte3 == 0)
-                        {
-                            j1 = -1;
-                            continue;
-                        }
-                        if (byte3 != Block.stone.blockID)
-                        {
-                            continue;
-                        }
-                        if (j1 == -1)
-                        {
-                            if (i1 <= 0)
-                            {
-                                byte1 = 0;
-                                byte2 = (byte) Block.stone.blockID;
-                            }
-                            else if (k1 >= byte0 - 4 && k1 <= byte0 + 1)
-                            {
-                                byte1 = mobspawnerbase.topBlock;
-                                byte2 = mobspawnerbase.fillerBlock;
-                                if (flag1)
-                                {
-                                    byte1 = 0;
-                                }
-                                if (flag1)
-                                {
-                                    byte2 = (byte) Block.gravel.blockID;
-                                }
-                                if (flag)
-                                {
-                                    byte1 = (byte) Block.sand.blockID;
-                                }
-                                if (flag)
-                                {
-                                    byte2 = (byte) Block.sand.blockID;
-                                }
-                            }
-                            if (k1 < byte0 && byte1 == 0)
-                            {
-                                byte1 = (byte) Block.waterMoving.blockID;
-                            }
-                            j1 = i1;
-                            if (k1 >= byte0 - 1)
-                            {
-                                abyte0[l1] = byte1;
-                            }
-                            else
-                            {
-                                abyte0[l1] = byte2;
-                            }
-                            continue;
-                        }
-                        if (j1 <= 0)
-                        {
-                            continue;
-                        }
-                        j1--;
-                        abyte0[l1] = byte2;
-                        if (j1 == 0 && byte2 == Block.sand.blockID)
-                        {
-                            j1 = rand.nextInt(4);
-                            byte2 = (byte) Block.sandStone.blockID;
-                        }
-                    }
-                }
-            }
-        }
+        #region IChunkProvider Members
 
         public Chunk provideChunk(int i, int j)
         {
-            rand.setSeed((long) i*0x4f9939f508L + (long) j*0x1ef1565bd5L);
-            byte[] abyte0 = new byte[32768];
-            Chunk chunk = new Chunk(worldObj, abyte0, i, j);
+            rand.setSeed(i*0x4f9939f508L + j*0x1ef1565bd5L);
+            var abyte0 = new byte[32768];
+            var chunk = new Chunk(worldObj, abyte0, i, j);
             biomesForGeneration = worldObj.getWorldChunkManager().loadBlockGeneratorData(biomesForGeneration, i*16, j*16,
                                                                                          16, 16);
             double[] ad = worldObj.getWorldChunkManager().temperature;
@@ -212,113 +67,6 @@ namespace CraftyServer.Core
             field_695_u.func_667_a(this, worldObj, i, j, abyte0);
             chunk.func_353_b();
             return chunk;
-        }
-
-        private double[] func_4058_a(double[] ad, int i, int j, int k, int l, int i1, int j1)
-        {
-            if (ad == null)
-            {
-                ad = new double[l*i1*j1];
-            }
-            double d = 684.41200000000003D;
-            double d1 = 684.41200000000003D;
-            double[] ad1 = worldObj.getWorldChunkManager().temperature;
-            double[] ad2 = worldObj.getWorldChunkManager().humidity;
-            field_4226_g = field_715_a.func_4103_a(field_4226_g, i, k, l, j1, 1.121D, 1.121D, 0.5D);
-            field_4225_h = field_714_b.func_4103_a(field_4225_h, i, k, l, j1, 200D, 200D, 0.5D);
-            field_4229_d = field_703_m.generateNoiseOctaves(field_4229_d, i, j, k, l, i1, j1, d/80D, d1/160D, d/80D);
-            field_4228_e = field_705_k.generateNoiseOctaves(field_4228_e, i, j, k, l, i1, j1, d, d1, d);
-            field_4227_f = field_704_l.generateNoiseOctaves(field_4227_f, i, j, k, l, i1, j1, d, d1, d);
-            int k1 = 0;
-            int l1 = 0;
-            int i2 = 16/l;
-            for (int j2 = 0; j2 < l; j2++)
-            {
-                int k2 = j2*i2 + i2/2;
-                for (int l2 = 0; l2 < j1; l2++)
-                {
-                    int i3 = l2*i2 + i2/2;
-                    double d2 = ad1[k2*16 + i3];
-                    double d3 = ad2[k2*16 + i3]*d2;
-                    double d4 = 1.0D - d3;
-                    d4 *= d4;
-                    d4 *= d4;
-                    d4 = 1.0D - d4;
-                    double d5 = (field_4226_g[l1] + 256D)/512D;
-                    d5 *= d4;
-                    if (d5 > 1.0D)
-                    {
-                        d5 = 1.0D;
-                    }
-                    double d6 = field_4225_h[l1]/8000D;
-                    if (d6 < 0.0D)
-                    {
-                        d6 = -d6*0.29999999999999999D;
-                    }
-                    d6 = d6*3D - 2D;
-                    if (d6 < 0.0D)
-                    {
-                        d6 /= 2D;
-                        if (d6 < -1D)
-                        {
-                            d6 = -1D;
-                        }
-                        d6 /= 1.3999999999999999D;
-                        d6 /= 2D;
-                        d5 = 0.0D;
-                    }
-                    else
-                    {
-                        if (d6 > 1.0D)
-                        {
-                            d6 = 1.0D;
-                        }
-                        d6 /= 8D;
-                    }
-                    if (d5 < 0.0D)
-                    {
-                        d5 = 0.0D;
-                    }
-                    d5 += 0.5D;
-                    d6 = (d6*(double) i1)/16D;
-                    double d7 = (double) i1/2D + d6*4D;
-                    l1++;
-                    for (int j3 = 0; j3 < i1; j3++)
-                    {
-                        double d8 = 0.0D;
-                        double d9 = (((double) j3 - d7)*12D)/d5;
-                        if (d9 < 0.0D)
-                        {
-                            d9 *= 4D;
-                        }
-                        double d10 = field_4228_e[k1]/512D;
-                        double d11 = field_4227_f[k1]/512D;
-                        double d12 = (field_4229_d[k1]/10D + 1.0D)/2D;
-                        if (d12 < 0.0D)
-                        {
-                            d8 = d10;
-                        }
-                        else if (d12 > 1.0D)
-                        {
-                            d8 = d11;
-                        }
-                        else
-                        {
-                            d8 = d10 + (d11 - d10)*d12;
-                        }
-                        d8 -= d9;
-                        if (j3 > i1 - 4)
-                        {
-                            double d13 = (float) (j3 - (i1 - 4))/3F;
-                            d8 = d8*(1.0D - d13) + -10D*d13;
-                        }
-                        ad[k1] = d8;
-                        k1++;
-                    }
-                }
-            }
-
-            return ad;
         }
 
         public bool chunkExists(int i, int j)
@@ -335,7 +83,7 @@ namespace CraftyServer.Core
             rand.setSeed(worldObj.func_22079_j());
             long l1 = (rand.nextLong()/2L)*2L + 1L;
             long l2 = (rand.nextLong()/2L)*2L + 1L;
-            rand.setSeed((long) i*l1 + (long) j*l2 ^ worldObj.func_22079_j());
+            rand.setSeed(i*l1 + j*l2 ^ worldObj.func_22079_j());
             double d = 0.25D;
             if (rand.nextInt(4) == 0)
             {
@@ -435,7 +183,7 @@ namespace CraftyServer.Core
             }
 
             d = 0.5D;
-            int k4 = (int) ((mobSpawnerNoise.func_647_a((double) k*d, (double) l*d)/8D + rand.nextDouble()*4D + 4D)/3D);
+            var k4 = (int) ((mobSpawnerNoise.func_647_a(k*d, l*d)/8D + rand.nextDouble()*4D + 4D)/3D);
             int l7 = 0;
             if (rand.nextInt(10) == 0)
             {
@@ -560,7 +308,7 @@ namespace CraftyServer.Core
                     int j22 = i18 - (k + 8);
                     int j23 = l20 - (l + 8);
                     int k23 = worldObj.findTopSolidBlock(i18, l20);
-                    double d1 = generatedTemperatures[j22*16 + j23] - ((double) (k23 - 64)/64D)*0.29999999999999999D;
+                    double d1 = generatedTemperatures[j22*16 + j23] - ((k23 - 64)/64D)*0.29999999999999999D;
                     if (d1 < 0.5D && k23 > 0 && k23 < 128 && worldObj.isAirBlock(i18, k23, l20) &&
                         worldObj.getBlockMaterial(i18, k23 - 1, l20).getIsSolid() &&
                         worldObj.getBlockMaterial(i18, k23 - 1, l20) != Material.ice)
@@ -588,28 +336,283 @@ namespace CraftyServer.Core
             return true;
         }
 
-        private Random rand;
-        private NoiseGeneratorOctaves field_705_k;
-        private NoiseGeneratorOctaves field_704_l;
-        private NoiseGeneratorOctaves field_703_m;
-        private NoiseGeneratorOctaves field_702_n;
-        private NoiseGeneratorOctaves field_701_o;
-        public NoiseGeneratorOctaves field_715_a;
-        public NoiseGeneratorOctaves field_714_b;
-        public NoiseGeneratorOctaves mobSpawnerNoise;
-        private World worldObj;
-        private double[] field_4224_q;
-        private double[] sandNoise;
-        private double[] gravelNoise;
-        private double[] stoneNoise;
-        private MapGenBase field_695_u;
-        private MobSpawnerBase[] biomesForGeneration;
-        private double[] field_4229_d;
-        private double[] field_4228_e;
-        private double[] field_4227_f;
-        private double[] field_4226_g;
-        private double[] field_4225_h;
-        private int[][] field_707_i;
-        private double[] generatedTemperatures;
+        #endregion
+
+        public void generateTerrain(int i, int j, byte[] abyte0, MobSpawnerBase[] amobspawnerbase, double[] ad)
+        {
+            byte byte0 = 4;
+            byte byte1 = 64;
+            int k = byte0 + 1;
+            byte byte2 = 17;
+            int l = byte0 + 1;
+            field_4224_q = func_4058_a(field_4224_q, i*byte0, 0, j*byte0, k, byte2, l);
+            for (int i1 = 0; i1 < byte0; i1++)
+            {
+                for (int j1 = 0; j1 < byte0; j1++)
+                {
+                    for (int k1 = 0; k1 < 16; k1++)
+                    {
+                        double d = 0.125D;
+                        double d1 = field_4224_q[((i1 + 0)*l + (j1 + 0))*byte2 + (k1 + 0)];
+                        double d2 = field_4224_q[((i1 + 0)*l + (j1 + 1))*byte2 + (k1 + 0)];
+                        double d3 = field_4224_q[((i1 + 1)*l + (j1 + 0))*byte2 + (k1 + 0)];
+                        double d4 = field_4224_q[((i1 + 1)*l + (j1 + 1))*byte2 + (k1 + 0)];
+                        double d5 = (field_4224_q[((i1 + 0)*l + (j1 + 0))*byte2 + (k1 + 1)] - d1)*d;
+                        double d6 = (field_4224_q[((i1 + 0)*l + (j1 + 1))*byte2 + (k1 + 1)] - d2)*d;
+                        double d7 = (field_4224_q[((i1 + 1)*l + (j1 + 0))*byte2 + (k1 + 1)] - d3)*d;
+                        double d8 = (field_4224_q[((i1 + 1)*l + (j1 + 1))*byte2 + (k1 + 1)] - d4)*d;
+                        for (int l1 = 0; l1 < 8; l1++)
+                        {
+                            double d9 = 0.25D;
+                            double d10 = d1;
+                            double d11 = d2;
+                            double d12 = (d3 - d1)*d9;
+                            double d13 = (d4 - d2)*d9;
+                            for (int i2 = 0; i2 < 4; i2++)
+                            {
+                                int j2 = i2 + i1*4 << 11 | 0 + j1*4 << 7 | k1*8 + l1;
+                                char c = '\x0080'; // '\200';
+                                double d14 = 0.25D;
+                                double d15 = d10;
+                                double d16 = (d11 - d10)*d14;
+                                for (int k2 = 0; k2 < 4; k2++)
+                                {
+                                    double d17 = ad[(i1*4 + i2)*16 + (j1*4 + k2)];
+                                    int l2 = 0;
+                                    if (k1*8 + l1 < byte1)
+                                    {
+                                        if (d17 < 0.5D && k1*8 + l1 >= byte1 - 1)
+                                        {
+                                            l2 = Block.ice.blockID;
+                                        }
+                                        else
+                                        {
+                                            l2 = Block.waterMoving.blockID;
+                                        }
+                                    }
+                                    if (d15 > 0.0D)
+                                    {
+                                        l2 = Block.stone.blockID;
+                                    }
+                                    abyte0[j2] = (byte) l2;
+                                    j2 += c;
+                                    d15 += d16;
+                                }
+
+                                d10 += d12;
+                                d11 += d13;
+                            }
+
+                            d1 += d5;
+                            d2 += d6;
+                            d3 += d7;
+                            d4 += d8;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void replaceBlocksForBiome(int i, int j, byte[] abyte0, MobSpawnerBase[] amobspawnerbase)
+        {
+            byte byte0 = 64;
+            double d = 0.03125D;
+            sandNoise = field_702_n.generateNoiseOctaves(sandNoise, i*16, j*16, 0.0D, 16, 16, 1, d, d, 1.0D);
+            gravelNoise = field_702_n.generateNoiseOctaves(gravelNoise, i*16, 109.0134D, j*16, 16, 1, 16, d, 1.0D, d);
+            stoneNoise = field_701_o.generateNoiseOctaves(stoneNoise, i*16, j*16, 0.0D, 16, 16, 1, d*2D, d*2D, d*2D);
+            for (int k = 0; k < 16; k++)
+            {
+                for (int l = 0; l < 16; l++)
+                {
+                    MobSpawnerBase mobspawnerbase = amobspawnerbase[k + l*16];
+                    bool flag = sandNoise[k + l*16] + rand.nextDouble()*0.20000000000000001D > 0.0D;
+                    bool flag1 = gravelNoise[k + l*16] + rand.nextDouble()*0.20000000000000001D > 3D;
+                    var i1 = (int) (stoneNoise[k + l*16]/3D + 3D + rand.nextDouble()*0.25D);
+                    int j1 = -1;
+                    byte byte1 = mobspawnerbase.topBlock;
+                    byte byte2 = mobspawnerbase.fillerBlock;
+                    for (int k1 = 127; k1 >= 0; k1--)
+                    {
+                        int l1 = (l*16 + k)*128 + k1;
+                        if (k1 <= 0 + rand.nextInt(5))
+                        {
+                            abyte0[l1] = (byte) Block.bedrock.blockID;
+                            continue;
+                        }
+                        byte byte3 = abyte0[l1];
+                        if (byte3 == 0)
+                        {
+                            j1 = -1;
+                            continue;
+                        }
+                        if (byte3 != Block.stone.blockID)
+                        {
+                            continue;
+                        }
+                        if (j1 == -1)
+                        {
+                            if (i1 <= 0)
+                            {
+                                byte1 = 0;
+                                byte2 = (byte) Block.stone.blockID;
+                            }
+                            else if (k1 >= byte0 - 4 && k1 <= byte0 + 1)
+                            {
+                                byte1 = mobspawnerbase.topBlock;
+                                byte2 = mobspawnerbase.fillerBlock;
+                                if (flag1)
+                                {
+                                    byte1 = 0;
+                                }
+                                if (flag1)
+                                {
+                                    byte2 = (byte) Block.gravel.blockID;
+                                }
+                                if (flag)
+                                {
+                                    byte1 = (byte) Block.sand.blockID;
+                                }
+                                if (flag)
+                                {
+                                    byte2 = (byte) Block.sand.blockID;
+                                }
+                            }
+                            if (k1 < byte0 && byte1 == 0)
+                            {
+                                byte1 = (byte) Block.waterMoving.blockID;
+                            }
+                            j1 = i1;
+                            if (k1 >= byte0 - 1)
+                            {
+                                abyte0[l1] = byte1;
+                            }
+                            else
+                            {
+                                abyte0[l1] = byte2;
+                            }
+                            continue;
+                        }
+                        if (j1 <= 0)
+                        {
+                            continue;
+                        }
+                        j1--;
+                        abyte0[l1] = byte2;
+                        if (j1 == 0 && byte2 == Block.sand.blockID)
+                        {
+                            j1 = rand.nextInt(4);
+                            byte2 = (byte) Block.sandStone.blockID;
+                        }
+                    }
+                }
+            }
+        }
+
+        private double[] func_4058_a(double[] ad, int i, int j, int k, int l, int i1, int j1)
+        {
+            if (ad == null)
+            {
+                ad = new double[l*i1*j1];
+            }
+            double d = 684.41200000000003D;
+            double d1 = 684.41200000000003D;
+            double[] ad1 = worldObj.getWorldChunkManager().temperature;
+            double[] ad2 = worldObj.getWorldChunkManager().humidity;
+            field_4226_g = field_715_a.func_4103_a(field_4226_g, i, k, l, j1, 1.121D, 1.121D, 0.5D);
+            field_4225_h = field_714_b.func_4103_a(field_4225_h, i, k, l, j1, 200D, 200D, 0.5D);
+            field_4229_d = field_703_m.generateNoiseOctaves(field_4229_d, i, j, k, l, i1, j1, d/80D, d1/160D, d/80D);
+            field_4228_e = field_705_k.generateNoiseOctaves(field_4228_e, i, j, k, l, i1, j1, d, d1, d);
+            field_4227_f = field_704_l.generateNoiseOctaves(field_4227_f, i, j, k, l, i1, j1, d, d1, d);
+            int k1 = 0;
+            int l1 = 0;
+            int i2 = 16/l;
+            for (int j2 = 0; j2 < l; j2++)
+            {
+                int k2 = j2*i2 + i2/2;
+                for (int l2 = 0; l2 < j1; l2++)
+                {
+                    int i3 = l2*i2 + i2/2;
+                    double d2 = ad1[k2*16 + i3];
+                    double d3 = ad2[k2*16 + i3]*d2;
+                    double d4 = 1.0D - d3;
+                    d4 *= d4;
+                    d4 *= d4;
+                    d4 = 1.0D - d4;
+                    double d5 = (field_4226_g[l1] + 256D)/512D;
+                    d5 *= d4;
+                    if (d5 > 1.0D)
+                    {
+                        d5 = 1.0D;
+                    }
+                    double d6 = field_4225_h[l1]/8000D;
+                    if (d6 < 0.0D)
+                    {
+                        d6 = -d6*0.29999999999999999D;
+                    }
+                    d6 = d6*3D - 2D;
+                    if (d6 < 0.0D)
+                    {
+                        d6 /= 2D;
+                        if (d6 < -1D)
+                        {
+                            d6 = -1D;
+                        }
+                        d6 /= 1.3999999999999999D;
+                        d6 /= 2D;
+                        d5 = 0.0D;
+                    }
+                    else
+                    {
+                        if (d6 > 1.0D)
+                        {
+                            d6 = 1.0D;
+                        }
+                        d6 /= 8D;
+                    }
+                    if (d5 < 0.0D)
+                    {
+                        d5 = 0.0D;
+                    }
+                    d5 += 0.5D;
+                    d6 = (d6*i1)/16D;
+                    double d7 = i1/2D + d6*4D;
+                    l1++;
+                    for (int j3 = 0; j3 < i1; j3++)
+                    {
+                        double d8 = 0.0D;
+                        double d9 = ((j3 - d7)*12D)/d5;
+                        if (d9 < 0.0D)
+                        {
+                            d9 *= 4D;
+                        }
+                        double d10 = field_4228_e[k1]/512D;
+                        double d11 = field_4227_f[k1]/512D;
+                        double d12 = (field_4229_d[k1]/10D + 1.0D)/2D;
+                        if (d12 < 0.0D)
+                        {
+                            d8 = d10;
+                        }
+                        else if (d12 > 1.0D)
+                        {
+                            d8 = d11;
+                        }
+                        else
+                        {
+                            d8 = d10 + (d11 - d10)*d12;
+                        }
+                        d8 -= d9;
+                        if (j3 > i1 - 4)
+                        {
+                            double d13 = (j3 - (i1 - 4))/3F;
+                            d8 = d8*(1.0D - d13) + -10D*d13;
+                        }
+                        ad[k1] = d8;
+                        k1++;
+                    }
+                }
+            }
+
+            return ad;
+        }
     }
 }

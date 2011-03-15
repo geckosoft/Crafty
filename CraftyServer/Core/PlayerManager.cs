@@ -5,6 +5,28 @@ namespace CraftyServer.Core
 {
     public class PlayerManager
     {
+        private readonly int[][] field_22089_e = new[]
+                                                 {
+                                                     new[]
+                                                     {
+                                                         1, 0
+                                                     }, new[]
+                                                        {
+                                                            0, 1
+                                                        }, new[]
+                                                           {
+                                                               -1, 0
+                                                           }, new[]
+                                                              {
+                                                                  0, -1
+                                                              }
+                                                 };
+
+        private readonly List field_833_c;
+        private readonly MCHashTable2 field_9215_b;
+        private readonly List field_9216_a;
+        private readonly MinecraftServer mcServer;
+
         public PlayerManager(MinecraftServer minecraftserver)
         {
             field_9216_a = new ArrayList();
@@ -25,8 +47,8 @@ namespace CraftyServer.Core
 
         private PlayerInstance func_537_a(int i, int j, bool flag)
         {
-            long l = (long) i + 0x7fffffffL | (long) j + 0x7fffffffL << 32;
-            PlayerInstance playerinstance = (PlayerInstance) field_9215_b.func_677_a(l);
+            long l = i + 0x7fffffffL | j + 0x7fffffffL << 32;
+            var playerinstance = (PlayerInstance) field_9215_b.func_677_a(l);
             if (playerinstance == null && flag)
             {
                 playerinstance = new PlayerInstance(this, i, j);
@@ -174,27 +196,5 @@ namespace CraftyServer.Core
         {
             return playermanager.field_833_c;
         }
-
-        private List field_9216_a;
-        private MCHashTable2 field_9215_b;
-        private List field_833_c;
-        private MinecraftServer mcServer;
-
-        private int[][] field_22089_e = new int[][]
-                                        {
-                                            new int[]
-                                            {
-                                                1, 0
-                                            }, new int[]
-                                               {
-                                                   0, 1
-                                               }, new int[]
-                                                  {
-                                                      -1, 0
-                                                  }, new int[]
-                                                     {
-                                                         0, -1
-                                                     }
-                                        };
     }
 }

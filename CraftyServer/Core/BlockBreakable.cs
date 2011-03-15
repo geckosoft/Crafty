@@ -2,6 +2,8 @@ namespace CraftyServer.Core
 {
     public class BlockBreakable : Block
     {
+        private readonly bool field_6084_a;
+
         public BlockBreakable(int i, int j, Material material, bool flag) : base(i, j, material)
         {
             field_6084_a = flag;
@@ -24,7 +26,5 @@ namespace CraftyServer.Core
                 return base.shouldSideBeRendered(iblockaccess, i, j, k, l);
             }
         }
-
-        private bool field_6084_a;
     }
 }

@@ -1,26 +1,24 @@
-using java.util.logging;
 using java.lang;
+using java.util.logging;
 
 namespace CraftyServer.Core
 {
     public class ConsoleLogManager
     {
-        public ConsoleLogManager()
-        {
-        }
+        public static Logger logger = Logger.getLogger("Minecraft");
 
         public static void init()
         {
-            ConsoleLogFormatter consolelogformatter = new ConsoleLogFormatter();
+            var consolelogformatter = new ConsoleLogFormatter();
             logger.setUseParentHandlers(false);
-            ConsoleHandler consolehandler = new ConsoleHandler();
+            var consolehandler = new ConsoleHandler();
             consolehandler.setFormatter(consolelogformatter);
             logger.addHandler(consolehandler);
 
 
             try
             {
-                FileHandler filehandler = new FileHandler("server.log", true);
+                var filehandler = new FileHandler("server.log", true);
                 filehandler.setFormatter(consolelogformatter);
                 logger.addHandler(filehandler);
             }
@@ -29,7 +27,5 @@ namespace CraftyServer.Core
                 logger.log(Level.WARNING, "Failed to log to server.log", exception);
             }
         }
-
-        public static Logger logger = Logger.getLogger("Minecraft");
     }
 }

@@ -4,6 +4,11 @@ namespace CraftyServer.Core
 {
     public class Packet28 : Packet
     {
+        public int entityId;
+        public int motionX;
+        public int motionY;
+        public int motionZ;
+
         public Packet28()
         {
         }
@@ -71,10 +76,5 @@ namespace CraftyServer.Core
         {
             return 10;
         }
-
-        public int entityId;
-        public int motionX;
-        public int motionY;
-        public int motionZ;
     }
 }

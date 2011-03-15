@@ -2,6 +2,14 @@ namespace CraftyServer.Core
 {
     public class EntityChicken : EntityAnimals
     {
+        public float field_390_ai;
+        public float field_391_b;
+        public bool field_392_a;
+        public float field_393_af;
+        public float field_394_ae;
+        public float field_395_ad;
+        public int timeUntilNextEgg;
+
         public EntityChicken(World world)
             : base(world)
         {
@@ -20,7 +28,7 @@ namespace CraftyServer.Core
             base.onLivingUpdate();
             field_393_af = field_391_b;
             field_394_ae = field_395_ad;
-            field_395_ad += (float) ((double) (onGround ? -1 : 4)*0.29999999999999999D);
+            field_395_ad += (float) ((onGround ? -1 : 4)*0.29999999999999999D);
             if (field_395_ad < 0.0F)
             {
                 field_395_ad = 0.0F;
@@ -81,13 +89,5 @@ namespace CraftyServer.Core
         {
             return Item.feather.shiftedIndex;
         }
-
-        public bool field_392_a;
-        public float field_391_b;
-        public float field_395_ad;
-        public float field_394_ae;
-        public float field_393_af;
-        public float field_390_ai;
-        public int timeUntilNextEgg;
     }
 }

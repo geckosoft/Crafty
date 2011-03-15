@@ -1,6 +1,5 @@
-using java.util;
 using java.lang;
-
+using java.util;
 
 namespace CraftyServer.Core
 {
@@ -21,7 +20,7 @@ namespace CraftyServer.Core
             {
                 i = 0;
             }
-            float f = (float) (i + 1)/9F;
+            float f = (i + 1)/9F;
             return f;
         }
 
@@ -266,11 +265,11 @@ namespace CraftyServer.Core
                     int l = world.getBlockMetadata(i, j, k);
                     if (l == 0)
                     {
-                        world.setBlockWithNotify(i, j, k, Block.obsidian.blockID);
+                        world.setBlockWithNotify(i, j, k, obsidian.blockID);
                     }
                     else if (l <= 4)
                     {
-                        world.setBlockWithNotify(i, j, k, Block.cobblestone.blockID);
+                        world.setBlockWithNotify(i, j, k, cobblestone.blockID);
                     }
                     func_300_h(world, i, j, k);
                 }
@@ -279,12 +278,12 @@ namespace CraftyServer.Core
 
         public void func_300_h(World world, int i, int j, int k)
         {
-            world.playSoundEffect((float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F, "random.fizz", 0.5F,
+            world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, "random.fizz", 0.5F,
                                   2.6F + (world.rand.nextFloat() - world.rand.nextFloat())*0.8F);
             for (int l = 0; l < 8; l++)
             {
-                world.spawnParticle("largesmoke", (double) i + Math.random(), (double) j + 1.2D,
-                                    (double) k + java.lang.Math.random(), 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("largesmoke", i + Math.random(), j + 1.2D,
+                                    k + Math.random(), 0.0D, 0.0D, 0.0D);
             }
         }
     }

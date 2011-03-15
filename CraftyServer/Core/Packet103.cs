@@ -4,6 +4,10 @@ namespace CraftyServer.Core
 {
     public class Packet103 : Packet
     {
+        public int itemSlot;
+        public ItemStack myItemStack;
+        public int windowId;
+
         public Packet103()
         {
         }
@@ -57,9 +61,5 @@ namespace CraftyServer.Core
         {
             return 8;
         }
-
-        public int windowId;
-        public int itemSlot;
-        public ItemStack myItemStack;
     }
 }

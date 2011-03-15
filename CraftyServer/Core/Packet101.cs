@@ -4,6 +4,8 @@ namespace CraftyServer.Core
 {
     public class Packet101 : Packet
     {
+        public int windowId;
+
         public Packet101()
         {
         }
@@ -32,7 +34,5 @@ namespace CraftyServer.Core
         {
             return 1;
         }
-
-        public int windowId;
     }
 }

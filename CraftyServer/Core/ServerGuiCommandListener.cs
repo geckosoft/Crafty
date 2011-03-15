@@ -6,12 +6,17 @@ namespace CraftyServer.Core
     public class ServerGuiCommandListener
         : ActionListener
     {
+        private readonly ServerGUI mcServerGui; /* synthetic field */
+        private readonly JTextField textField; /* synthetic field */
+
         public ServerGuiCommandListener(ServerGUI servergui, JTextField jtextfield)
         {
             mcServerGui = servergui;
             textField = jtextfield;
 //        
         }
+
+        #region ActionListener Members
 
         public void actionPerformed(ActionEvent actionevent)
         {
@@ -23,7 +28,6 @@ namespace CraftyServer.Core
             textField.setText("");
         }
 
-        private JTextField textField; /* synthetic field */
-        private ServerGUI mcServerGui; /* synthetic field */
+        #endregion
     }
 }

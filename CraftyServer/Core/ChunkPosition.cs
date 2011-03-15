@@ -1,7 +1,13 @@
+using java.lang;
+
 namespace CraftyServer.Core
 {
-    public class ChunkPosition : java.lang.Object
+    public class ChunkPosition : Object
     {
+        public int x;
+        public int y;
+        public int z;
+
         public ChunkPosition(int i, int j, int k)
         {
             x = i;
@@ -13,7 +19,7 @@ namespace CraftyServer.Core
         {
             if (obj is ChunkPosition)
             {
-                ChunkPosition chunkposition = (ChunkPosition) obj;
+                var chunkposition = (ChunkPosition) obj;
                 return chunkposition.x == x && chunkposition.y == y && chunkposition.z == z;
             }
             else
@@ -26,9 +32,5 @@ namespace CraftyServer.Core
         {
             return x*0x88f9fa + y*0xef88b + z;
         }
-
-        public int x;
-        public int y;
-        public int z;
     }
 }

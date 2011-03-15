@@ -1,11 +1,13 @@
-using java.util;
 using java.lang;
-
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class BlockSign : BlockContainer
     {
+        private readonly bool isFreestanding;
+        private readonly Class signEntityClass;
+
         public BlockSign(int i, Class class1, bool flag)
             : base(i, Material.wood)
         {
@@ -113,8 +115,5 @@ namespace CraftyServer.Core
             }
             base.onNeighborBlockChange(world, i, j, k, l);
         }
-
-        private Class signEntityClass;
-        private bool isFreestanding;
     }
 }

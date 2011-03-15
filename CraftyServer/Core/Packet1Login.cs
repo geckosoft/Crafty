@@ -4,6 +4,12 @@ namespace CraftyServer.Core
 {
     public class Packet1Login : Packet
     {
+        public byte dimension;
+        public long mapSeed;
+        public string password;
+        public int protocolVersion;
+        public string username;
+
         public Packet1Login()
         {
         }
@@ -44,11 +50,5 @@ namespace CraftyServer.Core
         {
             return 4 + username.Length + password.Length + 4 + 5;
         }
-
-        public int protocolVersion;
-        public string username;
-        public string password;
-        public long mapSeed;
-        public byte dimension;
     }
 }

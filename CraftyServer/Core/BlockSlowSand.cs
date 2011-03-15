@@ -10,7 +10,7 @@ namespace CraftyServer.Core
         public override AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k)
         {
             float f = 0.125F;
-            return AxisAlignedBB.getBoundingBoxFromPool(i, j, k, i + 1, (float) (j + 1) - f, k + 1);
+            return AxisAlignedBB.getBoundingBoxFromPool(i, j, k, i + 1, (j + 1) - f, k + 1);
         }
 
         public override void onEntityCollidedWithBlock(World world, int i, int j, int k, Entity entity)

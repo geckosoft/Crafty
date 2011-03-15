@@ -2,6 +2,10 @@ namespace CraftyServer.Core
 {
     public class CraftingInventoryPlayerCB : CraftingInventoryCB
     {
+        public InventoryCrafting craftMatrix;
+        public IInventory craftResult;
+        public bool isMP;
+
         public CraftingInventoryPlayerCB(InventoryPlayer inventoryplayer)
             : this(inventoryplayer, true)
         {
@@ -67,9 +71,5 @@ namespace CraftyServer.Core
         {
             return true;
         }
-
-        public InventoryCrafting craftMatrix;
-        public IInventory craftResult;
-        public bool isMP;
     }
 }

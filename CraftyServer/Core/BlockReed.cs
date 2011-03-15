@@ -1,6 +1,5 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockReed : Block
@@ -45,7 +44,7 @@ namespace CraftyServer.Core
             {
                 return true;
             }
-            if (l != Block.grass.blockID && l != Block.dirt.blockID)
+            if (l != grass.blockID && l != dirt.blockID)
             {
                 return false;
             }

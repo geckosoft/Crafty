@@ -4,6 +4,8 @@ namespace CraftyServer.Core
 {
     internal class NetworkWriterThread : Thread
     {
+        private readonly NetworkManager netManager; /* synthetic field */
+
         public NetworkWriterThread(NetworkManager networkmanager, string s)
             : base(s)
         {
@@ -32,7 +34,5 @@ namespace CraftyServer.Core
             }
 //        throw exception2;
         }
-
-        private NetworkManager netManager; /* synthetic field */
     }
 }

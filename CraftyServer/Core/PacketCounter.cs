@@ -2,7 +2,14 @@ namespace CraftyServer.Core
 {
     internal class PacketCounter
     {
+        private long field_22151_b;
+        private int field_22152_a;
+
         private PacketCounter()
+        {
+        }
+
+        internal PacketCounter(Empty1 empty1)
         {
         }
 
@@ -11,13 +18,5 @@ namespace CraftyServer.Core
             field_22152_a++;
             field_22151_b += i;
         }
-
-        internal PacketCounter(Empty1 empty1)
-            : base()
-        {
-        }
-
-        private int field_22152_a;
-        private long field_22151_b;
     }
 }

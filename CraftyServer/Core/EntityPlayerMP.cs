@@ -6,6 +6,22 @@ namespace CraftyServer.Core
     public class EntityPlayerMP : EntityPlayer
                                   , ICrafting
     {
+        private readonly ItemStack[] playerInventory = {
+                                                           null, null, null, null, null
+                                                       };
+
+        private int currentWindowId;
+        private int field_15004_bw;
+        public Set field_420_ah;
+        public double field_9154_e;
+        public double field_9155_d;
+        public bool isChangingQuantityOnly;
+        public ItemInWorldManager itemInWorldManager;
+        private int lastHealth;
+        public List loadedChunks;
+        public MinecraftServer mcServer;
+        public NetServerHandler playerNetServerHandler;
+
         public EntityPlayerMP(MinecraftServer minecraftserver, World world, string s,
                               ItemInWorldManager iteminworldmanager)
             : base(world)
@@ -25,7 +41,7 @@ namespace CraftyServer.Core
                 k = world.findTopSolidBlock(i, j);
                 j += rand.nextInt(20) - 10;
             }
-            setLocationAndAngles((double) i + 0.5D, k, (double) j + 0.5D, 0.0F, 0.0F);
+            setLocationAndAngles(i + 0.5D, k, j + 0.5D, 0.0F, 0.0F);
             mcServer = minecraftserver;
             stepHeight = 0.0F;
             iteminworldmanager.thisPlayer = this;
@@ -33,6 +49,38 @@ namespace CraftyServer.Core
             itemInWorldManager = iteminworldmanager;
             yOffset = 0.0F;
         }
+
+        #region ICrafting Members
+
+        public void updateCraftingInventorySlot(CraftingInventoryCB craftinginventorycb, int i, ItemStack itemstack)
+        {
+            if (craftinginventorycb.getSlot(i) is SlotCrafting)
+            {
+                return;
+            }
+            if (isChangingQuantityOnly)
+            {
+                return;
+            }
+            else
+            {
+                playerNetServerHandler.sendPacket(new Packet103(craftinginventorycb.windowId, i, itemstack));
+                return;
+            }
+        }
+
+        public void updateCraftingInventory(CraftingInventoryCB craftinginventorycb, List list)
+        {
+            playerNetServerHandler.sendPacket(new Packet104(craftinginventorycb.windowId, list));
+            playerNetServerHandler.sendPacket(new Packet103(-1, -1, inventory.getItemStack()));
+        }
+
+        public void updateCraftingInventoryInfo(CraftingInventoryCB craftinginventorycb, int i, int j)
+        {
+            playerNetServerHandler.sendPacket(new Packet105(craftinginventorycb.windowId, i, j));
+        }
+
+        #endregion
 
         public void func_20057_k()
         {
@@ -102,7 +150,7 @@ namespace CraftyServer.Core
                 }
                 if (entity is EntityArrow)
                 {
-                    EntityArrow entityarrow = (EntityArrow) entity;
+                    var entityarrow = (EntityArrow) entity;
                     if (entityarrow.owner is EntityPlayer)
                     {
                         return false;
@@ -122,7 +170,7 @@ namespace CraftyServer.Core
             base.onUpdate();
             if (flag && !loadedChunks.isEmpty())
             {
-                ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair) loadedChunks.get(0);
+                var chunkcoordintpair = (ChunkCoordIntPair) loadedChunks.get(0);
                 if (chunkcoordintpair != null)
                 {
                     bool flag1 = false;
@@ -289,34 +337,6 @@ namespace CraftyServer.Core
             currentCraftingInventory.onCraftGuiOpened(this);
         }
 
-        public void updateCraftingInventorySlot(CraftingInventoryCB craftinginventorycb, int i, ItemStack itemstack)
-        {
-            if (craftinginventorycb.getSlot(i) is SlotCrafting)
-            {
-                return;
-            }
-            if (isChangingQuantityOnly)
-            {
-                return;
-            }
-            else
-            {
-                playerNetServerHandler.sendPacket(new Packet103(craftinginventorycb.windowId, i, itemstack));
-                return;
-            }
-        }
-
-        public void updateCraftingInventory(CraftingInventoryCB craftinginventorycb, List list)
-        {
-            playerNetServerHandler.sendPacket(new Packet104(craftinginventorycb.windowId, list));
-            playerNetServerHandler.sendPacket(new Packet103(-1, -1, inventory.getItemStack()));
-        }
-
-        public void updateCraftingInventoryInfo(CraftingInventoryCB craftinginventorycb, int i, int j)
-        {
-            playerNetServerHandler.sendPacket(new Packet105(craftinginventorycb.windowId, i, j));
-        }
-
         public override void onItemStackChanged(ItemStack itemstack)
         {
         }
@@ -355,22 +375,5 @@ namespace CraftyServer.Core
             rotationPitch = f2;
             rotationYaw = f3;
         }
-
-        public NetServerHandler playerNetServerHandler;
-        public MinecraftServer mcServer;
-        public ItemInWorldManager itemInWorldManager;
-        public double field_9155_d;
-        public double field_9154_e;
-        public List loadedChunks;
-        public Set field_420_ah;
-        private int lastHealth;
-        private int field_15004_bw;
-
-        private ItemStack[] playerInventory = {
-                                                  null, null, null, null, null
-                                              };
-
-        private int currentWindowId;
-        public bool isChangingQuantityOnly;
     }
 }

@@ -1,12 +1,122 @@
-using java.util;
 using java.lang;
-
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class EntityMinecart : Entity
                                   , IInventory
     {
+        private static readonly int[][][] field_468_ak = new[]
+                                                         {
+                                                             new[]
+                                                             {
+                                                                 new[]
+                                                                 {
+                                                                     0, 0, -1
+                                                                 }, new[]
+                                                                    {
+                                                                        0, 0, 1
+                                                                    }
+                                                             }, new[]
+                                                                {
+                                                                    new[]
+                                                                    {
+                                                                        -1, 0, 0
+                                                                    }, new[]
+                                                                       {
+                                                                           1, 0, 0
+                                                                       }
+                                                                }, new[]
+                                                                   {
+                                                                       new[]
+                                                                       {
+                                                                           -1, -1, 0
+                                                                       }, new[]
+                                                                          {
+                                                                              1, 0, 0
+                                                                          }
+                                                                   }, new[]
+                                                                      {
+                                                                          new[]
+                                                                          {
+                                                                              -1, 0, 0
+                                                                          }, new[]
+                                                                             {
+                                                                                 1, -1, 0
+                                                                             }
+                                                                      }, new[]
+                                                                         {
+                                                                             new[]
+                                                                             {
+                                                                                 0, 0, -1
+                                                                             }, new[]
+                                                                                {
+                                                                                    0, -1, 1
+                                                                                }
+                                                                         }, new[]
+                                                                            {
+                                                                                new[]
+                                                                                {
+                                                                                    0, -1, -1
+                                                                                }, new[]
+                                                                                   {
+                                                                                       0, 0, 1
+                                                                                   }
+                                                                            }, new[]
+                                                                               {
+                                                                                   new[]
+                                                                                   {
+                                                                                       0, 0, 1
+                                                                                   }, new[]
+                                                                                      {
+                                                                                          1, 0, 0
+                                                                                      }
+                                                                               }, new[]
+                                                                                  {
+                                                                                      new[]
+                                                                                      {
+                                                                                          0, 0, 1
+                                                                                      }, new[]
+                                                                                         {
+                                                                                             -1, 0, 0
+                                                                                         }
+                                                                                  }, new[]
+                                                                                     {
+                                                                                         new[]
+                                                                                         {
+                                                                                             0, 0, -1
+                                                                                         }, new[]
+                                                                                            {
+                                                                                                -1, 0, 0
+                                                                                            }
+                                                                                     }, new[]
+                                                                                        {
+                                                                                            new[]
+                                                                                            {
+                                                                                                0, 0, -1
+                                                                                            }, new[]
+                                                                                               {
+                                                                                                   1, 0, 0
+                                                                                               }
+                                                                                        }
+                                                         };
+
+        private ItemStack[] cargoItems;
+        public int damageTaken;
+        private bool field_469_aj;
+        private double field_9158_as;
+        private double field_9159_ar;
+        private double field_9160_aq;
+        private double field_9161_ap;
+        private double field_9162_ao;
+        private int field_9163_an;
+        public int field_9167_b;
+        public int forwardDirection;
+        public int fuel;
+        public int minecartType;
+        public double pushX;
+        public double pushZ;
+
         public EntityMinecart(World world) : base(world)
         {
             cargoItems = new ItemStack[36];
@@ -19,6 +129,89 @@ namespace CraftyServer.Core
             yOffset = height/2.0F;
             entityWalks = false;
         }
+
+        public EntityMinecart(World world, double d, double d1, double d2,
+                              int i)
+            : this(world)
+        {
+            setPosition(d, d1 + yOffset, d2);
+            motionX = 0.0D;
+            motionY = 0.0D;
+            motionZ = 0.0D;
+            prevPosX = d;
+            prevPosY = d1;
+            prevPosZ = d2;
+            minecartType = i;
+        }
+
+        #region IInventory Members
+
+        public int getSizeInventory()
+        {
+            return 27;
+        }
+
+        public ItemStack getStackInSlot(int i)
+        {
+            return cargoItems[i];
+        }
+
+        public ItemStack decrStackSize(int i, int j)
+        {
+            if (cargoItems[i] != null)
+            {
+                if (cargoItems[i].stackSize <= j)
+                {
+                    ItemStack itemstack = cargoItems[i];
+                    cargoItems[i] = null;
+                    return itemstack;
+                }
+                ItemStack itemstack1 = cargoItems[i].splitStack(j);
+                if (cargoItems[i].stackSize == 0)
+                {
+                    cargoItems[i] = null;
+                }
+                return itemstack1;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void setInventorySlotContents(int i, ItemStack itemstack)
+        {
+            cargoItems[i] = itemstack;
+            if (itemstack != null && itemstack.stackSize > getInventoryStackLimit())
+            {
+                itemstack.stackSize = getInventoryStackLimit();
+            }
+        }
+
+        public string getInvName()
+        {
+            return "Minecart";
+        }
+
+        public int getInventoryStackLimit()
+        {
+            return 64;
+        }
+
+        public void onInventoryChanged()
+        {
+        }
+
+        public virtual bool canInteractWith(EntityPlayer entityplayer)
+        {
+            if (isDead)
+            {
+                return false;
+            }
+            return entityplayer.getDistanceSqToEntity(this) <= 64D;
+        }
+
+        #endregion
 
         protected override void entityInit()
         {
@@ -39,23 +232,9 @@ namespace CraftyServer.Core
             return true;
         }
 
-        public EntityMinecart(World world, double d, double d1, double d2,
-                              int i)
-            : this(world)
-        {
-            setPosition(d, d1 + (double) yOffset, d2);
-            motionX = 0.0D;
-            motionY = 0.0D;
-            motionZ = 0.0D;
-            prevPosX = d;
-            prevPosY = d1;
-            prevPosZ = d2;
-            minecartType = i;
-        }
-
         public override double getMountedYOffset()
         {
-            return (double) height*0.0D - 0.30000001192092896D;
+            return height*0.0D - 0.30000001192092896D;
         }
 
         public override bool attackEntityFrom(Entity entity, int i)
@@ -113,9 +292,9 @@ namespace CraftyServer.Core
                         j = itemstack.stackSize;
                     }
                     itemstack.stackSize -= j;
-                    EntityItem entityitem = new EntityItem(worldObj, posX + (double) f, posY + (double) f1,
-                                                           posZ + (double) f2,
-                                                           new ItemStack(itemstack.itemID, j, itemstack.getItemDamage()));
+                    var entityitem = new EntityItem(worldObj, posX + f, posY + f1,
+                                                    posZ + f2,
+                                                    new ItemStack(itemstack.itemID, j, itemstack.getItemDamage()));
                     float f3 = 0.05F;
                     entityitem.motionX = (float) rand.nextGaussian()*f3;
                     entityitem.motionY = (float) rand.nextGaussian()*f3 + 0.2F;
@@ -141,18 +320,18 @@ namespace CraftyServer.Core
             {
                 if (field_9163_an > 0)
                 {
-                    double d = posX + (field_9162_ao - posX)/(double) field_9163_an;
-                    double d1 = posY + (field_9161_ap - posY)/(double) field_9163_an;
-                    double d3 = posZ + (field_9160_aq - posZ)/(double) field_9163_an;
+                    double d = posX + (field_9162_ao - posX)/field_9163_an;
+                    double d1 = posY + (field_9161_ap - posY)/field_9163_an;
+                    double d3 = posZ + (field_9160_aq - posZ)/field_9163_an;
                     double d4;
-                    for (d4 = field_9159_ar - (double) rotationYaw; d4 < -180D; d4 += 360D)
+                    for (d4 = field_9159_ar - rotationYaw; d4 < -180D; d4 += 360D)
                     {
                     }
                     for (; d4 >= 180D; d4 -= 360D)
                     {
                     }
-                    rotationYaw += (float) (d4/(double) field_9163_an);
-                    rotationPitch += (float) ((field_9158_as - (double) rotationPitch)/(double) field_9163_an);
+                    rotationYaw += (float) (d4/field_9163_an);
+                    rotationPitch += (float) ((field_9158_as - rotationPitch)/field_9163_an);
                     field_9163_an--;
                     setPosition(d, d1, d3);
                     setRotation(rotationYaw, rotationPitch);
@@ -217,21 +396,21 @@ namespace CraftyServer.Core
                 motionX = (d13*d8)/d11;
                 motionZ = (d13*d10)/d11;
                 double d16 = 0.0D;
-                double d17 = (double) i + 0.5D + (double) ai[0][0]*0.5D;
-                double d18 = (double) k + 0.5D + (double) ai[0][2]*0.5D;
-                double d19 = (double) i + 0.5D + (double) ai[1][0]*0.5D;
-                double d20 = (double) k + 0.5D + (double) ai[1][2]*0.5D;
+                double d17 = i + 0.5D + ai[0][0]*0.5D;
+                double d18 = k + 0.5D + ai[0][2]*0.5D;
+                double d19 = i + 0.5D + ai[1][0]*0.5D;
+                double d20 = k + 0.5D + ai[1][2]*0.5D;
                 d8 = d19 - d17;
                 d10 = d20 - d18;
                 if (d8 == 0.0D)
                 {
-                    posX = (double) i + 0.5D;
-                    d16 = posZ - (double) k;
+                    posX = i + 0.5D;
+                    d16 = posZ - k;
                 }
                 else if (d10 == 0.0D)
                 {
-                    posZ = (double) k + 0.5D;
-                    d16 = posX - (double) i;
+                    posZ = k + 0.5D;
+                    d16 = posX - i;
                 }
                 else
                 {
@@ -242,7 +421,7 @@ namespace CraftyServer.Core
                 }
                 posX = d17 + d8*d16;
                 posZ = d18 + d10*d16;
-                setPosition(posX, posY + (double) yOffset, posZ);
+                setPosition(posX, posY + yOffset, posZ);
                 double d22 = motionX;
                 double d24 = motionZ;
                 if (riddenByEntity != null)
@@ -270,12 +449,12 @@ namespace CraftyServer.Core
                 if (ai[0][1] != 0 && MathHelper.floor_double(posX) - i == ai[0][0] &&
                     MathHelper.floor_double(posZ) - k == ai[0][2])
                 {
-                    setPosition(posX, posY + (double) ai[0][1], posZ);
+                    setPosition(posX, posY + ai[0][1], posZ);
                 }
                 else if (ai[1][1] != 0 && MathHelper.floor_double(posX) - i == ai[1][0] &&
                          MathHelper.floor_double(posZ) - k == ai[1][2])
                 {
-                    setPosition(posX, posY + (double) ai[1][1], posZ);
+                    setPosition(posX, posY + ai[1][1], posZ);
                 }
                 if (riddenByEntity != null)
                 {
@@ -328,8 +507,8 @@ namespace CraftyServer.Core
                 if (j1 != i || k1 != k)
                 {
                     double d15 = Math.sqrt(motionX*motionX + motionZ*motionZ);
-                    motionX = d15*(double) (j1 - i);
-                    motionZ = d15*(double) (k1 - k);
+                    motionX = d15*(j1 - i);
+                    motionZ = d15*(k1 - k);
                 }
                 if (minecartType == 2)
                 {
@@ -414,7 +593,7 @@ namespace CraftyServer.Core
             {
                 for (int i1 = 0; i1 < list.size(); i1++)
                 {
-                    Entity entity = (Entity) list.get(i1);
+                    var entity = (Entity) list.get(i1);
                     if (entity != riddenByEntity && entity.canBePushed() && (entity is EntityMinecart))
                     {
                         entity.applyEntityCollision(this);
@@ -455,24 +634,24 @@ namespace CraftyServer.Core
                 }
                 int[][] ai = field_468_ak[l];
                 double d3 = 0.0D;
-                double d4 = (double) i + 0.5D + (double) ai[0][0]*0.5D;
-                double d5 = (double) j + 0.5D + (double) ai[0][1]*0.5D;
-                double d6 = (double) k + 0.5D + (double) ai[0][2]*0.5D;
-                double d7 = (double) i + 0.5D + (double) ai[1][0]*0.5D;
-                double d8 = (double) j + 0.5D + (double) ai[1][1]*0.5D;
-                double d9 = (double) k + 0.5D + (double) ai[1][2]*0.5D;
+                double d4 = i + 0.5D + ai[0][0]*0.5D;
+                double d5 = j + 0.5D + ai[0][1]*0.5D;
+                double d6 = k + 0.5D + ai[0][2]*0.5D;
+                double d7 = i + 0.5D + ai[1][0]*0.5D;
+                double d8 = j + 0.5D + ai[1][1]*0.5D;
+                double d9 = k + 0.5D + ai[1][2]*0.5D;
                 double d10 = d7 - d4;
                 double d11 = (d8 - d5)*2D;
                 double d12 = d9 - d6;
                 if (d10 == 0.0D)
                 {
-                    d = (double) i + 0.5D;
-                    d3 = d2 - (double) k;
+                    d = i + 0.5D;
+                    d3 = d2 - k;
                 }
                 else if (d12 == 0.0D)
                 {
-                    d2 = (double) k + 0.5D;
-                    d3 = d - (double) i;
+                    d2 = k + 0.5D;
+                    d3 = d - i;
                 }
                 else
                 {
@@ -511,12 +690,12 @@ namespace CraftyServer.Core
             }
             else if (minecartType == 1)
             {
-                NBTTagList nbttaglist = new NBTTagList();
+                var nbttaglist = new NBTTagList();
                 for (int i = 0; i < cargoItems.Length; i++)
                 {
                     if (cargoItems[i] != null)
                     {
-                        NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                        var nbttagcompound1 = new NBTTagCompound();
                         nbttagcompound1.setByte("Slot", (byte) i);
                         cargoItems[i].writeToNBT(nbttagcompound1);
                         nbttaglist.setTag(nbttagcompound1);
@@ -542,7 +721,7 @@ namespace CraftyServer.Core
                 cargoItems = new ItemStack[getSizeInventory()];
                 for (int i = 0; i < nbttaglist.tagCount(); i++)
                 {
-                    NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
+                    var nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
                     int j = nbttagcompound1.getByte("Slot") & 0xff;
                     if (j >= 0 && j < cargoItems.Length)
                     {
@@ -628,62 +807,6 @@ namespace CraftyServer.Core
             }
         }
 
-        public int getSizeInventory()
-        {
-            return 27;
-        }
-
-        public ItemStack getStackInSlot(int i)
-        {
-            return cargoItems[i];
-        }
-
-        public ItemStack decrStackSize(int i, int j)
-        {
-            if (cargoItems[i] != null)
-            {
-                if (cargoItems[i].stackSize <= j)
-                {
-                    ItemStack itemstack = cargoItems[i];
-                    cargoItems[i] = null;
-                    return itemstack;
-                }
-                ItemStack itemstack1 = cargoItems[i].splitStack(j);
-                if (cargoItems[i].stackSize == 0)
-                {
-                    cargoItems[i] = null;
-                }
-                return itemstack1;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public void setInventorySlotContents(int i, ItemStack itemstack)
-        {
-            cargoItems[i] = itemstack;
-            if (itemstack != null && itemstack.stackSize > getInventoryStackLimit())
-            {
-                itemstack.stackSize = getInventoryStackLimit();
-            }
-        }
-
-        public string getInvName()
-        {
-            return "Minecart";
-        }
-
-        public int getInventoryStackLimit()
-        {
-            return 64;
-        }
-
-        public void onInventoryChanged()
-        {
-        }
-
         public override bool interact(EntityPlayer entityplayer)
         {
             if (minecartType == 0)
@@ -720,126 +843,5 @@ namespace CraftyServer.Core
             }
             return true;
         }
-
-        public virtual bool canInteractWith(EntityPlayer entityplayer)
-        {
-            if (isDead)
-            {
-                return false;
-            }
-            return entityplayer.getDistanceSqToEntity(this) <= 64D;
-        }
-
-        private ItemStack[] cargoItems;
-        public int damageTaken;
-        public int field_9167_b;
-        public int forwardDirection;
-        private bool field_469_aj;
-        public int minecartType;
-        public int fuel;
-        public double pushX;
-        public double pushZ;
-
-        private static int[][][] field_468_ak = new int[][][]
-                                                {
-                                                    new int[][]
-                                                    {
-                                                        new int[]
-                                                        {
-                                                            0, 0, -1
-                                                        }, new int[]
-                                                           {
-                                                               0, 0, 1
-                                                           }
-                                                    }, new int[][]
-                                                       {
-                                                           new int[]
-                                                           {
-                                                               -1, 0, 0
-                                                           }, new int[]
-                                                              {
-                                                                  1, 0, 0
-                                                              }
-                                                       }, new int[][]
-                                                          {
-                                                              new int[]
-                                                              {
-                                                                  -1, -1, 0
-                                                              }, new int[]
-                                                                 {
-                                                                     1, 0, 0
-                                                                 }
-                                                          }, new int[][]
-                                                             {
-                                                                 new int[]
-                                                                 {
-                                                                     -1, 0, 0
-                                                                 }, new int[]
-                                                                    {
-                                                                        1, -1, 0
-                                                                    }
-                                                             }, new int[][]
-                                                                {
-                                                                    new int[]
-                                                                    {
-                                                                        0, 0, -1
-                                                                    }, new int[]
-                                                                       {
-                                                                           0, -1, 1
-                                                                       }
-                                                                }, new int[][]
-                                                                   {
-                                                                       new int[]
-                                                                       {
-                                                                           0, -1, -1
-                                                                       }, new int[]
-                                                                          {
-                                                                              0, 0, 1
-                                                                          }
-                                                                   }, new int[][]
-                                                                      {
-                                                                          new int[]
-                                                                          {
-                                                                              0, 0, 1
-                                                                          }, new int[]
-                                                                             {
-                                                                                 1, 0, 0
-                                                                             }
-                                                                      }, new int[][]
-                                                                         {
-                                                                             new int[]
-                                                                             {
-                                                                                 0, 0, 1
-                                                                             }, new int[]
-                                                                                {
-                                                                                    -1, 0, 0
-                                                                                }
-                                                                         }, new int[][]
-                                                                            {
-                                                                                new int[]
-                                                                                {
-                                                                                    0, 0, -1
-                                                                                }, new int[]
-                                                                                   {
-                                                                                       -1, 0, 0
-                                                                                   }
-                                                                            }, new int[][]
-                                                                               {
-                                                                                   new int[]
-                                                                                   {
-                                                                                       0, 0, -1
-                                                                                   }, new int[]
-                                                                                      {
-                                                                                          1, 0, 0
-                                                                                      }
-                                                                               }
-                                                };
-
-        private int field_9163_an;
-        private double field_9162_ao;
-        private double field_9161_ap;
-        private double field_9160_aq;
-        private double field_9159_ar;
-        private double field_9158_as;
     }
 }

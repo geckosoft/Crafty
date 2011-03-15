@@ -39,7 +39,7 @@ namespace CraftyServer.Core
             int i1 = world.getBlockId(i, j, k);
             if (i1 == 0)
             {
-                world.playSoundEffect((double) i + 0.5D, (double) j + 0.5D, (double) k + 0.5D, "fire.ignite", 1.0F,
+                world.playSoundEffect(i + 0.5D, j + 0.5D, k + 0.5D, "fire.ignite", 1.0F,
                                       itemRand.nextFloat()*0.4F + 0.8F);
                 world.setBlockWithNotify(i, j, k, Block.fire.blockID);
             }

@@ -4,9 +4,28 @@ namespace CraftyServer.Core
 {
     public class RecipesArmor
     {
+        private readonly object[][] recipeItems;
+
+        private readonly string[][] recipePatterns = new[]
+                                                     {
+                                                         new[]
+                                                         {
+                                                             "XXX", "X X"
+                                                         }, new[]
+                                                            {
+                                                                "X X", "XXX", "XXX"
+                                                            }, new[]
+                                                               {
+                                                                   "XXX", "X X", "X X"
+                                                               }, new[]
+                                                                  {
+                                                                      "X X", "X X"
+                                                                  }
+                                                     };
+
         public RecipesArmor()
         {
-            recipeItems = (new object[][]
+            recipeItems = (new[]
                            {
                                new object[]
                                {
@@ -38,32 +57,13 @@ namespace CraftyServer.Core
                 object obj = recipeItems[0][i];
                 for (int j = 0; j < recipeItems.Length - 1; j++)
                 {
-                    Item item = (Item) recipeItems[j + 1][i];
-                    craftingmanager.addRecipe(new ItemStack(item), new object[]
+                    var item = (Item) recipeItems[j + 1][i];
+                    craftingmanager.addRecipe(new ItemStack(item), new[]
                                                                    {
                                                                        recipePatterns[j], Character.valueOf('X'), obj
                                                                    });
                 }
             }
         }
-
-        private string[][] recipePatterns = new string[][]
-                                            {
-                                                new string[]
-                                                {
-                                                    "XXX", "X X"
-                                                }, new string[]
-                                                   {
-                                                       "X X", "XXX", "XXX"
-                                                   }, new string[]
-                                                      {
-                                                          "XXX", "X X", "X X"
-                                                      }, new string[]
-                                                         {
-                                                             "X X", "X X"
-                                                         }
-                                            };
-
-        private object[][] recipeItems;
     }
 }

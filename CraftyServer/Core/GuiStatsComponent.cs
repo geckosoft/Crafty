@@ -1,11 +1,15 @@
 using java.awt;
-using javax.swing;
 using java.lang;
+using javax.swing;
 
 namespace CraftyServer.Core
 {
     public class GuiStatsComponent : JComponent
     {
+        private readonly string[] displayStrings;
+        private readonly int[] memoryUse;
+        private int updateCounter;
+
         public GuiStatsComponent()
         {
             memoryUse = new int[256];
@@ -59,9 +63,5 @@ namespace CraftyServer.Core
         {
             guistatscomponent.updateStats();
         }
-
-        private int[] memoryUse;
-        private int updateCounter;
-        private string[] displayStrings;
     }
 }

@@ -1,10 +1,11 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockSand : Block
     {
+        public static bool fallInstantly;
+
         public BlockSand(int i, int j)
             : base(i, j, Material.sand)
         {
@@ -47,9 +48,9 @@ namespace CraftyServer.Core
                 }
                 else
                 {
-                    EntityFallingSand entityfallingsand = new EntityFallingSand(world, (float) i + 0.5F,
-                                                                                (float) j + 0.5F, (float) k + 0.5F,
-                                                                                blockID);
+                    var entityfallingsand = new EntityFallingSand(world, i + 0.5F,
+                                                                  j + 0.5F, k + 0.5F,
+                                                                  blockID);
                     world.entityJoinedWorld(entityfallingsand);
                 }
             }
@@ -67,18 +68,16 @@ namespace CraftyServer.Core
             {
                 return true;
             }
-            if (l == Block.fire.blockID)
+            if (l == fire.blockID)
             {
                 return true;
             }
-            Material material = Block.blocksList[l].blockMaterial;
+            Material material = blocksList[l].blockMaterial;
             if (material == Material.water)
             {
                 return true;
             }
             return material == Material.lava;
         }
-
-        public static bool fallInstantly = false;
     }
 }

@@ -3,6 +3,8 @@ namespace CraftyServer.Core
     public class EntityMobs : EntityCreature
                               , IMobs
     {
+        protected int attackStrength;
+
         public EntityMobs(World world) : base(world)
         {
             attackStrength = 2;
@@ -63,7 +65,7 @@ namespace CraftyServer.Core
 
         public override void attackEntity(Entity entity, float f)
         {
-            if ((double) f < 1.5D && entity.boundingBox.maxY > boundingBox.minY &&
+            if (f < 1.5D && entity.boundingBox.maxY > boundingBox.minY &&
                 entity.boundingBox.minY < boundingBox.maxY)
             {
                 attackTime = 20;
@@ -101,7 +103,5 @@ namespace CraftyServer.Core
                 return l <= rand.nextInt(8) && base.getCanSpawnHere();
             }
         }
-
-        protected int attackStrength;
     }
 }

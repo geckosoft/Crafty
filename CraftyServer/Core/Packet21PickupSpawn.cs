@@ -4,6 +4,17 @@ namespace CraftyServer.Core
 {
     public class Packet21PickupSpawn : Packet
     {
+        public int count;
+        public int entityId;
+        public int itemDamage;
+        public int itemID;
+        public byte pitch;
+        public byte roll;
+        public byte rotation;
+        public int xPosition;
+        public int yPosition;
+        public int zPosition;
+
         public Packet21PickupSpawn()
         {
         }
@@ -59,16 +70,5 @@ namespace CraftyServer.Core
         {
             return 24;
         }
-
-        public int entityId;
-        public int xPosition;
-        public int yPosition;
-        public int zPosition;
-        public byte rotation;
-        public byte pitch;
-        public byte roll;
-        public int itemID;
-        public int count;
-        public int itemDamage;
     }
 }

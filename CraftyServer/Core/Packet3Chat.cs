@@ -4,6 +4,8 @@ namespace CraftyServer.Core
 {
     public class Packet3Chat : Packet
     {
+        public string message;
+
         public Packet3Chat()
         {
         }
@@ -32,7 +34,5 @@ namespace CraftyServer.Core
         {
             return message.Length;
         }
-
-        public string message;
     }
 }

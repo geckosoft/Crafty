@@ -1,11 +1,23 @@
-using java.util;
 using java.lang;
-
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class EntityFireball : Entity
     {
+        private readonly EntityLiving owner;
+        private int field_9190_an;
+        public double field_9196_d;
+        public double field_9198_c;
+        public double field_9199_b;
+        private bool inGround;
+        private int inTile;
+        public int shake;
+        private int ticksInAir;
+        private int xTile;
+        private int yTile;
+        private int zTile;
+
         public EntityFireball(World world)
             : base(world)
         {
@@ -17,10 +29,6 @@ namespace CraftyServer.Core
             shake = 0;
             ticksInAir = 0;
             setSize(1.0F, 1.0F);
-        }
-
-        protected override void entityInit()
-        {
         }
 
         public EntityFireball(World world, EntityLiving entityliving, double d, double d1, double d2)
@@ -47,6 +55,10 @@ namespace CraftyServer.Core
             field_9199_b = (d/d3)*0.10000000000000001D;
             field_9198_c = (d1/d3)*0.10000000000000001D;
             field_9196_d = (d2/d3)*0.10000000000000001D;
+        }
+
+        protected override void entityInit()
+        {
         }
 
         public override void onUpdate()
@@ -100,7 +112,7 @@ namespace CraftyServer.Core
             double d = 0.0D;
             for (int j = 0; j < list.size(); j++)
             {
-                Entity entity1 = (Entity) list.get(j);
+                var entity1 = (Entity) list.get(j);
                 if (!entity1.canBeCollidedWith() || entity1 == owner && ticksInAir < 25)
                 {
                     continue;
@@ -160,8 +172,8 @@ namespace CraftyServer.Core
                 for (int k = 0; k < 4; k++)
                 {
                     float f3 = 0.25F;
-                    worldObj.spawnParticle("bubble", posX - motionX*(double) f3, posY - motionY*(double) f3,
-                                           posZ - motionZ*(double) f3, motionX, motionY, motionZ);
+                    worldObj.spawnParticle("bubble", posX - motionX*f3, posY - motionY*f3,
+                                           posZ - motionZ*f3, motionX, motionY, motionZ);
                 }
 
                 f1 = 0.8F;
@@ -223,18 +235,5 @@ namespace CraftyServer.Core
                 return false;
             }
         }
-
-        private int xTile;
-        private int yTile;
-        private int zTile;
-        private int inTile;
-        private bool inGround;
-        public int shake;
-        private EntityLiving owner;
-        private int field_9190_an;
-        private int ticksInAir;
-        public double field_9199_b;
-        public double field_9198_c;
-        public double field_9196_d;
     }
 }

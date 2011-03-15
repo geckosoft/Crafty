@@ -10,7 +10,7 @@ namespace CraftyServer.Core
         public override ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
         {
             base.onItemRightClick(itemstack, world, entityplayer);
-            return new ItemStack(Item.bowlEmpty);
+            return new ItemStack(bowlEmpty);
         }
     }
 }

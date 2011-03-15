@@ -1,6 +1,5 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockCake : Block
@@ -15,7 +14,7 @@ namespace CraftyServer.Core
         {
             int l = iblockaccess.getBlockMetadata(i, j, k);
             float f = 0.0625F;
-            float f1 = (float) (1 + l*2)/16F;
+            float f1 = (1 + l*2)/16F;
             float f2 = 0.5F;
             setBlockBounds(f1, 0.0F, f, 1.0F - f, f2, 1.0F - f);
         }
@@ -24,10 +23,10 @@ namespace CraftyServer.Core
         {
             int l = world.getBlockMetadata(i, j, k);
             float f = 0.0625F;
-            float f1 = (float) (1 + l*2)/16F;
+            float f1 = (1 + l*2)/16F;
             float f2 = 0.5F;
-            return AxisAlignedBB.getBoundingBoxFromPool((float) i + f1, j, (float) k + f, (float) (i + 1) - f,
-                                                        ((float) j + f2) - f, (float) (k + 1) - f);
+            return AxisAlignedBB.getBoundingBoxFromPool(i + f1, j, k + f, (i + 1) - f,
+                                                        (j + f2) - f, (k + 1) - f);
         }
 
         public override int func_22009_a(int i, int j)

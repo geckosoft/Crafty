@@ -1,10 +1,11 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockFurnace : BlockContainer
     {
+        private bool isActive;
+
         public BlockFurnace(int i, bool flag) : base(i, Material.rock)
         {
             isActive = flag;
@@ -13,7 +14,7 @@ namespace CraftyServer.Core
 
         public override int idDropped(int i, Random random)
         {
-            return Block.stoneOvenIdle.blockID;
+            return stoneOvenIdle.blockID;
         }
 
         public override void onBlockAdded(World world, int i, int j, int k)
@@ -29,19 +30,19 @@ namespace CraftyServer.Core
             int j1 = world.getBlockId(i - 1, j, k);
             int k1 = world.getBlockId(i + 1, j, k);
             byte byte0 = 3;
-            if (Block.opaqueCubeLookup[l] && !Block.opaqueCubeLookup[i1])
+            if (opaqueCubeLookup[l] && !opaqueCubeLookup[i1])
             {
                 byte0 = 3;
             }
-            if (Block.opaqueCubeLookup[i1] && !Block.opaqueCubeLookup[l])
+            if (opaqueCubeLookup[i1] && !opaqueCubeLookup[l])
             {
                 byte0 = 2;
             }
-            if (Block.opaqueCubeLookup[j1] && !Block.opaqueCubeLookup[k1])
+            if (opaqueCubeLookup[j1] && !opaqueCubeLookup[k1])
             {
                 byte0 = 5;
             }
-            if (Block.opaqueCubeLookup[k1] && !Block.opaqueCubeLookup[j1])
+            if (opaqueCubeLookup[k1] && !opaqueCubeLookup[j1])
             {
                 byte0 = 4;
             }
@@ -76,7 +77,7 @@ namespace CraftyServer.Core
             }
             else
             {
-                TileEntityFurnace tileentityfurnace = (TileEntityFurnace) world.getBlockTileEntity(i, j, k);
+                var tileentityfurnace = (TileEntityFurnace) world.getBlockTileEntity(i, j, k);
                 entityplayer.displayGUIFurnace(tileentityfurnace);
                 return true;
             }
@@ -88,11 +89,11 @@ namespace CraftyServer.Core
             TileEntity tileentity = world.getBlockTileEntity(i, j, k);
             if (flag)
             {
-                world.setBlockWithNotify(i, j, k, Block.stoneOvenActive.blockID);
+                world.setBlockWithNotify(i, j, k, stoneOvenActive.blockID);
             }
             else
             {
-                world.setBlockWithNotify(i, j, k, Block.stoneOvenIdle.blockID);
+                world.setBlockWithNotify(i, j, k, stoneOvenIdle.blockID);
             }
             world.setBlockMetadataWithNotify(i, j, k, l);
             world.setBlockTileEntity(i, j, k, tileentity);
@@ -105,7 +106,7 @@ namespace CraftyServer.Core
 
         public override void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving)
         {
-            int l = MathHelper.floor_double((double) ((entityliving.rotationYaw*4F)/360F) + 0.5D) & 3;
+            int l = MathHelper.floor_double(((entityliving.rotationYaw*4F)/360F) + 0.5D) & 3;
             if (l == 0)
             {
                 world.setBlockMetadataWithNotify(i, j, k, 2);
@@ -123,7 +124,5 @@ namespace CraftyServer.Core
                 world.setBlockMetadataWithNotify(i, j, k, 4);
             }
         }
-
-        private bool isActive;
     }
 }

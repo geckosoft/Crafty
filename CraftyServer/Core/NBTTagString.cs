@@ -5,6 +5,8 @@ namespace CraftyServer.Core
 {
     public class NBTTagString : NBTBase
     {
+        public string stringValue;
+
         public NBTTagString()
         {
         }
@@ -41,7 +43,5 @@ namespace CraftyServer.Core
         {
             return (new StringBuilder()).append("").append(stringValue).toString();
         }
-
-        public string stringValue;
     }
 }

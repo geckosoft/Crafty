@@ -6,19 +6,35 @@ namespace CraftyServer.Core
     public class SaveFormatOld
         : ISaveFormat
     {
+        protected File field_22106_a;
+
         public SaveFormatOld(File file)
         {
             field_22106_a = file;
         }
 
+        #region ISaveFormat Members
+
+        public virtual bool func_22102_a(string s)
+        {
+            return false;
+        }
+
+        public virtual bool func_22101_a(string s, IProgressUpdate iprogressupdate)
+        {
+            return false;
+        }
+
+        #endregion
+
         public WorldInfo func_22103_b(string s)
         {
-            File file = new File(field_22106_a, s);
+            var file = new File(field_22106_a, s);
             if (!file.exists())
             {
                 return null;
             }
-            File file1 = new File(file, "level.dat");
+            var file1 = new File(file, "level.dat");
             if (file1.exists())
             {
                 try
@@ -51,17 +67,5 @@ namespace CraftyServer.Core
         {
             return new PlayerNBTManager(field_22106_a, s, flag);
         }
-
-        public virtual bool func_22102_a(string s)
-        {
-            return false;
-        }
-
-        public virtual bool func_22101_a(string s, IProgressUpdate iprogressupdate)
-        {
-            return false;
-        }
-
-        protected File field_22106_a;
     }
 }

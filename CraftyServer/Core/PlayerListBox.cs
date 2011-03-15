@@ -7,6 +7,9 @@ namespace CraftyServer.Core
     public class PlayerListBox : JList
                                  , IUpdatePlayerListBox
     {
+        private readonly MinecraftServer mcServer;
+        private int updateCounter;
+
         public PlayerListBox(MinecraftServer minecraftserver)
         {
             updateCounter = 0;
@@ -14,11 +17,13 @@ namespace CraftyServer.Core
             minecraftserver.func_6022_a(this);
         }
 
+        #region IUpdatePlayerListBox Members
+
         public void update()
         {
             if (updateCounter++%20 == 0)
             {
-                Vector vector = new Vector();
+                var vector = new Vector();
                 for (int i = 0; i < mcServer.configManager.playerEntities.size(); i++)
                 {
                     vector.add(((EntityPlayerMP) mcServer.configManager.playerEntities.get(i)).username);
@@ -28,7 +33,6 @@ namespace CraftyServer.Core
             }
         }
 
-        private MinecraftServer mcServer;
-        private int updateCounter;
+        #endregion
     }
 }

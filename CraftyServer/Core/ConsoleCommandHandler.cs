@@ -1,12 +1,16 @@
+using System;
 using CraftyServer.Server;
+using java.lang;
 using java.util;
 using java.util.logging;
-using java.lang;
 
 namespace CraftyServer.Core
 {
     public class ConsoleCommandHandler
     {
+        private static readonly Logger minecraftLogger = Logger.getLogger("Minecraft");
+        private readonly MinecraftServer minecraftServer;
+
         public ConsoleCommandHandler(MinecraftServer minecraftserver)
         {
             minecraftServer = minecraftserver;
@@ -99,7 +103,7 @@ namespace CraftyServer.Core
                 EntityPlayerMP entityplayermp1 = null;
                 for (int i = 0; i < serverconfigurationmanager.playerEntities.size(); i++)
                 {
-                    EntityPlayerMP entityplayermp5 = (EntityPlayerMP) serverconfigurationmanager.playerEntities.get(i);
+                    var entityplayermp5 = (EntityPlayerMP) serverconfigurationmanager.playerEntities.get(i);
                     if (entityplayermp5.username.ToLowerInvariant() == s8.ToLowerInvariant())
                     {
                         entityplayermp1 = entityplayermp5;
@@ -164,7 +168,7 @@ namespace CraftyServer.Core
                 {
                     try
                     {
-                        int k = java.lang.Integer.parseInt(as1[2]);
+                        int k = Integer.parseInt(as1[2]);
                         if (Item.itemsList[k] != null)
                         {
                             func_22115_a(s1,
@@ -212,13 +216,13 @@ namespace CraftyServer.Core
                 string s10 = as2[1];
                 try
                 {
-                    int j = java.lang.Integer.parseInt(as2[2]);
-                    if ("add".Equals(s10, System.StringComparison.InvariantCultureIgnoreCase))
+                    int j = Integer.parseInt(as2[2]);
+                    if ("add".Equals(s10, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        worldserver.func_22076_a(worldserver.getWorldTime() + (long) j);
+                        worldserver.func_22076_a(worldserver.getWorldTime() + j);
                         func_22115_a(s1, (new StringBuilder()).append("Added ").append(j).append(" to time").toString());
                     }
-                    else if ("set".Equals(s10, System.StringComparison.InvariantCultureIgnoreCase))
+                    else if ("set".Equals(s10, StringComparison.InvariantCultureIgnoreCase))
                     {
                         worldserver.func_22076_a(j);
                         func_22115_a(s1, (new StringBuilder()).append("Set time to ").append(j).toString());
@@ -293,7 +297,7 @@ namespace CraftyServer.Core
                 string s5 = "";
                 for (Iterator iterator = set.iterator(); iterator.hasNext();)
                 {
-                    string s6 = (string) iterator.next();
+                    var s6 = (string) iterator.next();
                     s5 = (new StringBuilder()).append(s5).append(s6).append(" ").toString();
                 }
 
@@ -355,15 +359,12 @@ namespace CraftyServer.Core
         {
             try
             {
-                return java.lang.Integer.parseInt(s);
+                return Integer.parseInt(s);
             }
             catch (NumberFormatException numberformatexception)
             {
                 return i;
             }
         }
-
-        private static Logger minecraftLogger = Logger.getLogger("Minecraft");
-        private MinecraftServer minecraftServer;
     }
 }

@@ -4,6 +4,10 @@ namespace CraftyServer.Core
 {
     public class StepSound
     {
+        public float field_1028_b;
+        public string field_1029_a;
+        public float field_1030_c;
+
         public StepSound(string s, float f, float f1)
         {
             field_1029_a = s;
@@ -25,9 +29,5 @@ namespace CraftyServer.Core
         {
             return (new StringBuilder()).append("step.").append(field_1029_a).toString();
         }
-
-        public string field_1029_a;
-        public float field_1028_b;
-        public float field_1030_c;
     }
 }

@@ -2,6 +2,8 @@ namespace CraftyServer.Core
 {
     public class NibbleArray
     {
+        public byte[] data;
+
         public NibbleArray(int i)
         {
             data = new byte[i >> 1];
@@ -46,7 +48,5 @@ namespace CraftyServer.Core
         {
             return data != null;
         }
-
-        public byte[] data;
     }
 }

@@ -1,11 +1,33 @@
-using java.util;
-using java.lang;
-
+using System;
+using Math = java.lang.Math;
+using Random = java.util.Random;
 
 namespace CraftyServer.Core
 {
     public class WorldGenBigTree : WorldGenerator
     {
+        public static byte[] field_760_a = {
+                                               2, 0, 0, 1, 2, 1
+                                           };
+
+        private readonly int[] basePos = {
+                                             0, 0, 0
+                                         };
+
+        private readonly int field_749_l;
+        private readonly double field_752_i;
+        private readonly double field_754_g;
+        private readonly Random field_759_b;
+        private int[][] field_746_o;
+        private int field_747_n;
+        private int field_748_m;
+        private double field_750_k;
+        private double field_751_j;
+        private double field_753_h;
+        private int field_756_e;
+        private int height;
+        private World worldObj;
+
         public WorldGenBigTree()
         {
             field_759_b = new Random();
@@ -22,17 +44,17 @@ namespace CraftyServer.Core
 
         private void func_424_a()
         {
-            height = (int) ((double) field_756_e*field_754_g);
+            height = (int) (field_756_e*field_754_g);
             if (height >= field_756_e)
             {
                 height = field_756_e - 1;
             }
-            int i = (int) (1.3819999999999999D + Math.pow((field_750_k*(double) field_756_e)/13D, 2D));
+            var i = (int) (1.3819999999999999D + Math.pow((field_750_k*field_756_e)/13D, 2D));
             if (i < 1)
             {
                 i = 1;
             }
-            int[][] ai = new int[i*field_756_e][];
+            var ai = new int[i*field_756_e][];
             for (int i2 = 0; i2 < i*field_756_e; i2++)
             {
                 ai[i2] = new int[4];
@@ -60,10 +82,10 @@ namespace CraftyServer.Core
                     double d = 0.5D;
                     for (; j1 < i; j1++)
                     {
-                        double d1 = field_751_j*((double) f*((double) field_759_b.nextFloat() + 0.32800000000000001D));
-                        double d2 = (double) field_759_b.nextFloat()*2D*3.1415899999999999D;
-                        int k1 = (int) (d1*Math.sin(d2) + (double) basePos[0] + d);
-                        int l1 = (int) (d1*Math.cos(d2) + (double) basePos[2] + d);
+                        double d1 = field_751_j*(f*(field_759_b.nextFloat() + 0.32800000000000001D));
+                        double d2 = field_759_b.nextFloat()*2D*3.1415899999999999D;
+                        var k1 = (int) (d1*Math.sin(d2) + basePos[0] + d);
+                        var l1 = (int) (d1*Math.cos(d2) + basePos[2] + d);
                         int[] ai1 = {
                                         k1, j, l1
                                     };
@@ -81,13 +103,13 @@ namespace CraftyServer.Core
                             Math.sqrt(Math.pow(Math.abs(basePos[0] - ai1[0]), 2D) +
                                       Math.pow(Math.abs(basePos[2] - ai1[2]), 2D));
                         double d4 = d3*field_752_i;
-                        if ((double) ai1[1] - d4 > (double) l)
+                        if (ai1[1] - d4 > l)
                         {
                             ai3[1] = l;
                         }
                         else
                         {
-                            ai3[1] = (int) ((double) ai1[1] - d4);
+                            ai3[1] = (int) (ai1[1] - d4);
                         }
                         if (func_427_a(ai3, ai1) == -1)
                         {
@@ -108,12 +130,12 @@ namespace CraftyServer.Core
             {
                 field_746_o[i3] = new int[4];
             }
-            System.Array.Copy(ai, 0, field_746_o, 0, k);
+            Array.Copy(ai, 0, field_746_o, 0, k);
         }
 
         private void func_426_a(int i, int j, int k, float f, byte byte0, int l)
         {
-            int i1 = (int) ((double) f + 0.61799999999999999D);
+            var i1 = (int) (f + 0.61799999999999999D);
             byte byte1 = field_760_a[byte0];
             byte byte2 = field_760_a[byte0 + 3];
             int[] ai = {
@@ -131,9 +153,9 @@ namespace CraftyServer.Core
                 for (int l1 = -i1; l1 <= i1;)
                 {
                     double d =
-                        Math.sqrt(Math.pow((double) Math.abs(j1) + 0.5D, 2D) +
-                                  Math.pow((double) Math.abs(l1) + 0.5D, 2D));
-                    if (d > (double) f)
+                        Math.sqrt(Math.pow(Math.abs(j1) + 0.5D, 2D) +
+                                  Math.pow(Math.abs(l1) + 0.5D, 2D));
+                    if (d > f)
                     {
                         l1++;
                     }
@@ -157,12 +179,12 @@ namespace CraftyServer.Core
 
         private float func_431_a(int i)
         {
-            if ((double) i < (double) (float) field_756_e*0.29999999999999999D)
+            if (i < field_756_e*0.29999999999999999D)
             {
                 return -1.618F;
             }
-            float f = (float) field_756_e/2.0F;
-            float f1 = (float) field_756_e/2.0F - (float) i;
+            float f = field_756_e/2.0F;
+            float f1 = field_756_e/2.0F - i;
             float f2;
             if (f1 == 0.0F)
             {
@@ -195,7 +217,7 @@ namespace CraftyServer.Core
             for (int i1 = j + field_747_n; l < i1; l++)
             {
                 float f = func_429_b(l - j);
-                func_426_a(i, l, k, f, (byte) 1, 18);
+                func_426_a(i, l, k, f, 1, 18);
             }
         }
 
@@ -230,17 +252,17 @@ namespace CraftyServer.Core
             {
                 byte3 = -1;
             }
-            double d = (double) ai2[byte1]/(double) ai2[j];
-            double d1 = (double) ai2[byte2]/(double) ai2[j];
+            double d = ai2[byte1]/(double) ai2[j];
+            double d1 = ai2[byte2]/(double) ai2[j];
             int[] ai3 = {
                             0, 0, 0
                         };
             int k = 0;
             for (int l = ai2[j] + byte3; k != l; k += byte3)
             {
-                ai3[j] = MathHelper.floor_double((double) (ai[j] + k) + 0.5D);
-                ai3[byte1] = MathHelper.floor_double((double) ai[byte1] + (double) k*d + 0.5D);
-                ai3[byte2] = MathHelper.floor_double((double) ai[byte2] + (double) k*d1 + 0.5D);
+                ai3[j] = MathHelper.floor_double((ai[j] + k) + 0.5D);
+                ai3[byte1] = MathHelper.floor_double(ai[byte1] + k*d + 0.5D);
+                ai3[byte2] = MathHelper.floor_double(ai[byte2] + k*d1 + 0.5D);
                 worldObj.setBlock(ai3[0], ai3[1], ai3[2], i);
             }
         }
@@ -259,7 +281,7 @@ namespace CraftyServer.Core
 
         private bool func_430_c(int i)
         {
-            return (double) i >= (double) field_756_e*0.20000000000000001D;
+            return i >= field_756_e*0.20000000000000001D;
         }
 
         private void func_432_c()
@@ -342,8 +364,8 @@ namespace CraftyServer.Core
             {
                 byte3 = -1;
             }
-            double d = (double) ai2[byte1]/(double) ai2[i];
-            double d1 = (double) ai2[byte2]/(double) ai2[i];
+            double d = ai2[byte1]/(double) ai2[i];
+            double d1 = ai2[byte2]/(double) ai2[i];
             int[] ai3 = {
                             0, 0, 0
                         };
@@ -356,8 +378,8 @@ namespace CraftyServer.Core
                     break;
                 }
                 ai3[i] = ai[i] + j;
-                ai3[byte1] = (int) ((double) ai[byte1] + (double) j*d);
-                ai3[byte2] = (int) ((double) ai[byte2] + (double) j*d1);
+                ai3[byte1] = (int) (ai[byte1] + j*d);
+                ai3[byte2] = (int) (ai[byte2] + j*d1);
                 int l = worldObj.getBlockId(ai3[0], ai3[1], ai3[2]);
                 if (l != 0 && l != 18)
                 {
@@ -440,28 +462,5 @@ namespace CraftyServer.Core
                 return true;
             }
         }
-
-        public static byte[] field_760_a = {
-                                               2, 0, 0, 1, 2, 1
-                                           };
-
-        private Random field_759_b;
-        private World worldObj;
-
-        private int[] basePos = {
-                                    0, 0, 0
-                                };
-
-        private int field_756_e;
-        private int height;
-        private double field_754_g;
-        private double field_753_h;
-        private double field_752_i;
-        private double field_751_j;
-        private double field_750_k;
-        private int field_749_l;
-        private int field_748_m;
-        private int field_747_n;
-        private int[][] field_746_o;
     }
 }

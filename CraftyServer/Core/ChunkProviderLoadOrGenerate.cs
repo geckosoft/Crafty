@@ -5,6 +5,17 @@ namespace CraftyServer.Core
     public class ChunkProviderLoadOrGenerate
         : IChunkProvider
     {
+        private readonly Chunk blankChunk;
+        private readonly IChunkLoader chunkLoader;
+        private readonly IChunkProvider chunkProvider;
+        private readonly Chunk[] chunks;
+        private readonly World worldObj;
+        private int field_21112_j;
+        private int field_21113_i;
+        private Chunk lastQueriedChunk;
+        private int lastQueriedChunkXPos;
+        private int lastQueriedChunkZPos;
+
         public ChunkProviderLoadOrGenerate(World world, IChunkLoader ichunkloader, IChunkProvider ichunkprovider)
         {
             chunks = new Chunk[1024];
@@ -16,12 +27,7 @@ namespace CraftyServer.Core
             chunkProvider = ichunkprovider;
         }
 
-        public bool func_21111_c(int i, int j)
-        {
-            byte byte0 = 15;
-            return i >= field_21113_i - byte0 && j >= field_21112_j - byte0 && i <= field_21113_i + byte0 &&
-                   j <= field_21112_j + byte0;
-        }
+        #region IChunkProvider Members
 
         public bool chunkExists(int i, int j)
         {
@@ -108,54 +114,6 @@ namespace CraftyServer.Core
             return chunks[i1];
         }
 
-        private Chunk func_4059_c(int i, int j)
-        {
-            if (chunkLoader == null)
-            {
-                return blankChunk;
-            }
-            try
-            {
-                Chunk chunk = chunkLoader.loadChunk(worldObj, i, j);
-                if (chunk != null)
-                {
-                    chunk.lastSaveTime = worldObj.getWorldTime();
-                }
-                return chunk;
-            }
-            catch (Exception exception)
-            {
-                exception.printStackTrace();
-            }
-            return blankChunk;
-        }
-
-        private void saveExtraChunkData(Chunk chunk)
-        {
-            if (chunkLoader == null)
-            {
-                return;
-            }
-            try
-            {
-                chunkLoader.saveExtraChunkData(worldObj, chunk);
-            }
-            catch (Exception exception)
-            {
-                exception.printStackTrace();
-            }
-        }
-
-        private void saveChunk(Chunk chunk)
-        {
-            if (chunkLoader == null)
-            {
-                return;
-            }
-            chunk.lastSaveTime = worldObj.getWorldTime();
-            chunkLoader.saveChunk(worldObj, chunk);
-        }
-
         public void populate(IChunkProvider ichunkprovider, int i, int j)
         {
             Chunk chunk = provideChunk(i, j);
@@ -236,15 +194,61 @@ namespace CraftyServer.Core
             return true;
         }
 
-        private Chunk blankChunk;
-        private IChunkProvider chunkProvider;
-        private IChunkLoader chunkLoader;
-        private Chunk[] chunks;
-        private World worldObj;
-        private int lastQueriedChunkXPos;
-        private int lastQueriedChunkZPos;
-        private Chunk lastQueriedChunk;
-        private int field_21113_i;
-        private int field_21112_j;
+        #endregion
+
+        public bool func_21111_c(int i, int j)
+        {
+            byte byte0 = 15;
+            return i >= field_21113_i - byte0 && j >= field_21112_j - byte0 && i <= field_21113_i + byte0 &&
+                   j <= field_21112_j + byte0;
+        }
+
+        private Chunk func_4059_c(int i, int j)
+        {
+            if (chunkLoader == null)
+            {
+                return blankChunk;
+            }
+            try
+            {
+                Chunk chunk = chunkLoader.loadChunk(worldObj, i, j);
+                if (chunk != null)
+                {
+                    chunk.lastSaveTime = worldObj.getWorldTime();
+                }
+                return chunk;
+            }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            }
+            return blankChunk;
+        }
+
+        private void saveExtraChunkData(Chunk chunk)
+        {
+            if (chunkLoader == null)
+            {
+                return;
+            }
+            try
+            {
+                chunkLoader.saveExtraChunkData(worldObj, chunk);
+            }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            }
+        }
+
+        private void saveChunk(Chunk chunk)
+        {
+            if (chunkLoader == null)
+            {
+                return;
+            }
+            chunk.lastSaveTime = worldObj.getWorldTime();
+            chunkLoader.saveChunk(worldObj, chunk);
+        }
     }
 }

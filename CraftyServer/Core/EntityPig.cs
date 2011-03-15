@@ -13,7 +13,7 @@ namespace CraftyServer.Core
 
         protected override void entityInit()
         {
-            dataWatcher.addObject(16, Byte.valueOf((byte) 0));
+            dataWatcher.addObject(16, Byte.valueOf(0));
         }
 
         public override void writeEntityToNBT(NBTTagCompound nbttagcompound)
@@ -71,11 +71,11 @@ namespace CraftyServer.Core
         {
             if (flag)
             {
-                dataWatcher.updateObject(16, Byte.valueOf((byte) 1));
+                dataWatcher.updateObject(16, Byte.valueOf(1));
             }
             else
             {
-                dataWatcher.updateObject(16, Byte.valueOf((byte) 0));
+                dataWatcher.updateObject(16, Byte.valueOf(0));
             }
         }
     }

@@ -4,6 +4,8 @@ namespace CraftyServer.Core
 {
     public class EntityTNTPrimed : Entity
     {
+        public int fuse;
+
         public EntityTNTPrimed(World world) : base(world)
         {
             fuse = 0;
@@ -15,7 +17,7 @@ namespace CraftyServer.Core
         public EntityTNTPrimed(World world, double d, double d1, double d2) : this(world)
         {
             setPosition(d, d1, d2);
-            float f = (float) (Math.random()*3.1415927410125732D*2D);
+            var f = (float) (Math.random()*3.1415927410125732D*2D);
             motionX = -MathHelper.sin((f*3.141593F)/180F)*0.02F;
             motionY = 0.20000000298023224D;
             motionZ = -MathHelper.cos((f*3.141593F)/180F)*0.02F;
@@ -77,7 +79,5 @@ namespace CraftyServer.Core
         {
             fuse = nbttagcompound.getByte("Fuse");
         }
-
-        public int fuse;
     }
 }

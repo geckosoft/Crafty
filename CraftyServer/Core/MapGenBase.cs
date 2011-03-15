@@ -1,10 +1,12 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class MapGenBase
     {
+        protected int field_947_a;
+        protected Random rand;
+
         public MapGenBase()
         {
             field_947_a = 8;
@@ -21,7 +23,7 @@ namespace CraftyServer.Core
             {
                 for (int j1 = j - k; j1 <= j + k; j1++)
                 {
-                    rand.setSeed((long) i1*l + (long) j1*l1 ^ world.func_22079_j());
+                    rand.setSeed(i1*l + j1*l1 ^ world.func_22079_j());
                     func_666_a(world, i1, j1, i, j, abyte0);
                 }
             }
@@ -30,8 +32,5 @@ namespace CraftyServer.Core
         public virtual void func_666_a(World world, int i, int j, int k, int l, byte[] abyte0)
         {
         }
-
-        protected int field_947_a;
-        protected Random rand;
     }
 }

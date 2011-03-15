@@ -1,14 +1,12 @@
-using java.util;
 using java.lang;
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class CraftingManager
     {
-        public static CraftingManager getInstance()
-        {
-            return instance;
-        }
+        private static readonly CraftingManager instance = new CraftingManager();
+        private readonly List recipes;
 
         private CraftingManager()
         {
@@ -259,6 +257,11 @@ namespace CraftyServer.Core
             java.lang.System.@out.println((new StringBuilder()).append(recipes.size()).append(" recipes").toString());
         }
 
+        public static CraftingManager getInstance()
+        {
+            return instance;
+        }
+
         public void addRecipe(ItemStack itemstack, object[] aobj)
         {
             string s = "";
@@ -267,7 +270,7 @@ namespace CraftyServer.Core
             int k = 0;
             if (aobj[i] is string[])
             {
-                string[] ask = (string[]) aobj[i++];
+                var ask = (string[]) aobj[i++];
                 for (int l = 0; l < ask.Length; l++)
                 {
                     string s2 = ask[l];
@@ -280,16 +283,16 @@ namespace CraftyServer.Core
             {
                 while (aobj[i] is string)
                 {
-                    string s1 = (string) aobj[i++];
+                    var s1 = (string) aobj[i++];
                     k++;
                     j = s1.Length;
                     s = (new StringBuilder()).append(s).append(s1).toString();
                 }
             }
-            HashMap hashmap = new HashMap();
+            var hashmap = new HashMap();
             for (; i < aobj.Length; i += 2)
             {
-                Character character = (Character) aobj[i];
+                var character = (Character) aobj[i];
                 ItemStack itemstack1 = null;
                 if (aobj[i + 1] is Item)
                 {
@@ -306,7 +309,7 @@ namespace CraftyServer.Core
                 hashmap.put(character, itemstack1);
             }
 
-            ItemStack[] aitemstack = new ItemStack[j*k];
+            var aitemstack = new ItemStack[j*k];
             for (int i1 = 0; i1 < j*k; i1++)
             {
                 char c = s[i1];
@@ -325,7 +328,7 @@ namespace CraftyServer.Core
 
         public void addShapelessRecipe(ItemStack itemstack, object[] aobj)
         {
-            ArrayList arraylist = new ArrayList();
+            var arraylist = new ArrayList();
             object[] aobj1 = aobj;
             int i = aobj1.Length;
             for (int j = 0; j < i; j++)
@@ -358,7 +361,7 @@ namespace CraftyServer.Core
         {
             for (int i = 0; i < recipes.size(); i++)
             {
-                IRecipe irecipe = (IRecipe) recipes.get(i);
+                var irecipe = (IRecipe) recipes.get(i);
                 if (irecipe.func_21134_a(inventorycrafting))
                 {
                     return irecipe.func_21136_b(inventorycrafting);
@@ -367,8 +370,5 @@ namespace CraftyServer.Core
 
             return null;
         }
-
-        private static CraftingManager instance = new CraftingManager();
-        private List recipes;
     }
 }

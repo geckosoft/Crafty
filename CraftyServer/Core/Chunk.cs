@@ -1,10 +1,31 @@
-using java.util;
+using System;
 using java.lang;
+using java.util;
+using Random = java.util.Random;
 
 namespace CraftyServer.Core
 {
     public class Chunk
     {
+        public static bool isLit;
+        public NibbleArray blocklightMap;
+        public byte[] blocks;
+        public Map chunkTileEntityMap;
+        public NibbleArray data;
+        public List[] entities;
+        public int field_686_i;
+        public bool hasEntities;
+        public byte[] heightMap;
+        public bool isChunkLoaded;
+        public bool isModified;
+        public bool isTerrainPopulated;
+        public long lastSaveTime;
+        public bool neverSave;
+        public NibbleArray skylightMap;
+        public World worldObj;
+        public int xPosition;
+        public int zPosition;
+
         public Chunk(World world, int i, int j)
         {
             chunkTileEntityMap = new HashMap();
@@ -210,7 +231,7 @@ namespace CraftyServer.Core
 
         public virtual bool setBlockIDWithMetadata(int i, int j, int k, int l, int i1)
         {
-            byte byte0 = (byte) l;
+            var byte0 = (byte) l;
             int j1 = heightMap[k << 4 | i] & 0xff;
             int k1 = blocks[i << 11 | k << 7 | j] & 0xff;
             if (k1 == l && data.getNibble(i, j, k) == i1)
@@ -253,7 +274,7 @@ namespace CraftyServer.Core
 
         public virtual bool setBlockID(int i, int j, int k, int l)
         {
-            byte byte0 = (byte) l;
+            var byte0 = (byte) l;
             int i1 = heightMap[k << 4 | i] & 0xff;
             int j1 = blocks[i << 11 | k << 7 | j] & 0xff;
             if (j1 == l)
@@ -401,26 +422,26 @@ namespace CraftyServer.Core
 
         public virtual TileEntity getChunkBlockTileEntity(int i, int j, int k)
         {
-            ChunkPosition position = new ChunkPosition(i, j, k);
-            TileEntity entity = (TileEntity) this.chunkTileEntityMap.get(position);
+            var position = new ChunkPosition(i, j, k);
+            var entity = (TileEntity) chunkTileEntityMap.get(position);
             if (entity != null)
             {
                 return entity;
             }
-            int index = this.getBlockID(i, j, k);
+            int index = getBlockID(i, j, k);
             if (!Block.isBlockContainer[index])
             {
                 return null;
             }
-            ((BlockContainer) Block.blocksList[index]).onBlockAdded(this.worldObj, (this.xPosition*0x10) + i, j,
-                                                                    (this.zPosition*0x10) + k);
-            return (TileEntity) this.chunkTileEntityMap.get(position);
+            (Block.blocksList[index]).onBlockAdded(worldObj, (xPosition*0x10) + i, j,
+                                                   (zPosition*0x10) + k);
+            return (TileEntity) chunkTileEntityMap.get(position);
         }
 
         public virtual TileEntity getChunkBlockTileEntity_(int i, int j, int k)
         {
-            ChunkPosition chunkposition = new ChunkPosition(i, j, k);
-            TileEntity tileentity = (TileEntity) chunkTileEntityMap.get(chunkposition);
+            var chunkposition = new ChunkPosition(i, j, k);
+            var tileentity = (TileEntity) chunkTileEntityMap.get(chunkposition);
             if (tileentity == null)
             {
                 int l = getBlockID(i, j, k);
@@ -428,7 +449,7 @@ namespace CraftyServer.Core
                 {
                     return null;
                 }
-                BlockContainer blockcontainer = (BlockContainer) Block.blocksList[l];
+                var blockcontainer = (BlockContainer) Block.blocksList[l];
                 blockcontainer.onBlockAdded(worldObj, xPosition*16 + i, j, zPosition*16 + k);
                 tileentity = (TileEntity) chunkTileEntityMap.get(chunkposition);
             }
@@ -445,7 +466,7 @@ namespace CraftyServer.Core
 
         public virtual void setChunkBlockTileEntity(int i, int j, int k, TileEntity tileentity)
         {
-            ChunkPosition chunkposition = new ChunkPosition(i, j, k);
+            var chunkposition = new ChunkPosition(i, j, k);
             tileentity.worldObj = worldObj;
             tileentity.xCoord = xPosition*16 + i;
             tileentity.yCoord = j;
@@ -468,7 +489,7 @@ namespace CraftyServer.Core
 
         public virtual void removeChunkBlockTileEntity(int i, int j, int k)
         {
-            ChunkPosition chunkposition = new ChunkPosition(i, j, k);
+            var chunkposition = new ChunkPosition(i, j, k);
             if (isChunkLoaded)
             {
                 worldObj.loadedTileEntityList.remove(chunkTileEntityMap.remove(chunkposition));
@@ -517,7 +538,7 @@ namespace CraftyServer.Core
                 List list1 = entities[k];
                 for (int l = 0; l < list1.size(); l++)
                 {
-                    Entity entity1 = (Entity) list1.get(l);
+                    var entity1 = (Entity) list1.get(l);
                     if (entity1 != entity && entity1.boundingBox.intersectsWith(axisalignedbb))
                     {
                         list.add(entity1);
@@ -543,7 +564,7 @@ namespace CraftyServer.Core
                 List list1 = entities[k];
                 for (int l = 0; l < list1.size(); l++)
                 {
-                    Entity entity = (Entity) list1.get(l);
+                    var entity = (Entity) list1.get(l);
                     if (class1.isAssignableFrom(entity.GetType()) && entity.boundingBox.intersectsWith(axisalignedbb))
                     {
                         list.add(entity);
@@ -581,7 +602,7 @@ namespace CraftyServer.Core
                 {
                     int l3 = l1 << 11 | l2 << 7 | j;
                     int l4 = i1 - j;
-                    System.Array.Copy(blocks, l3, abyte0, k1, l4);
+                    Array.Copy(blocks, l3, abyte0, k1, l4);
                     k1 += l4;
                 }
             }
@@ -592,7 +613,7 @@ namespace CraftyServer.Core
                 {
                     int i4 = (i2 << 11 | i3 << 7 | j) >> 1;
                     int i5 = (i1 - j)/2;
-                    System.Array.Copy(data.data, i4, abyte0, k1, i5);
+                    Array.Copy(data.data, i4, abyte0, k1, i5);
                     k1 += i5;
                 }
             }
@@ -603,7 +624,7 @@ namespace CraftyServer.Core
                 {
                     int j4 = (j2 << 11 | j3 << 7 | j) >> 1;
                     int j5 = (i1 - j)/2;
-                    System.Array.Copy(blocklightMap.data, j4, abyte0, k1, j5);
+                    Array.Copy(blocklightMap.data, j4, abyte0, k1, j5);
                     k1 += j5;
                 }
             }
@@ -614,7 +635,7 @@ namespace CraftyServer.Core
                 {
                     int k4 = (k2 << 11 | k3 << 7 | j) >> 1;
                     int k5 = (i1 - j)/2;
-                    System.Array.Copy(skylightMap.data, k4, abyte0, k1, k5);
+                    Array.Copy(skylightMap.data, k4, abyte0, k1, k5);
                     k1 += k5;
                 }
             }
@@ -625,32 +646,13 @@ namespace CraftyServer.Core
         public virtual Random func_334_a(long l)
         {
             return
-                new Random(worldObj.func_22079_j() + (long) (xPosition*xPosition*0x4c1906) + (long) (xPosition*0x5ac0db) +
-                           (long) (zPosition*zPosition)*0x4307a7L + (long) (zPosition*0x5f24f) ^ l);
+                new Random(worldObj.func_22079_j() + (xPosition*xPosition*0x4c1906) + (xPosition*0x5ac0db) +
+                           (zPosition*zPosition)*0x4307a7L + (zPosition*0x5f24f) ^ l);
         }
 
         public virtual bool func_21101_g()
         {
             return false;
         }
-
-        public static bool isLit;
-        public byte[] blocks;
-        public bool isChunkLoaded;
-        public World worldObj;
-        public NibbleArray data;
-        public NibbleArray skylightMap;
-        public NibbleArray blocklightMap;
-        public byte[] heightMap;
-        public int field_686_i;
-        public int xPosition;
-        public int zPosition;
-        public Map chunkTileEntityMap;
-        public List[] entities;
-        public bool isTerrainPopulated;
-        public bool isModified;
-        public bool neverSave;
-        public bool hasEntities;
-        public long lastSaveTime;
     }
 }

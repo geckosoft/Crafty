@@ -1,12 +1,22 @@
+using System.Runtime.CompilerServices;
 using java.io;
-using java.util;
 using java.lang;
+using java.util;
 using java.util.zip;
 
 namespace CraftyServer.Core
 {
     public class RegionFile
     {
+        private static readonly byte[] emptySector = new byte[4096];
+        private readonly int[] chunkTimestamps = new int[1024];
+        private readonly RandomAccessFile dataFile;
+        private readonly File fileName;
+        private readonly int[] offsets = new int[1024];
+        private readonly ArrayList sectorFree;
+        private long lastModified;
+        private int sizeDelta;
+
         public RegionFile(File file)
         {
             lastModified = 0L;
@@ -36,7 +46,7 @@ namespace CraftyServer.Core
                 }
                 if ((dataFile.length() & 4095L) != 0L)
                 {
-                    for (int k = 0; (long) k < (dataFile.length() & 4095L); k++)
+                    for (int k = 0; k < (dataFile.length() & 4095L); k++)
                     {
                         dataFile.write(0);
                     }
@@ -77,7 +87,7 @@ namespace CraftyServer.Core
             }
         }
 
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.Synchronized)]
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public int getSizeDelta()
         {
             int i = sizeDelta;
@@ -114,7 +124,7 @@ namespace CraftyServer.Core
             debug(s, i, j, (new StringBuilder()).append(s1).append("\n").toString());
         }
 
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.Synchronized)]
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public DataInputStream getChunkDataInputStream(int i, int j)
         {
             if (outOfBounds(i, j))
@@ -148,17 +158,17 @@ namespace CraftyServer.Core
                 byte byte0 = dataFile.readByte();
                 if (byte0 == 1)
                 {
-                    byte[] abyte0 = new byte[j1 - 1];
+                    var abyte0 = new byte[j1 - 1];
                     dataFile.read(abyte0);
-                    DataInputStream datainputstream =
+                    var datainputstream =
                         new DataInputStream(new GZIPInputStream(new ByteArrayInputStream(abyte0)));
                     return datainputstream;
                 }
                 if (byte0 == 2)
                 {
-                    byte[] abyte1 = new byte[j1 - 1];
+                    var abyte1 = new byte[j1 - 1];
                     dataFile.read(abyte1);
-                    DataInputStream datainputstream1 =
+                    var datainputstream1 =
                         new DataInputStream(new InflaterInputStream(new ByteArrayInputStream(abyte1)));
                     return datainputstream1;
                 }
@@ -187,7 +197,7 @@ namespace CraftyServer.Core
             }
         }
 
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.Synchronized)]
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void write(int i, int j, byte[] abyte0, int k)
         {
             try
@@ -324,14 +334,5 @@ namespace CraftyServer.Core
         {
             dataFile.close();
         }
-
-        private static byte[] emptySector = new byte[4096];
-        private File fileName;
-        private RandomAccessFile dataFile;
-        private int[] offsets = new int[1024];
-        private int[] chunkTimestamps = new int[1024];
-        private ArrayList sectorFree;
-        private int sizeDelta;
-        private long lastModified;
     }
 }

@@ -1,6 +1,5 @@
-using java.util;
 using java.lang;
-
+using java.util;
 
 namespace CraftyServer.Core
 {
@@ -106,12 +105,12 @@ namespace CraftyServer.Core
             world.markBlocksDirty(i, j - 1, k, i, j, k);
             if (Math.random() < 0.5D)
             {
-                world.playSoundEffect((double) i + 0.5D, (double) j + 0.5D, (double) k + 0.5D, "random.door_open", 1.0F,
+                world.playSoundEffect(i + 0.5D, j + 0.5D, k + 0.5D, "random.door_open", 1.0F,
                                       world.rand.nextFloat()*0.1F + 0.9F);
             }
             else
             {
-                world.playSoundEffect((double) i + 0.5D, (double) j + 0.5D, (double) k + 0.5D, "random.door_close", 1.0F,
+                world.playSoundEffect(i + 0.5D, j + 0.5D, k + 0.5D, "random.door_close", 1.0F,
                                       world.rand.nextFloat()*0.1F + 0.9F);
             }
             return true;
@@ -141,12 +140,12 @@ namespace CraftyServer.Core
             world.markBlocksDirty(i, j - 1, k, i, j, k);
             if (Math.random() < 0.5D)
             {
-                world.playSoundEffect((double) i + 0.5D, (double) j + 0.5D, (double) k + 0.5D, "random.door_open", 1.0F,
+                world.playSoundEffect(i + 0.5D, j + 0.5D, k + 0.5D, "random.door_open", 1.0F,
                                       world.rand.nextFloat()*0.1F + 0.9F);
             }
             else
             {
-                world.playSoundEffect((double) i + 0.5D, (double) j + 0.5D, (double) k + 0.5D, "random.door_close", 1.0F,
+                world.playSoundEffect(i + 0.5D, j + 0.5D, k + 0.5D, "random.door_close", 1.0F,
                                       world.rand.nextFloat()*0.1F + 0.9F);
             }
         }
@@ -160,7 +159,7 @@ namespace CraftyServer.Core
                 {
                     world.setBlockWithNotify(i, j, k, 0);
                 }
-                if (l > 0 && Block.blocksList[l].canProvidePower())
+                if (l > 0 && blocksList[l].canProvidePower())
                 {
                     onNeighborBlockChange(world, i, j - 1, k, l);
                 }
@@ -189,7 +188,7 @@ namespace CraftyServer.Core
                         dropBlockAsItem(world, i, j, k, i1);
                     }
                 }
-                else if (l > 0 && Block.blocksList[l].canProvidePower())
+                else if (l > 0 && blocksList[l].canProvidePower())
                 {
                     bool flag1 = world.isBlockIndirectlyGettingPowered(i, j, k) ||
                                  world.isBlockIndirectlyGettingPowered(i, j + 1, k);

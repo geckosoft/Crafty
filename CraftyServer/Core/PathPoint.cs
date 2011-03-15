@@ -2,8 +2,19 @@ using java.lang;
 
 namespace CraftyServer.Core
 {
-    public class PathPoint : java.lang.Object
+    public class PathPoint : Object
     {
+        private readonly int hash;
+        public float distanceToNext;
+        public float distanceToTarget;
+        public int index;
+        public bool isFirst;
+        public PathPoint previous;
+        public float totalPathDistance;
+        public int xCoord;
+        public int yCoord;
+        public int zCoord;
+
         public PathPoint(int i, int j, int k)
         {
             index = -1;
@@ -33,7 +44,7 @@ namespace CraftyServer.Core
         {
             if (obj is PathPoint)
             {
-                PathPoint pathpoint = (PathPoint) obj;
+                var pathpoint = (PathPoint) obj;
                 return hash == pathpoint.hash && xCoord == pathpoint.xCoord && yCoord == pathpoint.yCoord &&
                        zCoord == pathpoint.zCoord;
             }
@@ -58,16 +69,5 @@ namespace CraftyServer.Core
             return
                 (new StringBuilder()).append(xCoord).append(", ").append(yCoord).append(", ").append(zCoord).toString();
         }
-
-        public int xCoord;
-        public int yCoord;
-        public int zCoord;
-        private int hash;
-        public int index;
-        public float totalPathDistance;
-        public float distanceToNext;
-        public float distanceToTarget;
-        public PathPoint previous;
-        public bool isFirst;
     }
 }

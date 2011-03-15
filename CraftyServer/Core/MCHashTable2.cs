@@ -1,7 +1,15 @@
+using System;
+
 namespace CraftyServer.Core
 {
     public class MCHashTable2
     {
+        [NonSerialized] private int field_948_b;
+        [NonSerialized] private HashEntry2[] field_949_a;
+        [NonSerialized] private volatile int field_950_e;
+        private float field_951_d = 0.75F;
+        private int field_952_c;
+
         public MCHashTable2()
         {
             field_952_c = 12;
@@ -67,10 +75,10 @@ namespace CraftyServer.Core
             }
             else
             {
-                HashEntry2[] ahashentry2_1 = new HashEntry2[i];
+                var ahashentry2_1 = new HashEntry2[i];
                 func_673_a(ahashentry2_1);
                 field_949_a = ahashentry2_1;
-                field_952_c = (int) ((float) i*field_951_d);
+                field_952_c = (int) (i*field_951_d);
                 return;
             }
         }
@@ -148,11 +156,5 @@ namespace CraftyServer.Core
         {
             return func_671_e(l);
         }
-
-        [System.NonSerialized] private HashEntry2[] field_949_a;
-        [System.NonSerialized] private int field_948_b;
-        private int field_952_c;
-        private float field_951_d = 0.75F;
-        [System.NonSerialized] private volatile int field_950_e;
     }
 }

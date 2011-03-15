@@ -15,7 +15,7 @@ namespace CraftyServer.Core
             File file = func_22097_a();
             if (worldprovider is WorldProviderHell)
             {
-                File file1 = new File(file, "DIM-1");
+                var file1 = new File(file, "DIM-1");
                 file1.mkdirs();
                 return new McRegionChunkLoader(file1);
             }

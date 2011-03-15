@@ -2,6 +2,12 @@ namespace CraftyServer.Core
 {
     public class Slot
     {
+        private readonly IInventory inventory;
+        private readonly int slotIndex;
+        public int id;
+        public int xDisplayPosition;
+        public int yDisplayPosition;
+
         public Slot(IInventory iinventory, int i, int j, int k)
         {
             inventory = iinventory;
@@ -50,11 +56,5 @@ namespace CraftyServer.Core
         {
             return iinventory == inventory && i == slotIndex;
         }
-
-        private int slotIndex;
-        private IInventory inventory;
-        public int id;
-        public int xDisplayPosition;
-        public int yDisplayPosition;
     }
 }

@@ -1,14 +1,9 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class WorldGenPumpkin : WorldGenerator
     {
-        public WorldGenPumpkin()
-        {
-        }
-
         public override bool generate(World world, Random random, int i, int j, int k)
         {
             for (int l = 0; l < 64; l++)

@@ -1,11 +1,20 @@
-using java.util;
 using java.lang;
-
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class EntityArrow : Entity
     {
+        public int arrowShake;
+        private bool inGround;
+        private int inTile;
+        public EntityLiving owner;
+        private int ticksInAir;
+        private int ticksInGround;
+        private int xTile;
+        private int yTile;
+        private int zTile;
+
         public EntityArrow(World world) : base(world)
         {
             xTile = -1;
@@ -43,7 +52,7 @@ namespace CraftyServer.Core
             ticksInAir = 0;
             owner = entityliving;
             setSize(0.5F, 0.5F);
-            setLocationAndAngles(entityliving.posX, entityliving.posY + (double) entityliving.getEyeHeight(),
+            setLocationAndAngles(entityliving.posX, entityliving.posY + entityliving.getEyeHeight(),
                                  entityliving.posZ, entityliving.rotationYaw, entityliving.rotationPitch);
             posX -= MathHelper.cos((rotationYaw/180F)*3.141593F)*0.16F;
             posY -= 0.10000000149011612D;
@@ -67,9 +76,9 @@ namespace CraftyServer.Core
             d /= f2;
             d1 /= f2;
             d2 /= f2;
-            d += rand.nextGaussian()*0.0074999998323619366D*(double) f1;
-            d1 += rand.nextGaussian()*0.0074999998323619366D*(double) f1;
-            d2 += rand.nextGaussian()*0.0074999998323619366D*(double) f1;
+            d += rand.nextGaussian()*0.0074999998323619366D*f1;
+            d1 += rand.nextGaussian()*0.0074999998323619366D*f1;
+            d2 += rand.nextGaussian()*0.0074999998323619366D*f1;
             d *= f;
             d1 *= f;
             d2 *= f;
@@ -138,7 +147,7 @@ namespace CraftyServer.Core
             double d = 0.0D;
             for (int j = 0; j < list.size(); j++)
             {
-                Entity entity1 = (Entity) list.get(j);
+                var entity1 = (Entity) list.get(j);
                 if (!entity1.canBeCollidedWith() || entity1 == owner && ticksInAir < 5)
                 {
                     continue;
@@ -191,9 +200,9 @@ namespace CraftyServer.Core
                     motionY = (float) (movingobjectposition.hitVec.yCoord - posY);
                     motionZ = (float) (movingobjectposition.hitVec.zCoord - posZ);
                     float f1 = MathHelper.sqrt_double(motionX*motionX + motionY*motionY + motionZ*motionZ);
-                    posX -= (motionX/(double) f1)*0.05000000074505806D;
-                    posY -= (motionY/(double) f1)*0.05000000074505806D;
-                    posZ -= (motionZ/(double) f1)*0.05000000074505806D;
+                    posX -= (motionX/f1)*0.05000000074505806D;
+                    posY -= (motionY/f1)*0.05000000074505806D;
+                    posZ -= (motionZ/f1)*0.05000000074505806D;
                     worldObj.playSoundAtEntity(this, "random.drr", 1.0F, 1.2F/(rand.nextFloat()*0.2F + 0.9F));
                     inGround = true;
                     arrowShake = 7;
@@ -227,8 +236,8 @@ namespace CraftyServer.Core
                 for (int k = 0; k < 4; k++)
                 {
                     float f6 = 0.25F;
-                    worldObj.spawnParticle("bubble", posX - motionX*(double) f6, posY - motionY*(double) f6,
-                                           posZ - motionZ*(double) f6, motionX, motionY, motionZ);
+                    worldObj.spawnParticle("bubble", posX - motionX*f6, posY - motionY*f6,
+                                           posZ - motionZ*f6, motionX, motionY, motionZ);
                 }
 
                 f3 = 0.8F;
@@ -275,15 +284,5 @@ namespace CraftyServer.Core
                 setEntityDead();
             }
         }
-
-        private int xTile;
-        private int yTile;
-        private int zTile;
-        private int inTile;
-        private bool inGround;
-        public int arrowShake;
-        public EntityLiving owner;
-        private int ticksInGround;
-        private int ticksInAir;
     }
 }

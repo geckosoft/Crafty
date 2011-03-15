@@ -1,28 +1,15 @@
-using java.util;
 using java.lang;
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class Vec3D
     {
-        public static Vec3D createVectorHelper(double d, double d1, double d2)
-        {
-            return new Vec3D(d, d1, d2);
-        }
-
-        public static void initialize()
-        {
-            nextVector = 0;
-        }
-
-        public static Vec3D createVector(double d, double d1, double d2)
-        {
-            if (nextVector >= vectorList.size())
-            {
-                vectorList.add(createVectorHelper(0.0D, 0.0D, 0.0D));
-            }
-            return ((Vec3D) vectorList.get(nextVector++)).setComponents(d, d1, d2);
-        }
+        private static readonly List vectorList = new ArrayList();
+        private static int nextVector;
+        public double xCoord;
+        public double yCoord;
+        public double zCoord;
 
         private Vec3D(double d, double d1, double d2)
         {
@@ -41,6 +28,25 @@ namespace CraftyServer.Core
             xCoord = d;
             yCoord = d1;
             zCoord = d2;
+        }
+
+        public static Vec3D createVectorHelper(double d, double d1, double d2)
+        {
+            return new Vec3D(d, d1, d2);
+        }
+
+        public static void initialize()
+        {
+            nextVector = 0;
+        }
+
+        public static Vec3D createVector(double d, double d1, double d2)
+        {
+            if (nextVector >= vectorList.size())
+            {
+                vectorList.add(createVectorHelper(0.0D, 0.0D, 0.0D));
+            }
+            return ((Vec3D) vectorList.get(nextVector++)).setComponents(d, d1, d2);
         }
 
         private Vec3D setComponents(double d, double d1, double d2)
@@ -74,7 +80,7 @@ namespace CraftyServer.Core
             double d = vec3d.xCoord - xCoord;
             double d1 = vec3d.yCoord - yCoord;
             double d2 = vec3d.zCoord - zCoord;
-            return (double) MathHelper.sqrt_double(d*d + d1*d1 + d2*d2);
+            return MathHelper.sqrt_double(d*d + d1*d1 + d2*d2);
         }
 
         public double squareDistanceTo(Vec3D vec3d)
@@ -95,7 +101,7 @@ namespace CraftyServer.Core
 
         public double lengthVector()
         {
-            return (double) MathHelper.sqrt_double(xCoord*xCoord + yCoord*yCoord + zCoord*zCoord);
+            return MathHelper.sqrt_double(xCoord*xCoord + yCoord*yCoord + zCoord*zCoord);
         }
 
         public Vec3D getIntermediateWithXValue(Vec3D vec3d, double d)
@@ -164,11 +170,5 @@ namespace CraftyServer.Core
                 (new StringBuilder()).append("(").append(xCoord).append(", ").append(yCoord).append(", ").append(zCoord)
                     .append(")").toString();
         }
-
-        private static List vectorList = new ArrayList();
-        private static int nextVector = 0;
-        public double xCoord;
-        public double yCoord;
-        public double zCoord;
     }
 }

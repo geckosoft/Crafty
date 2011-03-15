@@ -5,16 +5,20 @@ namespace CraftyServer.Core
     public class GuiStatsListener
         : ActionListener
     {
+        private readonly GuiStatsComponent statsComponent; /* synthetic field */
+
         public GuiStatsListener(GuiStatsComponent guistatscomponent)
         {
             statsComponent = guistatscomponent;
         }
+
+        #region ActionListener Members
 
         public void actionPerformed(ActionEvent actionevent)
         {
             GuiStatsComponent.update(statsComponent);
         }
 
-        private GuiStatsComponent statsComponent; /* synthetic field */
+        #endregion
     }
 }

@@ -5,6 +5,9 @@ namespace CraftyServer.Core
 {
     public class Packet104 : Packet
     {
+        public ItemStack[] itemStack;
+        public int windowId;
+
         public Packet104()
         {
         }
@@ -15,7 +18,7 @@ namespace CraftyServer.Core
             itemStack = new ItemStack[list.size()];
             for (int j = 0; j < itemStack.Length; j++)
             {
-                ItemStack itemstack = (ItemStack) list.get(j);
+                var itemstack = (ItemStack) list.get(j);
                 itemStack[j] = itemstack != null ? itemstack.copy() : null;
             }
         }
@@ -65,8 +68,5 @@ namespace CraftyServer.Core
         {
             return 3 + itemStack.Length*5;
         }
-
-        public int windowId;
-        public ItemStack[] itemStack;
     }
 }

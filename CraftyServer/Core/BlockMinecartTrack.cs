@@ -1,6 +1,5 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockMinecartTrack : Block
@@ -105,7 +104,7 @@ namespace CraftyServer.Core
                 dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k));
                 world.setBlockWithNotify(i, j, k, 0);
             }
-            else if (l > 0 && Block.blocksList[l].canProvidePower() &&
+            else if (l > 0 && blocksList[l].canProvidePower() &&
                      MinecartTrackLogic.getNAdjacentTracks(new MinecartTrackLogic(this, world, i, j, k)) == 3)
             {
                 func_4038_g(world, i, j, k);

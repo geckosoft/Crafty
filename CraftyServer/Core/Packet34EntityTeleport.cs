@@ -4,6 +4,13 @@ namespace CraftyServer.Core
 {
     public class Packet34EntityTeleport : Packet
     {
+        public int entityId;
+        public byte pitch;
+        public int xPosition;
+        public int yPosition;
+        public byte yaw;
+        public int zPosition;
+
         public Packet34EntityTeleport()
         {
         }
@@ -57,12 +64,5 @@ namespace CraftyServer.Core
         {
             return 34;
         }
-
-        public int entityId;
-        public int xPosition;
-        public int yPosition;
-        public int zPosition;
-        public byte yaw;
-        public byte pitch;
     }
 }

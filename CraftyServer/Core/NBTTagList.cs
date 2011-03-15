@@ -1,11 +1,14 @@
 using java.io;
-using java.util;
 using java.lang;
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class NBTTagList : NBTBase
     {
+        private List tagList;
+        private byte tagType;
+
         public NBTTagList()
         {
             tagList = new ArrayList();
@@ -36,7 +39,7 @@ namespace CraftyServer.Core
             tagList = new ArrayList();
             for (int j = 0; j < i; j++)
             {
-                NBTBase nbtbase = NBTBase.createTagOfType(tagType);
+                NBTBase nbtbase = createTagOfType(tagType);
                 nbtbase.readTagContents(datainput);
                 tagList.add(nbtbase);
             }
@@ -51,7 +54,7 @@ namespace CraftyServer.Core
         {
             return
                 (new StringBuilder()).append("").append(tagList.size()).append(" entries of type ").append(
-                    NBTBase.getTagName(tagType)).toString();
+                    getTagName(tagType)).toString();
         }
 
         public void setTag(NBTBase nbtbase)
@@ -69,8 +72,5 @@ namespace CraftyServer.Core
         {
             return tagList.size();
         }
-
-        private List tagList;
-        private byte tagType;
     }
 }

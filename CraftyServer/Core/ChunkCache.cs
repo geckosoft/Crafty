@@ -3,6 +3,11 @@ namespace CraftyServer.Core
     public class ChunkCache
         : IBlockAccess
     {
+        private readonly Chunk[][] chunkArray;
+        private readonly int chunkX;
+        private readonly int chunkZ;
+        private World worldObj;
+
         public ChunkCache(World world, int i, int j, int k, int l, int i1, int j1)
         {
             worldObj = world;
@@ -23,6 +28,8 @@ namespace CraftyServer.Core
                 }
             }
         }
+
+        #region IBlockAccess Members
 
         public int getBlockId(int i, int j, int k)
         {
@@ -95,9 +102,6 @@ namespace CraftyServer.Core
             }
         }
 
-        private int chunkX;
-        private int chunkZ;
-        private Chunk[][] chunkArray;
-        private World worldObj;
+        #endregion
     }
 }

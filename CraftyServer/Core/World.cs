@@ -1,15 +1,46 @@
-using java.util;
 using java.lang;
+using java.util;
+using Object = System.Object;
 
 namespace CraftyServer.Core
 {
     public class World
         : IBlockAccess
     {
-        public WorldChunkManager getWorldChunkManager()
-        {
-            return worldProvider.worldChunkMgr;
-        }
+        public static int field_4268_y;
+        private readonly Set activeChunkSet;
+        private readonly List field_778_L;
+        private readonly List field_821_y;
+        private readonly ArrayList field_9207_I;
+        private readonly Set scheduledTickSet;
+        private readonly TreeSet scheduledTickTreeSet;
+        private readonly List unloadedEntityList;
+        protected int DIST_HASH_MAGIC;
+        private bool allPlayersSleeping;
+        private int ambientTickCountdown;
+        protected int autosavePeriod;
+        protected IChunkProvider chunkProvider;
+        public int difficultySetting;
+        protected int distHashCounter;
+        public bool editingBlocks;
+        private int field_4265_J;
+        private long field_6159_E;
+        public bool field_9209_x;
+        public bool field_9212_p;
+        public List loadedEntityList;
+        public List loadedTileEntityList;
+        private long lockTimestamp;
+        public List playerEntities;
+        public Random rand;
+        public bool scheduledUpdatesAreImmediate;
+        public bool singleplayerWorld;
+        public int skylightSubtracted;
+        private bool spawnHostileMobs;
+        private bool spawnPeacefulMobs;
+        protected List worldAccesses;
+        protected ISaveHandler worldFile;
+        protected WorldInfo worldInfo;
+        public WorldProvider worldProvider;
 
         public World(ISaveHandler isavehandler, string s, long l, WorldProvider worldprovider)
         {
@@ -83,6 +114,85 @@ namespace CraftyServer.Core
             calculateInitialSkylight();
         }
 
+        #region IBlockAccess Members
+
+        public int getBlockId(int i, int j, int k)
+        {
+            // converted using reflector ^^
+            if (((i < -32000000) || (k < -32000000)) || ((i >= 0x1e84800) || (k > 0x1e84800)))
+            {
+                return 0;
+            }
+            if (j < 0)
+            {
+                return 0;
+            }
+            if (j >= 128)
+            {
+                return 0;
+            }
+            else
+            {
+                return getChunkFromChunkCoords(i >> 4, k >> 4).getBlockID(i & 0xf, j, k & 0xf);
+            }
+        }
+
+        public Material getBlockMaterial(int i, int j, int k)
+        {
+            int l = getBlockId(i, j, k);
+            if (l == 0)
+            {
+                return Material.air;
+            }
+            else
+            {
+                return Block.blocksList[l].blockMaterial;
+            }
+        }
+
+        public int getBlockMetadata(int i, int j, int k)
+        {
+            if (((i < -32000000) || (k < -32000000)) || ((i >= 0x1e84800) || (k > 0x1e84800)))
+            {
+                return 0;
+            }
+            if (j < 0)
+            {
+                return 0;
+            }
+            if (j >= 128)
+            {
+                return 0;
+            }
+            else
+            {
+                Chunk chunk = getChunkFromChunkCoords(i >> 4, k >> 4);
+                i &= 0xf;
+                k &= 0xf;
+                return chunk.getBlockMetadata(i, j, k);
+            }
+        }
+
+        public virtual bool isBlockOpaqueCube(int i, int j, int k)
+        {
+            Block block = Block.blocksList[getBlockId(i, j, k)];
+            if (block == null)
+            {
+                return false;
+            }
+            else
+            {
+                return block.isOpaqueCube();
+            }
+        }
+
+        #endregion
+
+        public WorldChunkManager getWorldChunkManager()
+        {
+            return worldProvider.worldChunkMgr;
+        }
+
         protected virtual IChunkProvider func_22086_b()
         {
             IChunkLoader ichunkloader = worldFile.func_22092_a(worldProvider);
@@ -120,27 +230,6 @@ namespace CraftyServer.Core
         {
             checkSessionLock();
             worldFile.func_22095_a(worldInfo, playerEntities);
-        }
-
-        public int getBlockId(int i, int j, int k)
-        {
-            // converted using reflector ^^
-            if (((i < -32000000) || (k < -32000000)) || ((i >= 0x1e84800) || (k > 0x1e84800)))
-            {
-                return 0;
-            }
-            if (j < 0)
-            {
-                return 0;
-            }
-            if (j >= 128)
-            {
-                return 0;
-            }
-            else
-            {
-                return getChunkFromChunkCoords(i >> 4, k >> 4).getBlockID(i & 0xf, j, k & 0xf);
-            }
         }
 
         public bool isAirBlock(int i, int j, int k)
@@ -245,42 +334,6 @@ namespace CraftyServer.Core
             {
                 Chunk chunk = getChunkFromChunkCoords(i >> 4, k >> 4);
                 return chunk.setBlockID(i & 0xf, j, k & 0xf, l);
-            }
-        }
-
-        public Material getBlockMaterial(int i, int j, int k)
-        {
-            int l = getBlockId(i, j, k);
-            if (l == 0)
-            {
-                return Material.air;
-            }
-            else
-            {
-                return Block.blocksList[l].blockMaterial;
-            }
-        }
-
-        public int getBlockMetadata(int i, int j, int k)
-        {
-            if (((i < -32000000) || (k < -32000000)) || ((i >= 0x1e84800) || (k > 0x1e84800)))
-            {
-                return 0;
-            }
-            if (j < 0)
-            {
-                return 0;
-            }
-            if (j >= 128)
-            {
-                return 0;
-            }
-            else
-            {
-                Chunk chunk = getChunkFromChunkCoords(i >> 4, k >> 4);
-                i &= 0xf;
-                k &= 0xf;
-                return chunk.getBlockMetadata(i, j, k);
             }
         }
 
@@ -557,17 +610,17 @@ namespace CraftyServer.Core
             }
             int num = i >> 4;
             int num2 = k >> 4;
-            if (!this.chunkExists(num, num2))
+            if (!chunkExists(num, num2))
             {
                 return 0;
             }
-            return this.getChunkFromChunkCoords(num, num2).getSavedLightValue(enumskyblock, i & 15, j, k & 15);
+            return getChunkFromChunkCoords(num, num2).getSavedLightValue(enumskyblock, i & 15, j, k & 15);
         }
 
         public virtual void setLightValue(EnumSkyBlock enumskyblock, int i, int j, int k, int l)
         {
             if (((((i >= -32000000) && (k >= -32000000)) && ((i < 0x1e84800) && (k <= 0x1e84800))) && (j >= 0)) &&
-                ((j < 0x80) && this.chunkExists(i >> 4, k >> 4)))
+                ((j < 0x80) && chunkExists(i >> 4, k >> 4)))
             {
                 return;
             }
@@ -637,27 +690,27 @@ namespace CraftyServer.Core
                 double d2 = 999D;
                 if (i > l)
                 {
-                    d = (double) l + 1.0D;
+                    d = l + 1.0D;
                 }
                 if (i < l)
                 {
-                    d = (double) l + 0.0D;
+                    d = l + 0.0D;
                 }
                 if (j > i1)
                 {
-                    d1 = (double) i1 + 1.0D;
+                    d1 = i1 + 1.0D;
                 }
                 if (j < i1)
                 {
-                    d1 = (double) i1 + 0.0D;
+                    d1 = i1 + 0.0D;
                 }
                 if (k > j1)
                 {
-                    d2 = (double) j1 + 1.0D;
+                    d2 = j1 + 1.0D;
                 }
                 if (k < j1)
                 {
-                    d2 = (double) j1 + 0.0D;
+                    d2 = j1 + 0.0D;
                 }
                 double d3 = 999D;
                 double d4 = 999D;
@@ -759,7 +812,7 @@ namespace CraftyServer.Core
         {
             for (int i = 0; i < worldAccesses.size(); i++)
             {
-                ((IWorldAccess) worldAccesses.get(i)).playSound(s, entity.posX, entity.posY - (double) entity.yOffset,
+                ((IWorldAccess) worldAccesses.get(i)).playSound(s, entity.posX, entity.posY - entity.yOffset,
                                                                 entity.posZ, f, f1);
             }
         }
@@ -803,7 +856,7 @@ namespace CraftyServer.Core
             {
                 if (entity is EntityPlayer)
                 {
-                    EntityPlayer entityplayer = (EntityPlayer) entity;
+                    var entityplayer = (EntityPlayer) entity;
                     playerEntities.add(entityplayer);
                     updateAllPlayersSleepingFlag();
                 }
@@ -847,7 +900,7 @@ namespace CraftyServer.Core
             entity.setEntityDead();
             if (entity is EntityPlayer)
             {
-                playerEntities.remove((EntityPlayer) entity);
+                playerEntities.remove(entity);
                 updateAllPlayersSleepingFlag();
             }
         }
@@ -857,7 +910,7 @@ namespace CraftyServer.Core
             entity.setEntityDead();
             if (entity is EntityPlayer)
             {
-                playerEntities.remove((EntityPlayer) entity);
+                playerEntities.remove(entity);
                 updateAllPlayersSleepingFlag();
             }
             int i = entity.chunkCoordX;
@@ -969,7 +1022,7 @@ namespace CraftyServer.Core
 
         public virtual void func_22074_c(int i, int j, int k, int l, int i1)
         {
-            NextTickListEntry nextticklistentry = new NextTickListEntry(i, j, k, l);
+            var nextticklistentry = new NextTickListEntry(i, j, k, l);
             byte byte0 = 8;
             if (scheduledUpdatesAreImmediate)
             {
@@ -990,7 +1043,7 @@ namespace CraftyServer.Core
             {
                 if (l > 0)
                 {
-                    nextticklistentry.setScheduledTime((long) i1 + worldInfo.getWorldTime());
+                    nextticklistentry.setScheduledTime(i1 + worldInfo.getWorldTime());
                 }
                 if (!scheduledTickSet.contains(nextticklistentry))
                 {
@@ -1005,7 +1058,7 @@ namespace CraftyServer.Core
             loadedEntityList.removeAll(unloadedEntityList);
             for (int i = 0; i < unloadedEntityList.size(); i++)
             {
-                Entity entity = (Entity) unloadedEntityList.get(i);
+                var entity = (Entity) unloadedEntityList.get(i);
                 int i1 = entity.chunkCoordX;
                 int k1 = entity.chunkCoordZ;
                 if (entity.addedToChunk && chunkExists(i1, k1))
@@ -1022,7 +1075,7 @@ namespace CraftyServer.Core
             unloadedEntityList.clear();
             for (int k = 0; k < loadedEntityList.size(); k++)
             {
-                Entity entity1 = (Entity) loadedEntityList.get(k);
+                var entity1 = (Entity) loadedEntityList.get(k);
                 if (entity1.ridingEntity != null)
                 {
                     if (!entity1.ridingEntity.isDead && entity1.ridingEntity.riddenByEntity == entity1)
@@ -1052,7 +1105,7 @@ namespace CraftyServer.Core
 
             for (int l = 0; l < loadedTileEntityList.size(); l++)
             {
-                TileEntity tileentity = (TileEntity) loadedTileEntityList.get(l);
+                var tileentity = (TileEntity) loadedTileEntityList.get(l);
                 tileentity.updateEntity();
             }
         }
@@ -1147,7 +1200,7 @@ namespace CraftyServer.Core
             List list = getEntitiesWithinAABBExcludingEntity(null, axisalignedbb);
             for (int i = 0; i < list.size(); i++)
             {
-                Entity entity = (Entity) list.get(i);
+                var entity = (Entity) list.get(i);
                 if (!entity.isDead && entity.preventEntitySpawning)
                 {
                     return false;
@@ -1249,8 +1302,8 @@ namespace CraftyServer.Core
                         {
                             continue;
                         }
-                        double d1 = (float) (l1 + 1) - BlockFluids.setFluidHeight(getBlockMetadata(k1, l1, i2));
-                        if ((double) l >= d1)
+                        double d1 = (l1 + 1) - BlockFluids.setFluidHeight(getBlockMetadata(k1, l1, i2));
+                        if (l >= d1)
                         {
                             flag = true;
                             block.velocityToAddToEntity(this, k1, l1, i2, entity, vec3d);
@@ -1319,7 +1372,7 @@ namespace CraftyServer.Core
                         double d = l1 + 1;
                         if (j2 < 8)
                         {
-                            d = (double) (l1 + 1) - (double) j2/8D;
+                            d = (l1 + 1) - j2/8D;
                         }
                         if (d >= axisalignedbb.minY)
                         {
@@ -1341,7 +1394,7 @@ namespace CraftyServer.Core
         public virtual Explosion newExplosion(Entity entity, double d, double d1, double d2,
                                               float f, bool flag)
         {
-            Explosion explosion = new Explosion(this, entity, d, d1, d2, f);
+            var explosion = new Explosion(this, entity, d, d1, d2, f);
             explosion.isFlaming = flag;
             explosion.doExplosion();
             explosion.doEffects();
@@ -1355,15 +1408,15 @@ namespace CraftyServer.Core
             double d2 = 1.0D/((axisalignedbb.maxZ - axisalignedbb.minZ)*2D + 1.0D);
             int i = 0;
             int j = 0;
-            for (float f = 0.0F; f <= 1.0F; f = (float) ((double) f + d))
+            for (float f = 0.0F; f <= 1.0F; f = (float) (f + d))
             {
-                for (float f1 = 0.0F; f1 <= 1.0F; f1 = (float) ((double) f1 + d1))
+                for (float f1 = 0.0F; f1 <= 1.0F; f1 = (float) (f1 + d1))
                 {
-                    for (float f2 = 0.0F; f2 <= 1.0F; f2 = (float) ((double) f2 + d2))
+                    for (float f2 = 0.0F; f2 <= 1.0F; f2 = (float) (f2 + d2))
                     {
-                        double d3 = axisalignedbb.minX + (axisalignedbb.maxX - axisalignedbb.minX)*(double) f;
-                        double d4 = axisalignedbb.minY + (axisalignedbb.maxY - axisalignedbb.minY)*(double) f1;
-                        double d5 = axisalignedbb.minZ + (axisalignedbb.maxZ - axisalignedbb.minZ)*(double) f2;
+                        double d3 = axisalignedbb.minX + (axisalignedbb.maxX - axisalignedbb.minX)*f;
+                        double d4 = axisalignedbb.minY + (axisalignedbb.maxY - axisalignedbb.minY)*f1;
+                        double d5 = axisalignedbb.minZ + (axisalignedbb.maxZ - axisalignedbb.minZ)*f2;
                         if (rayTraceBlocks(Vec3D.createVector(d3, d4, d5), vec3d) == null)
                         {
                             i++;
@@ -1373,7 +1426,7 @@ namespace CraftyServer.Core
                 }
             }
 
-            return (float) i/(float) j;
+            return i/(float) j;
         }
 
         public virtual TileEntity getBlockTileEntity(int i, int j, int k)
@@ -1404,19 +1457,6 @@ namespace CraftyServer.Core
             if (chunk != null)
             {
                 chunk.removeChunkBlockTileEntity(i & 0xf, j, k & 0xf);
-            }
-        }
-
-        public virtual bool isBlockOpaqueCube(int i, int j, int k)
-        {
-            Block block = Block.blocksList[getBlockId(i, j, k)];
-            if (block == null)
-            {
-                return false;
-            }
-            else
-            {
-                return block.isOpaqueCube();
             }
         }
 
@@ -1452,18 +1492,18 @@ namespace CraftyServer.Core
         public virtual bool func_6156_d()
         {
             int num;
-            if (this.field_4265_J >= 50)
+            if (field_4265_J >= 50)
             {
                 return false;
             }
-            this.field_4265_J++;
+            field_4265_J++;
             try
             {
                 num = 500;
             }
             catch (Exception ex)
             {
-                this.field_4265_J--;
+                field_4265_J--;
                 throw ex;
             }
             while (true)
@@ -1472,17 +1512,17 @@ namespace CraftyServer.Core
                 int num3;
                 try
                 {
-                    if (this.field_821_y.size() <= 0)
+                    if (field_821_y.size() <= 0)
                     {
                         num2 = 0;
                         num3 = num2;
-                        this.field_4265_J--;
+                        field_4265_J--;
                         return false; // ?
                     }
                 }
                 catch (Exception ex)
                 {
-                    this.field_4265_J--;
+                    field_4265_J--;
                     throw ex;
                 }
                 try
@@ -1492,22 +1532,22 @@ namespace CraftyServer.Core
                     {
                         num2 = 1;
                         num3 = num2;
-                        this.field_4265_J--;
+                        field_4265_J--;
                         return true; //?
                     }
                 }
                 catch (Exception ex)
                 {
-                    this.field_4265_J--;
+                    field_4265_J--;
                     throw ex;
                 }
                 try
                 {
-                    ((MetadataChunkBlock) this.field_821_y.remove((int) (this.field_821_y.size() - 1))).func_4107_a(this);
+                    ((MetadataChunkBlock) field_821_y.remove((field_821_y.size() - 1))).func_4107_a(this);
                 }
                 catch (Exception ex)
                 {
-                    this.field_4265_J--;
+                    field_4265_J--;
                     throw ex;
                 }
 
@@ -1525,7 +1565,7 @@ namespace CraftyServer.Core
             try
             {
                 int i = 500;
-                System.Object tempObject;
+                Object tempObject;
                 //System.Console.WriteLine("Count: {0}", field_821_y.size());
                 for (; field_821_y.size() > 0; ((MetadataChunkBlock) tempObject).func_4107_a(this))
                 {
@@ -1588,7 +1628,7 @@ namespace CraftyServer.Core
                 }
                 for (int l2 = 0; l2 < j2; l2++)
                 {
-                    MetadataChunkBlock metadatachunkblock =
+                    var metadatachunkblock =
                         (MetadataChunkBlock) field_821_y.get(field_821_y.size() - l2 - 1);
                     if (metadatachunkblock.field_957_a == enumskyblock &&
                         metadatachunkblock.func_692_a(i, j, k, l, i1, j1))
@@ -1653,7 +1693,7 @@ namespace CraftyServer.Core
                 }
             }
             long l1 = worldInfo.getWorldTime() + 1L;
-            if (l1%(long) autosavePeriod == 0L)
+            if (l1%autosavePeriod == 0L)
             {
                 saveWorld(false, null);
             }
@@ -1667,7 +1707,7 @@ namespace CraftyServer.Core
             activeChunkSet.clear();
             for (int i = 0; i < playerEntities.size(); i++)
             {
-                EntityPlayer entityplayer = (EntityPlayer) playerEntities.get(i);
+                var entityplayer = (EntityPlayer) playerEntities.get(i);
                 int j = MathHelper.floor_double(entityplayer.posX/16D);
                 int l = MathHelper.floor_double(entityplayer.posZ/16D);
                 byte byte0 = 9;
@@ -1686,7 +1726,7 @@ namespace CraftyServer.Core
             }
             for (Iterator iterator = activeChunkSet.iterator(); iterator.hasNext();)
             {
-                ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair) iterator.next();
+                var chunkcoordintpair = (ChunkCoordIntPair) iterator.next();
                 int k = chunkcoordintpair.chunkXPos*16;
                 int i1 = chunkcoordintpair.chunkZPos*16;
                 Chunk chunk = getChunkFromChunkCoords(chunkcoordintpair.chunkXPos, chunkcoordintpair.chunkZPos);
@@ -1703,12 +1743,12 @@ namespace CraftyServer.Core
                     if (l3 == 0 && getBlockLightValue(j2, j3, l2) <= rand.nextInt(8) &&
                         getSavedLightValue(EnumSkyBlock.Sky, j2, j3, l2) <= 0)
                     {
-                        EntityPlayer entityplayer1 = getClosestPlayer((double) j2 + 0.5D, (double) j3 + 0.5D,
-                                                                      (double) l2 + 0.5D, 8D);
+                        EntityPlayer entityplayer1 = getClosestPlayer(j2 + 0.5D, j3 + 0.5D,
+                                                                      l2 + 0.5D, 8D);
                         if (entityplayer1 != null &&
-                            entityplayer1.getDistanceSq((double) j2 + 0.5D, (double) j3 + 0.5D, (double) l2 + 0.5D) > 4D)
+                            entityplayer1.getDistanceSq(j2 + 0.5D, j3 + 0.5D, l2 + 0.5D) > 4D)
                         {
-                            playSoundEffect((double) j2 + 0.5D, (double) j3 + 0.5D, (double) l2 + 0.5D,
+                            playSoundEffect(j2 + 0.5D, j3 + 0.5D, l2 + 0.5D,
                                             "ambient.cave.cave", 0.7F, 0.8F + rand.nextFloat()*0.2F);
                             ambientTickCountdown = rand.nextInt(12000) + 6000;
                         }
@@ -1745,7 +1785,7 @@ namespace CraftyServer.Core
             }
             for (int j = 0; j < i; j++)
             {
-                NextTickListEntry nextticklistentry = (NextTickListEntry) scheduledTickTreeSet.first();
+                var nextticklistentry = (NextTickListEntry) scheduledTickTreeSet.first();
                 if (!flag && nextticklistentry.scheduledTime > worldInfo.getWorldTime())
                 {
                     break;
@@ -1799,7 +1839,7 @@ namespace CraftyServer.Core
             int j = MathHelper.floor_double((axisalignedbb.maxX + 2D)/16D);
             int k = MathHelper.floor_double((axisalignedbb.minZ - 2D)/16D);
             int l = MathHelper.floor_double((axisalignedbb.maxZ + 2D)/16D);
-            ArrayList arraylist = new ArrayList();
+            var arraylist = new ArrayList();
             for (int i1 = i; i1 <= j; i1++)
             {
                 for (int j1 = k; j1 <= l; j1++)
@@ -1831,7 +1871,7 @@ namespace CraftyServer.Core
             int i = 0;
             for (int j = 0; j < loadedEntityList.size(); j++)
             {
-                Entity entity = (Entity) loadedEntityList.get(j);
+                var entity = (Entity) loadedEntityList.get(j);
                 if (class1.isAssignableFrom(entity.GetType()))
                 {
                     i++;
@@ -1882,14 +1922,14 @@ namespace CraftyServer.Core
             int i = MathHelper.floor_double(entity.posX);
             int j = MathHelper.floor_double(entity.posY);
             int k = MathHelper.floor_double(entity.posZ);
-            int l = (int) (f + 16F);
+            var l = (int) (f + 16F);
             int i1 = i - l;
             int j1 = j - l;
             int k1 = k - l;
             int l1 = i + l;
             int i2 = j + l;
             int j2 = k + l;
-            ChunkCache chunkcache = new ChunkCache(this, i1, j1, k1, l1, i2, j2);
+            var chunkcache = new ChunkCache(this, i1, j1, k1, l1, i2, j2);
             return (new Pathfinder(chunkcache)).createEntityPathTo(entity, entity1, f);
         }
 
@@ -1898,14 +1938,14 @@ namespace CraftyServer.Core
             int l = MathHelper.floor_double(entity.posX);
             int i1 = MathHelper.floor_double(entity.posY);
             int j1 = MathHelper.floor_double(entity.posZ);
-            int k1 = (int) (f + 8F);
+            var k1 = (int) (f + 8F);
             int l1 = l - k1;
             int i2 = i1 - k1;
             int j2 = j1 - k1;
             int k2 = l + k1;
             int l2 = i1 + k1;
             int i3 = j1 + k1;
-            ChunkCache chunkcache = new ChunkCache(this, l1, i2, j2, k2, l2, i3);
+            var chunkcache = new ChunkCache(this, l1, i2, j2, k2, l2, i3);
             return (new Pathfinder(chunkcache)).createEntityPathTo(entity, i, j, k, f);
         }
 
@@ -2000,7 +2040,7 @@ namespace CraftyServer.Core
             EntityPlayer entityplayer = null;
             for (int i = 0; i < playerEntities.size(); i++)
             {
-                EntityPlayer entityplayer1 = (EntityPlayer) playerEntities.get(i);
+                var entityplayer1 = (EntityPlayer) playerEntities.get(i);
                 double d5 = entityplayer1.getDistanceSq(d, d1, d2);
                 if ((d3 < 0.0D || d5 < d3*d3) && (d4 == -1D || d5 < d4))
                 {
@@ -2014,7 +2054,7 @@ namespace CraftyServer.Core
 
         public virtual byte[] getChunkData(int i, int j, int k, int l, int i1, int j1)
         {
-            byte[] abyte0 = new byte[(l*i1*j1*5)/2];
+            var abyte0 = new byte[(l*i1*j1*5)/2];
             int k1 = i >> 4;
             int l1 = k >> 4;
             int i2 = (i + l) - 1 >> 4;
@@ -2124,7 +2164,7 @@ namespace CraftyServer.Core
                 {
                     break;
                 }
-                EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+                var entityplayer = (EntityPlayer) iterator.next();
                 if (entityplayer.isPlayerSleeping())
                 {
                     continue;
@@ -2144,7 +2184,7 @@ namespace CraftyServer.Core
                 {
                     break;
                 }
-                EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+                var entityplayer = (EntityPlayer) iterator.next();
                 if (entityplayer.isPlayerSleeping())
                 {
                     entityplayer.wakeUpPlayer(false, false);
@@ -2158,7 +2198,7 @@ namespace CraftyServer.Core
             {
                 for (Iterator iterator = playerEntities.iterator(); iterator.hasNext();)
                 {
-                    EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+                    var entityplayer = (EntityPlayer) iterator.next();
                     if (!entityplayer.isPlayerFullyAsleep())
                     {
                         return false;
@@ -2172,40 +2212,5 @@ namespace CraftyServer.Core
                 return false;
             }
         }
-
-        public bool scheduledUpdatesAreImmediate;
-        private List field_821_y;
-        public List loadedEntityList;
-        private List unloadedEntityList;
-        private TreeSet scheduledTickTreeSet;
-        private Set scheduledTickSet;
-        public List loadedTileEntityList;
-        public List playerEntities;
-        private long field_6159_E;
-        public int skylightSubtracted;
-        protected int distHashCounter;
-        protected int DIST_HASH_MAGIC;
-        public bool editingBlocks;
-        private long lockTimestamp;
-        protected int autosavePeriod;
-        public int difficultySetting;
-        public Random rand;
-        public bool field_9212_p;
-        public WorldProvider worldProvider;
-        protected List worldAccesses;
-        protected IChunkProvider chunkProvider;
-        protected ISaveHandler worldFile;
-        protected WorldInfo worldInfo;
-        public bool field_9209_x;
-        private bool allPlayersSleeping;
-        private ArrayList field_9207_I;
-        private int field_4265_J;
-        private bool spawnHostileMobs;
-        private bool spawnPeacefulMobs;
-        public static int field_4268_y = 0;
-        private Set activeChunkSet;
-        private int ambientTickCountdown;
-        private List field_778_L;
-        public bool singleplayerWorld;
     }
 }

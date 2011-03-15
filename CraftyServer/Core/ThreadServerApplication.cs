@@ -1,9 +1,12 @@
 using CraftyServer.Server;
+using java.lang;
 
 namespace CraftyServer.Core
 {
-    public class ThreadServerApplication : java.lang.Thread
+    public class ThreadServerApplication : Thread
     {
+        private readonly MinecraftServer mcServer; /* synthetic field */
+
         public ThreadServerApplication(string s, MinecraftServer minecraftserver)
             : base(s)
         {
@@ -14,7 +17,5 @@ namespace CraftyServer.Core
         {
             mcServer.run();
         }
-
-        private MinecraftServer mcServer; /* synthetic field */
     }
 }

@@ -5,6 +5,9 @@ namespace CraftyServer.Core
 {
     public class Packet40 : Packet
     {
+        public int entityId;
+        private List field_21018_b;
+
         public Packet40()
         {
         }
@@ -36,8 +39,5 @@ namespace CraftyServer.Core
         {
             return 5;
         }
-
-        public int entityId;
-        private List field_21018_b;
     }
 }

@@ -2,6 +2,8 @@ namespace CraftyServer.Core
 {
     public class ItemDoor : Item
     {
+        private readonly Material field_260_a;
+
         public ItemDoor(int i, Material material) : base(i)
         {
             field_260_a = material;
@@ -30,7 +32,7 @@ namespace CraftyServer.Core
             {
                 return false;
             }
-            int i1 = MathHelper.floor_double((double) (((entityplayer.rotationYaw + 180F)*4F)/360F) - 0.5D) & 3;
+            int i1 = MathHelper.floor_double((((entityplayer.rotationYaw + 180F)*4F)/360F) - 0.5D) & 3;
             sbyte byte0 = 0;
             sbyte byte1 = 0;
             if (i1 == 0)
@@ -78,7 +80,5 @@ namespace CraftyServer.Core
             itemstack.stackSize--;
             return true;
         }
-
-        private Material field_260_a;
     }
 }

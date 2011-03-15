@@ -6,6 +6,8 @@ namespace CraftyServer.Core
 {
     public class ThreadCommandReader : Thread
     {
+        private readonly MinecraftServer mcServer; /* synthetic field */
+
         public ThreadCommandReader(MinecraftServer minecraftserver)
         {
             mcServer = minecraftserver;
@@ -14,7 +16,7 @@ namespace CraftyServer.Core
 
         public override void run()
         {
-            BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(java.lang.System.@in));
+            var bufferedreader = new BufferedReader(new InputStreamReader(java.lang.System.@in));
             string s = null;
             try
             {
@@ -29,7 +31,5 @@ namespace CraftyServer.Core
                 ioexception.printStackTrace();
             }
         }
-
-        private MinecraftServer mcServer; /* synthetic field */
     }
 }

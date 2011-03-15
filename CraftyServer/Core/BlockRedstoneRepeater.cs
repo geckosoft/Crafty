@@ -1,10 +1,19 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockRedstoneRepeater : Block
     {
+        public static double[] field_22014_a = {
+                                                   -0.0625D, 0.0625D, 0.1875D, 0.3125D
+                                               };
+
+        private static readonly int[] field_22013_b = {
+                                                          1, 2, 3, 4
+                                                      };
+
+        private readonly bool field_22015_c;
+
         public BlockRedstoneRepeater(int i, bool flag)
             : base(i, 102, Material.circuits)
         {
@@ -42,15 +51,15 @@ namespace CraftyServer.Core
             bool flag = func_22012_g(world, i, j, k, l);
             if (field_22015_c && !flag)
             {
-                world.setBlockAndMetadataWithNotify(i, j, k, Block.field_22011_bh.blockID, l);
+                world.setBlockAndMetadataWithNotify(i, j, k, field_22011_bh.blockID, l);
             }
             else if (!field_22015_c)
             {
-                world.setBlockAndMetadataWithNotify(i, j, k, Block.field_22010_bi.blockID, l);
+                world.setBlockAndMetadataWithNotify(i, j, k, field_22010_bi.blockID, l);
                 if (!flag)
                 {
                     int i1 = (l & 0xc) >> 2;
-                    world.func_22074_c(i, j, k, Block.field_22010_bi.blockID, field_22013_b[i1]*2);
+                    world.func_22074_c(i, j, k, field_22010_bi.blockID, field_22013_b[i1]*2);
                 }
             }
         }
@@ -165,7 +174,7 @@ namespace CraftyServer.Core
 
         public override void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving)
         {
-            int l = ((MathHelper.floor_double((double) ((entityliving.rotationYaw*4F)/360F) + 0.5D) & 3) + 2)%4;
+            int l = ((MathHelper.floor_double(((entityliving.rotationYaw*4F)/360F) + 0.5D) & 3) + 2)%4;
             world.setBlockMetadataWithNotify(i, j, k, l);
             bool flag = func_22012_g(world, i, j, k, l);
             if (flag)
@@ -193,15 +202,5 @@ namespace CraftyServer.Core
         {
             return Item.redstoneRepeater.shiftedIndex;
         }
-
-        public static double[] field_22014_a = {
-                                                   -0.0625D, 0.0625D, 0.1875D, 0.3125D
-                                               };
-
-        private static int[] field_22013_b = {
-                                                 1, 2, 3, 4
-                                             };
-
-        private bool field_22015_c;
     }
 }

@@ -1,7 +1,7 @@
 using java.io;
+using java.lang;
 using java.util;
 using java.util.zip;
-using java.lang;
 
 namespace CraftyServer.Core
 {
@@ -26,12 +26,12 @@ namespace CraftyServer.Core
         public override bool func_22101_a(string s, IProgressUpdate iprogressupdate)
         {
             iprogressupdate.setLoadingProgress(0);
-            ArrayList arraylist = new ArrayList();
-            ArrayList arraylist1 = new ArrayList();
-            ArrayList arraylist2 = new ArrayList();
-            ArrayList arraylist3 = new ArrayList();
-            File file = new File(field_22106_a, s);
-            File file1 = new File(file, "DIM-1");
+            var arraylist = new ArrayList();
+            var arraylist1 = new ArrayList();
+            var arraylist2 = new ArrayList();
+            var arraylist3 = new ArrayList();
+            var file = new File(field_22106_a, s);
+            var file1 = new File(file, "DIM-1");
             java.lang.System.@out.println("Scanning folders...");
             func_22108_a(file, arraylist, arraylist1);
             if (file1.exists())
@@ -57,8 +57,8 @@ namespace CraftyServer.Core
 
         private void func_22108_a(File file, ArrayList arraylist, ArrayList arraylist1)
         {
-            ChunkFolderPattern chunkfolderpattern = new ChunkFolderPattern(null);
-            ChunkFilePattern chunkfilepattern = new ChunkFilePattern(null);
+            var chunkfolderpattern = new ChunkFolderPattern(null);
+            var chunkfilepattern = new ChunkFilePattern(null);
             File[] afile = file.listFiles(chunkfolderpattern);
             File[] afile1 = afile;
             int i = afile1.Length;
@@ -87,11 +87,11 @@ namespace CraftyServer.Core
         private void func_22107_a(File file, ArrayList arraylist, int i, int j, IProgressUpdate iprogressupdate)
         {
             Collections.sort(arraylist);
-            byte[] abyte0 = new byte[4096];
+            var abyte0 = new byte[4096];
             int i1;
             for (Iterator iterator = arraylist.iterator(); iterator.hasNext(); iprogressupdate.setLoadingProgress(i1))
             {
-                FileMatcher filematcher = (FileMatcher) iterator.next();
+                var filematcher = (FileMatcher) iterator.next();
                 int k = filematcher.func_22205_b();
                 int l = filematcher.func_22204_c();
                 RegionFile regionfile = RegionFileCache.func_22123_a(file, k, l);
@@ -99,7 +99,7 @@ namespace CraftyServer.Core
                 {
                     try
                     {
-                        DataInputStream datainputstream =
+                        var datainputstream =
                             new DataInputStream(new GZIPInputStream(new FileInputStream(filematcher.func_22207_a())));
                         DataOutputStream dataoutputstream = regionfile.getChunkDataOutputStream(k & 0x1f, l & 0x1f);
                         for (int j1 = 0; (j1 = datainputstream.read(abyte0)) != -1;)
@@ -116,7 +116,7 @@ namespace CraftyServer.Core
                     }
                 }
                 i++;
-                i1 = (int) Math.round((100D*(double) i)/(double) j);
+                i1 = (int) Math.round((100D*i)/j);
             }
 
             RegionFileCache.func_22122_a();
@@ -127,12 +127,12 @@ namespace CraftyServer.Core
             int k;
             for (Iterator iterator = arraylist.iterator(); iterator.hasNext(); iprogressupdate.setLoadingProgress(k))
             {
-                File file = (File) iterator.next();
+                var file = (File) iterator.next();
                 File[] afile = file.listFiles();
                 func_22104_a(afile);
                 file.delete();
                 i++;
-                k = (int) Math.round((100D*(double) i)/(double) j);
+                k = (int) Math.round((100D*i)/j);
             }
         }
     }

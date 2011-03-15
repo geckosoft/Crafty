@@ -4,10 +4,6 @@ namespace CraftyServer.Core
 {
     public class Packet0KeepAlive : Packet
     {
-        public Packet0KeepAlive()
-        {
-        }
-
         public override void processPacket(NetHandler nethandler)
         {
         }

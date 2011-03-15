@@ -4,6 +4,9 @@ namespace CraftyServer.Core
 {
     public class Packet22Collect : Packet
     {
+        public int collectedEntityId;
+        public int collectorEntityId;
+
         public Packet22Collect()
         {
         }
@@ -35,8 +38,5 @@ namespace CraftyServer.Core
         {
             return 8;
         }
-
-        public int collectedEntityId;
-        public int collectorEntityId;
     }
 }

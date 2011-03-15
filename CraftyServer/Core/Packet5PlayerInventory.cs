@@ -4,6 +4,11 @@ namespace CraftyServer.Core
 {
     public class Packet5PlayerInventory : Packet
     {
+        public int entityID;
+        public int itemDamage;
+        public int itemID;
+        public int slot;
+
         public Packet5PlayerInventory()
         {
         }
@@ -49,10 +54,5 @@ namespace CraftyServer.Core
         {
             return 8;
         }
-
-        public int entityID;
-        public int slot;
-        public int itemID;
-        public int itemDamage;
     }
 }

@@ -1,14 +1,9 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class WorldGenLightStone1 : WorldGenerator
     {
-        public WorldGenLightStone1()
-        {
-        }
-
         public override bool generate(World world, Random random, int i, int j, int k)
         {
             if (!world.isAirBlock(i, j, k))

@@ -1,11 +1,31 @@
+using java.lang;
 using java.util;
-
 
 namespace CraftyServer.Core
 {
     public class ChunkProviderHell
         : IChunkProvider
     {
+        private readonly MapGenBase field_4230_s;
+        private readonly World field_4235_n;
+        private readonly NoiseGeneratorOctaves field_4236_m;
+        private readonly NoiseGeneratorOctaves field_4237_l;
+        private readonly NoiseGeneratorOctaves field_4238_k;
+        private readonly NoiseGeneratorOctaves field_4239_j;
+        private readonly NoiseGeneratorOctaves field_4240_i;
+        private readonly Random hellRNG;
+        private double[] field_4231_r;
+        private double[] field_4232_q;
+        private double[] field_4233_p;
+        private double[] field_4234_o;
+        private double[] field_4242_g;
+        private double[] field_4243_f;
+        private double[] field_4244_e;
+        private double[] field_4245_d;
+        private double[] field_4246_c;
+        public NoiseGeneratorOctaves field_4247_b;
+        public NoiseGeneratorOctaves field_4248_a;
+
         public ChunkProviderHell(World world, long l)
         {
             field_4233_p = new double[256];
@@ -22,6 +42,97 @@ namespace CraftyServer.Core
             field_4248_a = new NoiseGeneratorOctaves(hellRNG, 10);
             field_4247_b = new NoiseGeneratorOctaves(hellRNG, 16);
         }
+
+        #region IChunkProvider Members
+
+        public Chunk provideChunk(int i, int j)
+        {
+            hellRNG.setSeed(i*0x4f9939f508L + j*0x1ef1565bd5L);
+            var abyte0 = new byte[32768];
+            func_4062_a(i, j, abyte0);
+            func_4061_b(i, j, abyte0);
+            field_4230_s.func_667_a(this, field_4235_n, i, j, abyte0);
+            var chunk = new Chunk(field_4235_n, abyte0, i, j);
+            return chunk;
+        }
+
+        public bool chunkExists(int i, int j)
+        {
+            return true;
+        }
+
+        public void populate(IChunkProvider ichunkprovider, int i, int j)
+        {
+            BlockSand.fallInstantly = true;
+            int k = i*16;
+            int l = j*16;
+            for (int i1 = 0; i1 < 8; i1++)
+            {
+                int k1 = k + hellRNG.nextInt(16) + 8;
+                int i3 = hellRNG.nextInt(120) + 4;
+                int k4 = l + hellRNG.nextInt(16) + 8;
+                (new WorldGenHellLava(Block.lavaStill.blockID)).generate(field_4235_n, hellRNG, k1, i3, k4);
+            }
+
+            int j1 = hellRNG.nextInt(hellRNG.nextInt(10) + 1) + 1;
+            for (int l1 = 0; l1 < j1; l1++)
+            {
+                int j3 = k + hellRNG.nextInt(16) + 8;
+                int l4 = hellRNG.nextInt(120) + 4;
+                int i6 = l + hellRNG.nextInt(16) + 8;
+                (new WorldGenFire()).generate(field_4235_n, hellRNG, j3, l4, i6);
+            }
+
+            j1 = hellRNG.nextInt(hellRNG.nextInt(10) + 1);
+            for (int i2 = 0; i2 < j1; i2++)
+            {
+                int k3 = k + hellRNG.nextInt(16) + 8;
+                int i5 = hellRNG.nextInt(120) + 4;
+                int j6 = l + hellRNG.nextInt(16) + 8;
+                (new WorldGenLightStone1()).generate(field_4235_n, hellRNG, k3, i5, j6);
+            }
+
+            for (int j2 = 0; j2 < 10; j2++)
+            {
+                int l3 = k + hellRNG.nextInt(16) + 8;
+                int j5 = hellRNG.nextInt(128);
+                int k6 = l + hellRNG.nextInt(16) + 8;
+                (new WorldGenLightStone2()).generate(field_4235_n, hellRNG, l3, j5, k6);
+            }
+
+            if (hellRNG.nextInt(1) == 0)
+            {
+                int k2 = k + hellRNG.nextInt(16) + 8;
+                int i4 = hellRNG.nextInt(128);
+                int k5 = l + hellRNG.nextInt(16) + 8;
+                (new WorldGenFlowers(Block.mushroomBrown.blockID)).generate(field_4235_n, hellRNG, k2, i4, k5);
+            }
+            if (hellRNG.nextInt(1) == 0)
+            {
+                int l2 = k + hellRNG.nextInt(16) + 8;
+                int j4 = hellRNG.nextInt(128);
+                int l5 = l + hellRNG.nextInt(16) + 8;
+                (new WorldGenFlowers(Block.mushroomRed.blockID)).generate(field_4235_n, hellRNG, l2, j4, l5);
+            }
+            BlockSand.fallInstantly = false;
+        }
+
+        public bool saveChunks(bool flag, IProgressUpdate iprogressupdate)
+        {
+            return true;
+        }
+
+        public bool func_361_a()
+        {
+            return false;
+        }
+
+        public bool func_364_b()
+        {
+            return true;
+        }
+
+        #endregion
 
         public void func_4062_a(int i, int j, byte[] abyte0)
         {
@@ -103,10 +214,10 @@ namespace CraftyServer.Core
                 {
                     bool flag = field_4233_p[k + l*16] + hellRNG.nextDouble()*0.20000000000000001D > 0.0D;
                     bool flag1 = field_4232_q[k + l*16] + hellRNG.nextDouble()*0.20000000000000001D > 0.0D;
-                    int i1 = (int) (field_4231_r[k + l*16]/3D + 3D + hellRNG.nextDouble()*0.25D);
+                    var i1 = (int) (field_4231_r[k + l*16]/3D + 3D + hellRNG.nextDouble()*0.25D);
                     int j1 = -1;
-                    byte byte1 = (byte) Block.bloodStone.blockID;
-                    byte byte2 = (byte) Block.bloodStone.blockID;
+                    var byte1 = (byte) Block.bloodStone.blockID;
+                    var byte2 = (byte) Block.bloodStone.blockID;
                     for (int k1 = 127; k1 >= 0; k1--)
                     {
                         int l1 = (l*16 + k)*128 + k1;
@@ -183,17 +294,6 @@ namespace CraftyServer.Core
             }
         }
 
-        public Chunk provideChunk(int i, int j)
-        {
-            hellRNG.setSeed((long) i*0x4f9939f508L + (long) j*0x1ef1565bd5L);
-            byte[] abyte0 = new byte[32768];
-            func_4062_a(i, j, abyte0);
-            func_4061_b(i, j, abyte0);
-            field_4230_s.func_667_a(this, field_4235_n, i, j, abyte0);
-            Chunk chunk = new Chunk(field_4235_n, abyte0, i, j);
-            return chunk;
-        }
-
         private double[] func_4060_a(double[] ad, int i, int j, int k, int l, int i1, int j1)
         {
             if (ad == null)
@@ -209,10 +309,10 @@ namespace CraftyServer.Core
             field_4244_e = field_4239_j.generateNoiseOctaves(field_4244_e, i, j, k, l, i1, j1, d, d1, d);
             int k1 = 0;
             int l1 = 0;
-            double[] ad1 = new double[i1];
+            var ad1 = new double[i1];
             for (int i2 = 0; i2 < i1; i2++)
             {
-                ad1[i2] = java.lang.Math.cos(((double) i2*3.1415926535897931D*6D)/(double) i1)*2D;
+                ad1[i2] = Math.cos((i2*3.1415926535897931D*6D)/i1)*2D;
                 double d2 = i2;
                 if (i2 > i1/2)
                 {
@@ -261,7 +361,7 @@ namespace CraftyServer.Core
                         d5 /= 6D;
                     }
                     d3 += 0.5D;
-                    d5 = (d5*(double) i1)/16D;
+                    d5 = (d5*i1)/16D;
                     l1++;
                     for (int l2 = 0; l2 < i1; l2++)
                     {
@@ -285,12 +385,12 @@ namespace CraftyServer.Core
                         d6 -= d7;
                         if (l2 > i1 - 4)
                         {
-                            double d11 = (float) (l2 - (i1 - 4))/3F;
+                            double d11 = (l2 - (i1 - 4))/3F;
                             d6 = d6*(1.0D - d11) + -10D*d11;
                         }
-                        if ((double) l2 < d4)
+                        if (l2 < d4)
                         {
-                            double d12 = (d4 - (double) l2)/4D;
+                            double d12 = (d4 - l2)/4D;
                             if (d12 < 0.0D)
                             {
                                 d12 = 0.0D;
@@ -309,101 +409,5 @@ namespace CraftyServer.Core
 
             return ad;
         }
-
-        public bool chunkExists(int i, int j)
-        {
-            return true;
-        }
-
-        public void populate(IChunkProvider ichunkprovider, int i, int j)
-        {
-            BlockSand.fallInstantly = true;
-            int k = i*16;
-            int l = j*16;
-            for (int i1 = 0; i1 < 8; i1++)
-            {
-                int k1 = k + hellRNG.nextInt(16) + 8;
-                int i3 = hellRNG.nextInt(120) + 4;
-                int k4 = l + hellRNG.nextInt(16) + 8;
-                (new WorldGenHellLava(Block.lavaStill.blockID)).generate(field_4235_n, hellRNG, k1, i3, k4);
-            }
-
-            int j1 = hellRNG.nextInt(hellRNG.nextInt(10) + 1) + 1;
-            for (int l1 = 0; l1 < j1; l1++)
-            {
-                int j3 = k + hellRNG.nextInt(16) + 8;
-                int l4 = hellRNG.nextInt(120) + 4;
-                int i6 = l + hellRNG.nextInt(16) + 8;
-                (new WorldGenFire()).generate(field_4235_n, hellRNG, j3, l4, i6);
-            }
-
-            j1 = hellRNG.nextInt(hellRNG.nextInt(10) + 1);
-            for (int i2 = 0; i2 < j1; i2++)
-            {
-                int k3 = k + hellRNG.nextInt(16) + 8;
-                int i5 = hellRNG.nextInt(120) + 4;
-                int j6 = l + hellRNG.nextInt(16) + 8;
-                (new WorldGenLightStone1()).generate(field_4235_n, hellRNG, k3, i5, j6);
-            }
-
-            for (int j2 = 0; j2 < 10; j2++)
-            {
-                int l3 = k + hellRNG.nextInt(16) + 8;
-                int j5 = hellRNG.nextInt(128);
-                int k6 = l + hellRNG.nextInt(16) + 8;
-                (new WorldGenLightStone2()).generate(field_4235_n, hellRNG, l3, j5, k6);
-            }
-
-            if (hellRNG.nextInt(1) == 0)
-            {
-                int k2 = k + hellRNG.nextInt(16) + 8;
-                int i4 = hellRNG.nextInt(128);
-                int k5 = l + hellRNG.nextInt(16) + 8;
-                (new WorldGenFlowers(Block.mushroomBrown.blockID)).generate(field_4235_n, hellRNG, k2, i4, k5);
-            }
-            if (hellRNG.nextInt(1) == 0)
-            {
-                int l2 = k + hellRNG.nextInt(16) + 8;
-                int j4 = hellRNG.nextInt(128);
-                int l5 = l + hellRNG.nextInt(16) + 8;
-                (new WorldGenFlowers(Block.mushroomRed.blockID)).generate(field_4235_n, hellRNG, l2, j4, l5);
-            }
-            BlockSand.fallInstantly = false;
-        }
-
-        public bool saveChunks(bool flag, IProgressUpdate iprogressupdate)
-        {
-            return true;
-        }
-
-        public bool func_361_a()
-        {
-            return false;
-        }
-
-        public bool func_364_b()
-        {
-            return true;
-        }
-
-        private Random hellRNG;
-        private NoiseGeneratorOctaves field_4240_i;
-        private NoiseGeneratorOctaves field_4239_j;
-        private NoiseGeneratorOctaves field_4238_k;
-        private NoiseGeneratorOctaves field_4237_l;
-        private NoiseGeneratorOctaves field_4236_m;
-        public NoiseGeneratorOctaves field_4248_a;
-        public NoiseGeneratorOctaves field_4247_b;
-        private World field_4235_n;
-        private double[] field_4234_o;
-        private double[] field_4233_p;
-        private double[] field_4232_q;
-        private double[] field_4231_r;
-        private MapGenBase field_4230_s;
-        private double[] field_4246_c;
-        private double[] field_4245_d;
-        private double[] field_4244_e;
-        private double[] field_4243_f;
-        private double[] field_4242_g;
     }
 }

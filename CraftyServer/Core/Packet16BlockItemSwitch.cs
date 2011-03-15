@@ -4,9 +4,7 @@ namespace CraftyServer.Core
 {
     public class Packet16BlockItemSwitch : Packet
     {
-        public Packet16BlockItemSwitch()
-        {
-        }
+        public int id;
 
         public override void readPacketData(DataInputStream datainputstream)
         {
@@ -27,7 +25,5 @@ namespace CraftyServer.Core
         {
             return 2;
         }
-
-        public int id;
     }
 }

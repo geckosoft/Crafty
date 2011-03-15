@@ -1,12 +1,16 @@
 using java.io;
-using java.util;
 using java.lang;
+using java.util;
 using java.util.logging;
 
 namespace CraftyServer.Core
 {
     public class PropertyManager
     {
+        public static Logger logger = Logger.getLogger("Minecraft");
+        private readonly Properties serverProperties;
+        private readonly File serverPropertiesFile;
+
         public PropertyManager(File file)
         {
             serverProperties = new Properties();
@@ -67,8 +71,8 @@ namespace CraftyServer.Core
             try
             {
                 return
-                    java.lang.Integer.parseInt(getStringProperty(s,
-                                                                 (new StringBuilder()).append("").append(i).toString()));
+                    Integer.parseInt(getStringProperty(s,
+                                                       (new StringBuilder()).append("").append(i).toString()));
             }
             catch (Exception)
             {
@@ -96,9 +100,5 @@ namespace CraftyServer.Core
             serverProperties.setProperty(s, (new StringBuilder()).append("").append(flag).toString());
             saveProperties();
         }
-
-        public static Logger logger = Logger.getLogger("Minecraft");
-        private Properties serverProperties;
-        private File serverPropertiesFile;
     }
 }

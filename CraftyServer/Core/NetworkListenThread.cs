@@ -1,13 +1,22 @@
 using CraftyServer.Server;
+using java.lang;
 using java.net;
 using java.util;
 using java.util.logging;
-using java.lang;
 
 namespace CraftyServer.Core
 {
     public class NetworkListenThread
     {
+        public static Logger logger = Logger.getLogger("Minecraft");
+        private readonly Thread networkAcceptThread;
+        private readonly ArrayList pendingConnections;
+        private readonly ArrayList playerList;
+        private readonly ServerSocket serverSocket;
+        public volatile bool field_973_b;
+        private int field_977_f;
+        public MinecraftServer mcServer;
+
         public NetworkListenThread(MinecraftServer minecraftserver, InetAddress inetaddress, int i)
         {
             field_973_b = false;
@@ -44,7 +53,7 @@ namespace CraftyServer.Core
         {
             for (int i = 0; i < pendingConnections.size(); i++)
             {
-                NetLoginHandler netloginhandler = (NetLoginHandler) pendingConnections.get(i);
+                var netloginhandler = (NetLoginHandler) pendingConnections.get(i);
                 try
                 {
                     netloginhandler.tryLogin();
@@ -64,7 +73,7 @@ namespace CraftyServer.Core
 
             for (int j = 0; j < playerList.size(); j++)
             {
-                NetServerHandler netserverhandler = (NetServerHandler) playerList.get(j);
+                var netserverhandler = (NetServerHandler) playerList.get(j);
                 try
                 {
                     netserverhandler.handlePackets();
@@ -97,14 +106,5 @@ namespace CraftyServer.Core
         {
             networklistenthread.func_717_a(netloginhandler);
         }
-
-        public static Logger logger = Logger.getLogger("Minecraft");
-        private ServerSocket serverSocket;
-        private Thread networkAcceptThread;
-        public volatile bool field_973_b;
-        private int field_977_f;
-        private ArrayList pendingConnections;
-        private ArrayList playerList;
-        public MinecraftServer mcServer;
     }
 }

@@ -1,7 +1,13 @@
+using java.lang;
+
 namespace CraftyServer.Core
 {
     public class EntityCreature : EntityLiving
     {
+        protected bool hasAttacked;
+        private PathEntity pathToEntity;
+        protected Entity playerToAttack;
+
         public EntityCreature(World world) : base(world)
         {
             hasAttacked = false;
@@ -44,9 +50,9 @@ namespace CraftyServer.Core
                 float f2 = -99999F;
                 for (int i1 = 0; i1 < 10; i1++)
                 {
-                    int j1 = MathHelper.floor_double((posX + (double) rand.nextInt(13)) - 6D);
-                    int k1 = MathHelper.floor_double((posY + (double) rand.nextInt(7)) - 3D);
-                    int l1 = MathHelper.floor_double((posZ + (double) rand.nextInt(13)) - 6D);
+                    int j1 = MathHelper.floor_double((posX + rand.nextInt(13)) - 6D);
+                    int k1 = MathHelper.floor_double((posY + rand.nextInt(7)) - 3D);
+                    int l1 = MathHelper.floor_double((posZ + rand.nextInt(13)) - 6D);
                     float f3 = getBlockPathWeight(j1, k1, l1);
                     if (f3 > f2)
                     {
@@ -93,8 +99,8 @@ namespace CraftyServer.Core
             {
                 double d1 = vec3d.xCoord - posX;
                 double d2 = vec3d.zCoord - posZ;
-                double d3 = vec3d.yCoord - (double) i;
-                float f4 = (float) ((java.lang.Math.atan2(d2, d1)*180D)/3.1415927410125732D) - 90F;
+                double d3 = vec3d.yCoord - i;
+                float f4 = (float) ((Math.atan2(d2, d1)*180D)/3.1415927410125732D) - 90F;
                 float f5 = f4 - rotationYaw;
                 moveForward = moveSpeed;
                 for (; f5 < -180F; f5 += 360F)
@@ -117,7 +123,7 @@ namespace CraftyServer.Core
                     double d4 = playerToAttack.posX - posX;
                     double d5 = playerToAttack.posZ - posZ;
                     float f7 = rotationYaw;
-                    rotationYaw = (float) ((java.lang.Math.atan2(d5, d4)*180D)/3.1415927410125732D) - 90F;
+                    rotationYaw = (float) ((Math.atan2(d5, d4)*180D)/3.1415927410125732D) - 90F;
                     float f6 = (((f7 - rotationYaw) + 90F)*3.141593F)/180F;
                     moveStrafing = -MathHelper.sin(f6)*moveForward*1.0F;
                     moveForward = MathHelper.cos(f6)*moveForward*1.0F;
@@ -162,9 +168,5 @@ namespace CraftyServer.Core
             int k = MathHelper.floor_double(posZ);
             return base.getCanSpawnHere() && getBlockPathWeight(i, j, k) >= 0.0F;
         }
-
-        private PathEntity pathToEntity;
-        protected Entity playerToAttack;
-        protected bool hasAttacked;
     }
 }

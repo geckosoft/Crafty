@@ -2,6 +2,8 @@ namespace CraftyServer.Core
 {
     public class ItemRecord : Item
     {
+        private readonly string recordName;
+
         protected internal ItemRecord(int i, string s) : base(i)
         {
             recordName = s;
@@ -13,7 +15,7 @@ namespace CraftyServer.Core
         {
             if (world.getBlockId(i, j, k) == Block.jukebox.blockID && world.getBlockMetadata(i, j, k) == 0)
             {
-                world.setBlockMetadataWithNotify(i, j, k, (shiftedIndex - Item.record13.shiftedIndex) + 1);
+                world.setBlockMetadataWithNotify(i, j, k, (shiftedIndex - record13.shiftedIndex) + 1);
                 world.playRecord(recordName, i, j, k);
                 itemstack.stackSize--;
                 return true;
@@ -23,7 +25,5 @@ namespace CraftyServer.Core
                 return false;
             }
         }
-
-        private string recordName;
     }
 }

@@ -2,6 +2,9 @@ namespace CraftyServer.Core
 {
     public class TileEntityNote : TileEntity
     {
+        public byte note;
+        public bool previousRedstoneState;
+
         public TileEntityNote()
         {
             note = 0;
@@ -60,8 +63,5 @@ namespace CraftyServer.Core
             }
             world.playNoteAt(i, j, k, byte0, note);
         }
-
-        public byte note;
-        public bool previousRedstoneState;
     }
 }

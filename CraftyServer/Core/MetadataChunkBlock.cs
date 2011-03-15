@@ -2,6 +2,14 @@ namespace CraftyServer.Core
 {
     public class MetadataChunkBlock
     {
+        public int field_956_b;
+        public EnumSkyBlock field_957_a;
+        public int field_958_g;
+        public int field_959_f;
+        public int field_960_e;
+        public int field_961_d;
+        public int field_962_c;
+
         public MetadataChunkBlock(EnumSkyBlock enumskyblock, int i, int j, int k, int l, int i1, int j1)
         {
             field_957_a = enumskyblock;
@@ -217,13 +225,5 @@ namespace CraftyServer.Core
             }
             return false;
         }
-
-        public EnumSkyBlock field_957_a;
-        public int field_956_b;
-        public int field_962_c;
-        public int field_961_d;
-        public int field_960_e;
-        public int field_959_f;
-        public int field_958_g;
     }
 }

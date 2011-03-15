@@ -2,10 +2,6 @@ namespace CraftyServer.Core
 {
     public class MaterialLogic : Material
     {
-        public MaterialLogic()
-        {
-        }
-
         public override bool isSolid()
         {
             return false;

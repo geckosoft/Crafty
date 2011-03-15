@@ -1,10 +1,12 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class NoiseGeneratorOctaves : NoiseGenerator
     {
+        private readonly int field_938_b;
+        private readonly NoiseGeneratorPerlin[] generatorCollection;
+
         public NoiseGeneratorOctaves(Random random, int i)
         {
             field_938_b = i;
@@ -58,8 +60,5 @@ namespace CraftyServer.Core
         {
             return generateNoiseOctaves(ad, i, 10D, j, k, 1, l, d, 1.0D, d1);
         }
-
-        private NoiseGeneratorPerlin[] generatorCollection;
-        private int field_938_b;
     }
 }

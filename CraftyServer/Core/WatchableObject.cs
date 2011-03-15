@@ -2,6 +2,11 @@ namespace CraftyServer.Core
 {
     public class WatchableObject
     {
+        private readonly int dataValueId;
+        private readonly int objectType;
+        private bool isWatching;
+        private object watchedObject;
+
         public WatchableObject(int i, int j, object obj)
         {
             dataValueId = j;
@@ -39,10 +44,5 @@ namespace CraftyServer.Core
         {
             isWatching = flag;
         }
-
-        private int objectType;
-        private int dataValueId;
-        private object watchedObject;
-        private bool isWatching;
     }
 }

@@ -4,6 +4,18 @@ namespace CraftyServer.Core
 {
     public class WorldInfo
     {
+        private readonly int field_22194_i;
+        private readonly NBTTagCompound field_22195_h;
+        private readonly long lastPlayed;
+        private readonly long randomSeed;
+        private string levelName;
+        private long sizeOnDisk;
+        private int spawnX;
+        private int spawnY;
+        private int spawnZ;
+        private int version;
+        private long worldTime;
+
         public WorldInfo(NBTTagCompound nbttagcompound)
         {
             randomSeed = nbttagcompound.getLong("RandomSeed");
@@ -45,14 +57,14 @@ namespace CraftyServer.Core
 
         public NBTTagCompound func_22185_a()
         {
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            var nbttagcompound = new NBTTagCompound();
             func_22176_a(nbttagcompound, field_22195_h);
             return nbttagcompound;
         }
 
         public NBTTagCompound func_22183_a(List list)
         {
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            var nbttagcompound = new NBTTagCompound();
             EntityPlayer entityplayer = null;
             NBTTagCompound nbttagcompound1 = null;
             if (list.size() > 0)
@@ -151,17 +163,5 @@ namespace CraftyServer.Core
         {
             version = i;
         }
-
-        private long randomSeed;
-        private int spawnX;
-        private int spawnY;
-        private int spawnZ;
-        private long worldTime;
-        private long lastPlayed;
-        private long sizeOnDisk;
-        private NBTTagCompound field_22195_h;
-        private int field_22194_i;
-        private string levelName;
-        private int version;
     }
 }

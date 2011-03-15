@@ -5,15 +5,20 @@ namespace CraftyServer.Core
     public class ShapelessRecipes
         : IRecipe
     {
+        private readonly List field_21137_b;
+        private readonly ItemStack field_21138_a;
+
         public ShapelessRecipes(ItemStack itemstack, List list)
         {
             field_21138_a = itemstack;
             field_21137_b = list;
         }
 
+        #region IRecipe Members
+
         public bool func_21134_a(InventoryCrafting inventorycrafting)
         {
-            ArrayList arraylist = new ArrayList(field_21137_b);
+            var arraylist = new ArrayList(field_21137_b);
             int i = 0;
             do
             {
@@ -36,7 +41,7 @@ namespace CraftyServer.Core
                         {
                             break;
                         }
-                        ItemStack itemstack1 = (ItemStack) iterator.next();
+                        var itemstack1 = (ItemStack) iterator.next();
                         if (itemstack.itemID != itemstack1.itemID ||
                             itemstack1.getItemDamage() != -1 && itemstack.getItemDamage() != itemstack1.getItemDamage())
                         {
@@ -67,7 +72,6 @@ namespace CraftyServer.Core
             return field_21137_b.size();
         }
 
-        private ItemStack field_21138_a;
-        private List field_21137_b;
+        #endregion
     }
 }

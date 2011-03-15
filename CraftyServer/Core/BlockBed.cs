@@ -1,10 +1,22 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockBed : Block
     {
+        public static int[,] field_22023_a = new[,]
+                                             {
+                                                 {
+                                                     0, 1
+                                                 }, {
+                                                        -1, 0
+                                                    }, {
+                                                           0, -1
+                                                       }, {
+                                                              1, 0
+                                                          }
+                                             };
+
         public BlockBed(int i) : base(i, 134, Material.cloth)
         {
             func_22017_f();
@@ -45,7 +57,7 @@ namespace CraftyServer.Core
         {
             if (i == 0)
             {
-                return Block.planks.blockIndexInTexture;
+                return planks.blockIndexInTexture;
             }
             int k = func_22019_c(j);
             int l = ModelBed.field_22155_c[k][i];
@@ -188,18 +200,5 @@ namespace CraftyServer.Core
 
             return new ChunkCoordinates(i, j + 1, k);
         }
-
-        public static int[,] field_22023_a = new int[,]
-                                             {
-                                                 {
-                                                     0, 1
-                                                 }, {
-                                                        -1, 0
-                                                    }, {
-                                                           0, -1
-                                                       }, {
-                                                              1, 0
-                                                          }
-                                             };
     }
 }

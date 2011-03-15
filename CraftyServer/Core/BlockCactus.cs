@@ -1,6 +1,5 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockCactus : Block
@@ -38,8 +37,8 @@ namespace CraftyServer.Core
         public override AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k)
         {
             float f = 0.0625F;
-            return AxisAlignedBB.getBoundingBoxFromPool((float) i + f, j, (float) k + f, (float) (i + 1) - f,
-                                                        (float) (j + 1) - f, (float) (k + 1) - f);
+            return AxisAlignedBB.getBoundingBoxFromPool(i + f, j, k + f, (i + 1) - f,
+                                                        (j + 1) - f, (k + 1) - f);
         }
 
         public override int getBlockTextureFromSide(int i)
@@ -105,7 +104,7 @@ namespace CraftyServer.Core
             else
             {
                 int l = world.getBlockId(i, j - 1, k);
-                return l == Block.cactus.blockID || l == Block.sand.blockID;
+                return l == cactus.blockID || l == sand.blockID;
             }
         }
 

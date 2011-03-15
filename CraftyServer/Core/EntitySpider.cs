@@ -12,7 +12,7 @@ namespace CraftyServer.Core
 
         public override double getMountedYOffset()
         {
-            return (double) height*0.75D - 0.5D;
+            return height*0.75D - 0.5D;
         }
 
         protected override Entity findPlayerToAttack()
@@ -59,8 +59,8 @@ namespace CraftyServer.Core
                     double d = entity.posX - posX;
                     double d1 = entity.posZ - posZ;
                     float f2 = MathHelper.sqrt_double(d*d + d1*d1);
-                    motionX = (d/(double) f2)*0.5D*0.80000001192092896D + motionX*0.20000000298023224D;
-                    motionZ = (d1/(double) f2)*0.5D*0.80000001192092896D + motionZ*0.20000000298023224D;
+                    motionX = (d/f2)*0.5D*0.80000001192092896D + motionX*0.20000000298023224D;
+                    motionZ = (d1/f2)*0.5D*0.80000001192092896D + motionZ*0.20000000298023224D;
                     motionY = 0.40000000596046448D;
                 }
             }

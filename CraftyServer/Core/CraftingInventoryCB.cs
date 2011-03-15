@@ -4,6 +4,13 @@ namespace CraftyServer.Core
 {
     public abstract class CraftingInventoryCB
     {
+        private readonly Set field_20131_b;
+        protected List crafters;
+        private short field_20132_a;
+        public List inventoryItemStacks;
+        public List inventorySlots;
+        public int windowId;
+
         public CraftingInventoryCB()
         {
             inventoryItemStacks = new ArrayList();
@@ -24,7 +31,7 @@ namespace CraftyServer.Core
         public virtual void onCraftGuiOpened(ICrafting icrafting)
         {
             crafters.add(icrafting);
-            ArrayList arraylist = new ArrayList();
+            var arraylist = new ArrayList();
             for (int i = 0; i < inventorySlots.size(); i++)
             {
                 arraylist.add(((Slot) inventorySlots.get(i)).getStack());
@@ -39,7 +46,7 @@ namespace CraftyServer.Core
             for (int i = 0; i < inventorySlots.size(); i++)
             {
                 ItemStack itemstack = ((Slot) inventorySlots.get(i)).getStack();
-                ItemStack itemstack1 = (ItemStack) inventoryItemStacks.get(i);
+                var itemstack1 = (ItemStack) inventoryItemStacks.get(i);
                 if (ItemStack.areItemStacksEqual(itemstack1, itemstack))
                 {
                     continue;
@@ -57,7 +64,7 @@ namespace CraftyServer.Core
         {
             for (int j = 0; j < inventorySlots.size(); j++)
             {
-                Slot slot = (Slot) inventorySlots.get(j);
+                var slot = (Slot) inventorySlots.get(j);
                 if (slot.isHere(iinventory, i))
                 {
                     return slot;
@@ -99,7 +106,7 @@ namespace CraftyServer.Core
                 }
                 else
                 {
-                    Slot slot = (Slot) inventorySlots.get(i);
+                    var slot = (Slot) inventorySlots.get(i);
                     if (slot != null)
                     {
                         slot.onSlotChanged();
@@ -221,12 +228,5 @@ namespace CraftyServer.Core
         }
 
         public abstract bool canInteractWith(EntityPlayer entityplayer);
-
-        public List inventoryItemStacks;
-        public List inventorySlots;
-        public int windowId;
-        private short field_20132_a;
-        protected List crafters;
-        private Set field_20131_b;
     }
 }

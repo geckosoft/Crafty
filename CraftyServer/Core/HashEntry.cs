@@ -4,6 +4,11 @@ namespace CraftyServer.Core
 {
     public class HashEntry
     {
+        public int hashEntry;
+        public HashEntry nextEntry;
+        public int slotHash;
+        public object valueEntry;
+
         public HashEntry(int i, int j, object obj, HashEntry hashentry)
         {
             valueEntry = obj;
@@ -28,9 +33,9 @@ namespace CraftyServer.Core
             {
                 return false;
             }
-            HashEntry hashentry = (HashEntry) obj;
-            Integer integer = java.lang.Integer.valueOf(getHash());
-            Integer integer1 = java.lang.Integer.valueOf(hashentry.getHash());
+            var hashentry = (HashEntry) obj;
+            Integer integer = Integer.valueOf(getHash());
+            Integer integer1 = Integer.valueOf(hashentry.getHash());
             if (integer == integer1 || integer != null && integer.Equals(integer1))
             {
                 object obj1 = getValue();
@@ -52,10 +57,5 @@ namespace CraftyServer.Core
         {
             return (new StringBuilder()).append(getHash()).append("=").append(getValue()).toString();
         }
-
-        public int hashEntry;
-        public object valueEntry;
-        public HashEntry nextEntry;
-        public int slotHash;
     }
 }

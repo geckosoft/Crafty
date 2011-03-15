@@ -4,10 +4,6 @@ namespace CraftyServer.Core
 {
     public class NBTTagEnd : NBTBase
     {
-        public NBTTagEnd()
-        {
-        }
-
         public override void readTagContents(DataInput datainput)
         {
         }

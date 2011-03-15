@@ -2,10 +2,6 @@ namespace CraftyServer.Core
 {
     public class MaterialLiquid : Material
     {
-        public MaterialLiquid()
-        {
-        }
-
         public override bool getIsLiquid()
         {
             return true;

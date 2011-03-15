@@ -1,10 +1,20 @@
-using java.util;
 using java.lang;
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class Explosion
     {
+        private readonly Random ExplosionRNG;
+        private readonly World worldObj;
+        public Set destroyedBlockPositions;
+        public Entity exploder;
+        public float explosionSize;
+        public double explosionX;
+        public double explosionY;
+        public double explosionZ;
+        public bool isFlaming;
+
         public Explosion(World world, Entity entity, double d, double d1, double d2, float f)
         {
             isFlaming = false;
@@ -32,9 +42,9 @@ namespace CraftyServer.Core
                         {
                             continue;
                         }
-                        double d = ((float) j/((float) i - 1.0F))*2.0F - 1.0F;
-                        double d1 = ((float) l/((float) i - 1.0F))*2.0F - 1.0F;
-                        double d2 = ((float) j1/((float) i - 1.0F))*2.0F - 1.0F;
+                        double d = (j/(i - 1.0F))*2.0F - 1.0F;
+                        double d1 = (l/(i - 1.0F))*2.0F - 1.0F;
+                        double d2 = (j1/(i - 1.0F))*2.0F - 1.0F;
                         double d3 = Math.sqrt(d*d + d1*d1 + d2*d2);
                         d /= d3;
                         d1 /= d3;
@@ -62,9 +72,9 @@ namespace CraftyServer.Core
                             {
                                 destroyedBlockPositions.add(new ChunkPosition(j4, k4, l4));
                             }
-                            d5 += d*(double) f2;
-                            d7 += d1*(double) f2;
-                            d9 += d2*(double) f2;
+                            d5 += d*f2;
+                            d7 += d1*f2;
+                            d9 += d2*f2;
                             f1 -= f2*0.75F;
                         } while (true);
 
@@ -75,20 +85,20 @@ namespace CraftyServer.Core
             }
 
             explosionSize *= 2.0F;
-            int k = MathHelper.floor_double(explosionX - (double) explosionSize - 1.0D);
-            int i1 = MathHelper.floor_double(explosionX + (double) explosionSize + 1.0D);
-            int k1 = MathHelper.floor_double(explosionY - (double) explosionSize - 1.0D);
-            int l1 = MathHelper.floor_double(explosionY + (double) explosionSize + 1.0D);
-            int i2 = MathHelper.floor_double(explosionZ - (double) explosionSize - 1.0D);
-            int j2 = MathHelper.floor_double(explosionZ + (double) explosionSize + 1.0D);
+            int k = MathHelper.floor_double(explosionX - explosionSize - 1.0D);
+            int i1 = MathHelper.floor_double(explosionX + explosionSize + 1.0D);
+            int k1 = MathHelper.floor_double(explosionY - explosionSize - 1.0D);
+            int l1 = MathHelper.floor_double(explosionY + explosionSize + 1.0D);
+            int i2 = MathHelper.floor_double(explosionZ - explosionSize - 1.0D);
+            int j2 = MathHelper.floor_double(explosionZ + explosionSize + 1.0D);
             List list = worldObj.getEntitiesWithinAABBExcludingEntity(exploder,
                                                                       AxisAlignedBB.getBoundingBoxFromPool(k, k1, i2, i1,
                                                                                                            l1, j2));
             Vec3D vec3d = Vec3D.createVector(explosionX, explosionY, explosionZ);
             for (int k2 = 0; k2 < list.size(); k2++)
             {
-                Entity entity = (Entity) list.get(k2);
-                double d4 = entity.getDistance(explosionX, explosionY, explosionZ)/(double) explosionSize;
+                var entity = (Entity) list.get(k2);
+                double d4 = entity.getDistance(explosionX, explosionY, explosionZ)/explosionSize;
                 if (d4 <= 1.0D)
                 {
                     double d6 = entity.posX - explosionX;
@@ -100,7 +110,7 @@ namespace CraftyServer.Core
                     d10 /= d11;
                     double d12 = worldObj.func_494_a(vec3d, entity.boundingBox);
                     double d13 = (1.0D - d4)*d12;
-                    entity.attackEntityFrom(exploder, (int) (((d13*d13 + d13)/2D)*8D*(double) explosionSize + 1.0D));
+                    entity.attackEntityFrom(exploder, (int) (((d13*d13 + d13)/2D)*8D*explosionSize + 1.0D));
                     double d14 = d13;
                     entity.motionX += d6*d14;
                     entity.motionY += d8*d14;
@@ -109,13 +119,13 @@ namespace CraftyServer.Core
             }
 
             explosionSize = f;
-            ArrayList arraylist = new ArrayList();
+            var arraylist = new ArrayList();
             arraylist.addAll(destroyedBlockPositions);
             if (isFlaming)
             {
                 for (int l2 = arraylist.size() - 1; l2 >= 0; l2--)
                 {
-                    ChunkPosition chunkposition = (ChunkPosition) arraylist.get(l2);
+                    var chunkposition = (ChunkPosition) arraylist.get(l2);
                     int i3 = chunkposition.x;
                     int j3 = chunkposition.y;
                     int k3 = chunkposition.z;
@@ -133,20 +143,20 @@ namespace CraftyServer.Core
         {
             worldObj.playSoundEffect(explosionX, explosionY, explosionZ, "random.explode", 4F,
                                      (1.0F + (worldObj.rand.nextFloat() - worldObj.rand.nextFloat())*0.2F)*0.7F);
-            ArrayList arraylist = new ArrayList();
+            var arraylist = new ArrayList();
             arraylist.addAll(destroyedBlockPositions);
             for (int i = arraylist.size() - 1; i >= 0; i--)
             {
-                ChunkPosition chunkposition = (ChunkPosition) arraylist.get(i);
+                var chunkposition = (ChunkPosition) arraylist.get(i);
                 int j = chunkposition.x;
                 int k = chunkposition.y;
                 int l = chunkposition.z;
                 int i1 = worldObj.getBlockId(j, k, l);
                 for (int j1 = 0; j1 < 1; j1++)
                 {
-                    double d = (float) j + worldObj.rand.nextFloat();
-                    double d1 = (float) k + worldObj.rand.nextFloat();
-                    double d2 = (float) l + worldObj.rand.nextFloat();
+                    double d = j + worldObj.rand.nextFloat();
+                    double d1 = k + worldObj.rand.nextFloat();
+                    double d2 = l + worldObj.rand.nextFloat();
                     double d3 = d - explosionX;
                     double d4 = d1 - explosionY;
                     double d5 = d2 - explosionZ;
@@ -154,7 +164,7 @@ namespace CraftyServer.Core
                     d3 /= d6;
                     d4 /= d6;
                     d5 /= d6;
-                    double d7 = 0.5D/(d6/(double) explosionSize + 0.10000000000000001D);
+                    double d7 = 0.5D/(d6/explosionSize + 0.10000000000000001D);
                     d7 *= worldObj.rand.nextFloat()*worldObj.rand.nextFloat() + 0.3F;
                     d3 *= d7;
                     d4 *= d7;
@@ -173,15 +183,5 @@ namespace CraftyServer.Core
                 }
             }
         }
-
-        public bool isFlaming;
-        private Random ExplosionRNG;
-        private World worldObj;
-        public double explosionX;
-        public double explosionY;
-        public double explosionZ;
-        public Entity exploder;
-        public float explosionSize;
-        public Set destroyedBlockPositions;
     }
 }

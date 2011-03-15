@@ -2,6 +2,11 @@ namespace CraftyServer.Core
 {
     internal class RedstoneUpdateInfo
     {
+        public long updateTime;
+        public int x;
+        public int y;
+        public int z;
+
         public RedstoneUpdateInfo(int i, int j, int k, long l)
         {
             x = i;
@@ -9,10 +14,5 @@ namespace CraftyServer.Core
             z = k;
             updateTime = l;
         }
-
-        public int x;
-        public int y;
-        public int z;
-        public long updateTime;
     }
 }

@@ -16,7 +16,7 @@ namespace CraftyServer.Core
             }
             if (i == 0)
             {
-                return Block.planks.getBlockTextureFromSide(0);
+                return planks.getBlockTextureFromSide(0);
             }
             if (i == 2 || i == 4)
             {

@@ -2,10 +2,6 @@ namespace CraftyServer.Core
 {
     public class WorldProviderHell : WorldProvider
     {
-        public WorldProviderHell()
-        {
-        }
-
         public override void registerWorldChunkManager()
         {
             worldChunkMgr = new WorldChunkManagerHell(MobSpawnerBase.hell, 1.0D, 0.0D);
@@ -20,7 +16,7 @@ namespace CraftyServer.Core
             float f = 0.1F;
             for (int i = 0; i <= 15; i++)
             {
-                float f1 = 1.0F - (float) i/15F;
+                float f1 = 1.0F - i/15F;
                 lightBrightnessTable[i] = ((1.0F - f1)/(f1*3F + 1.0F))*(1.0F - f) + f;
             }
         }

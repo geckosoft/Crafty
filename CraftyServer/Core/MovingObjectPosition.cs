@@ -2,6 +2,14 @@ namespace CraftyServer.Core
 {
     public class MovingObjectPosition
     {
+        public int blockX;
+        public int blockY;
+        public int blockZ;
+        public Entity entityHit;
+        public Vec3D hitVec;
+        public int sideHit;
+        public EnumMovingObjectType typeOfHit;
+
         public MovingObjectPosition(int i, int j, int k, int l, Vec3D vec3d)
         {
             typeOfHit = EnumMovingObjectType.TILE;
@@ -18,13 +26,5 @@ namespace CraftyServer.Core
             entityHit = entity;
             hitVec = Vec3D.createVector(entity.posX, entity.posY, entity.posZ);
         }
-
-        public EnumMovingObjectType typeOfHit;
-        public int blockX;
-        public int blockY;
-        public int blockZ;
-        public int sideHit;
-        public Vec3D hitVec;
-        public Entity entityHit;
     }
 }

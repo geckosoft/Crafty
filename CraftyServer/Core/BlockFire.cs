@@ -1,21 +1,23 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockFire : Block
     {
+        private readonly int[] abilityToCatchFire;
+        private readonly int[] chanceToEncourageFire;
+
         public BlockFire(int i, int j)
             : base(i, j, Material.fire)
         {
             chanceToEncourageFire = new int[256];
             abilityToCatchFire = new int[256];
-            setBurnRate(Block.planks.blockID, 5, 20);
-            setBurnRate(Block.wood.blockID, 5, 5);
-            setBurnRate(Block.leaves.blockID, 30, 60);
-            setBurnRate(Block.bookShelf.blockID, 30, 20);
-            setBurnRate(Block.tnt.blockID, 15, 100);
-            setBurnRate(Block.cloth.blockID, 30, 60);
+            setBurnRate(planks.blockID, 5, 20);
+            setBurnRate(wood.blockID, 5, 5);
+            setBurnRate(leaves.blockID, 30, 60);
+            setBurnRate(bookShelf.blockID, 30, 20);
+            setBurnRate(tnt.blockID, 15, 100);
+            setBurnRate(cloth.blockID, 30, 60);
             setTickOnLoad(true);
         }
 
@@ -47,7 +49,7 @@ namespace CraftyServer.Core
 
         public override void updateTick(World world, int i, int j, int k, Random random)
         {
-            bool flag = world.getBlockId(i, j - 1, k) == Block.bloodStone.blockID;
+            bool flag = world.getBlockId(i, j - 1, k) == bloodStone.blockID;
             int l = world.getBlockMetadata(i, j, k);
             if (l < 15)
             {
@@ -115,7 +117,7 @@ namespace CraftyServer.Core
             int i1 = abilityToCatchFire[world.getBlockId(i, j, k)];
             if (random.nextInt(l) < i1)
             {
-                bool flag = world.getBlockId(i, j, k) == Block.tnt.blockID;
+                bool flag = world.getBlockId(i, j, k) == tnt.blockID;
                 if (random.nextInt(2) == 0)
                 {
                     world.setBlockWithNotify(i, j, k, blockID);
@@ -126,7 +128,7 @@ namespace CraftyServer.Core
                 }
                 if (flag)
                 {
-                    Block.tnt.onBlockDestroyedByPlayer(world, i, j, k, 0);
+                    tnt.onBlockDestroyedByPlayer(world, i, j, k, 0);
                 }
             }
         }
@@ -218,8 +220,8 @@ namespace CraftyServer.Core
 
         public override void onBlockAdded(World world, int i, int j, int k)
         {
-            if (world.getBlockId(i, j - 1, k) == Block.obsidian.blockID &&
-                Block.portal.tryToCreatePortal(world, i, j, k))
+            if (world.getBlockId(i, j - 1, k) == obsidian.blockID &&
+                portal.tryToCreatePortal(world, i, j, k))
             {
                 return;
             }
@@ -234,8 +236,5 @@ namespace CraftyServer.Core
                 return;
             }
         }
-
-        private int[] chanceToEncourageFire;
-        private int[] abilityToCatchFire;
     }
 }

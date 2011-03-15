@@ -4,6 +4,9 @@ namespace CraftyServer.Core
 {
     public class Packet39 : Packet
     {
+        public int entityId;
+        public int vehicleEntityId;
+
         public Packet39()
         {
         }
@@ -35,8 +38,5 @@ namespace CraftyServer.Core
         {
             nethandler.func_6003_a(this);
         }
-
-        public int entityId;
-        public int vehicleEntityId;
     }
 }

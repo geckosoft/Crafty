@@ -5,6 +5,8 @@ namespace CraftyServer.Core
 {
     public class NBTTagFloat : NBTBase
     {
+        public float floatValue;
+
         public NBTTagFloat()
         {
         }
@@ -33,7 +35,5 @@ namespace CraftyServer.Core
         {
             return (new StringBuilder()).append("").append(floatValue).toString();
         }
-
-        public float floatValue;
     }
 }

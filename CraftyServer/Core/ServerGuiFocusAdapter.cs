@@ -4,6 +4,8 @@ namespace CraftyServer.Core
 {
     public class ServerGuiFocusAdapter : FocusAdapter
     {
+        private ServerGUI mcServerGui; /* synthetic field */
+
         public ServerGuiFocusAdapter(ServerGUI servergui)
         {
             mcServerGui = servergui;
@@ -13,7 +15,5 @@ namespace CraftyServer.Core
         public override void focusGained(FocusEvent focusevent)
         {
         }
-
-        private ServerGUI mcServerGui; /* synthetic field */
     }
 }

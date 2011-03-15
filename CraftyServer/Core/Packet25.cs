@@ -4,6 +4,13 @@ namespace CraftyServer.Core
 {
     public class Packet25 : Packet
     {
+        public int direction;
+        public int entityId;
+        public string title;
+        public int xPosition;
+        public int yPosition;
+        public int zPosition;
+
         public Packet25()
         {
         }
@@ -47,12 +54,5 @@ namespace CraftyServer.Core
         {
             return 24;
         }
-
-        public int entityId;
-        public int xPosition;
-        public int yPosition;
-        public int zPosition;
-        public int direction;
-        public string title;
     }
 }

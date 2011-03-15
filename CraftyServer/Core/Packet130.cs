@@ -4,6 +4,11 @@ namespace CraftyServer.Core
 {
     public class Packet130 : Packet
     {
+        public string[] signLines;
+        public int xPosition;
+        public int yPosition;
+        public int zPosition;
+
         public Packet130()
         {
             isChunkDataPacket = true;
@@ -56,10 +61,5 @@ namespace CraftyServer.Core
 
             return i;
         }
-
-        public int xPosition;
-        public int yPosition;
-        public int zPosition;
-        public string[] signLines;
     }
 }

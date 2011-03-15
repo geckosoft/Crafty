@@ -4,6 +4,10 @@ namespace CraftyServer.Core
 {
     public class Packet50PreChunk : Packet
     {
+        public bool mode;
+        public int xPosition;
+        public int yPosition;
+
         public Packet50PreChunk()
         {
             isChunkDataPacket = false;
@@ -40,9 +44,5 @@ namespace CraftyServer.Core
         {
             return 9;
         }
-
-        public int xPosition;
-        public int yPosition;
-        public bool mode;
     }
 }

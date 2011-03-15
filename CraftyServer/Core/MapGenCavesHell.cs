@@ -1,14 +1,9 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class MapGenCavesHell : MapGenBase
     {
-        public MapGenCavesHell()
-        {
-        }
-
         public void func_4106_a(int i, int j, byte[] abyte0, double d, double d1,
                                 double d2)
         {
@@ -23,7 +18,7 @@ namespace CraftyServer.Core
             double d5 = j*16 + 8;
             float f3 = 0.0F;
             float f4 = 0.0F;
-            Random random = new Random(rand.nextLong());
+            var random = new Random(rand.nextLong());
             if (l <= 0)
             {
                 int i1 = field_947_a*16 - 16;
@@ -39,7 +34,7 @@ namespace CraftyServer.Core
             bool flag1 = random.nextInt(6) == 0;
             for (; k < l; k++)
             {
-                double d6 = 1.5D + (double) (MathHelper.sin(((float) k*3.141593F)/(float) l)*f*1.0F);
+                double d6 = 1.5D + (MathHelper.sin((k*3.141593F)/l)*f*1.0F);
                 double d7 = d6*d3;
                 float f5 = MathHelper.cos(f2);
                 float f6 = MathHelper.sin(f2);
@@ -115,9 +110,9 @@ namespace CraftyServer.Core
                     i2 = 16;
                 }
                 bool flag2 = false;
-                for (int j2 = (int) d8; !flag2 && j2 < k1; j2++)
+                for (var j2 = (int) d8; !flag2 && j2 < k1; j2++)
                 {
-                    for (int l2 = (int) d10; !flag2 && l2 < i2; l2++)
+                    for (var l2 = (int) d10; !flag2 && l2 < i2; l2++)
                     {
                         for (int i3 = l1 + 1; !flag2 && i3 >= d9 - 1; i3--)
                         {
@@ -142,16 +137,16 @@ namespace CraftyServer.Core
                 {
                     continue;
                 }
-                for (int k2 = (int) d8; k2 < k1; k2++)
+                for (var k2 = (int) d8; k2 < k1; k2++)
                 {
-                    double d12 = (((double) (k2 + i*16) + 0.5D) - d)/d6;
-                    for (int k3 = (int) d10; k3 < i2; k3++)
+                    double d12 = (((k2 + i*16) + 0.5D) - d)/d6;
+                    for (var k3 = (int) d10; k3 < i2; k3++)
                     {
-                        double d13 = (((double) (k3 + j*16) + 0.5D) - d2)/d6;
+                        double d13 = (((k3 + j*16) + 0.5D) - d2)/d6;
                         int l3 = (k2*16 + k3)*128 + l1;
                         for (int i4 = l1 - 1; i4 >= d9; i4--)
                         {
-                            double d14 = (((double) i4 + 0.5D) - d1)/d7;
+                            double d14 = ((i4 + 0.5D) - d1)/d7;
                             if (d14 > -0.69999999999999996D && d12*d12 + d14*d14 + d13*d13 < 1.0D)
                             {
                                 byte byte0 = abyte0[l3];

@@ -1,10 +1,12 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockLeaves : BlockLeavesBase
     {
+        private int[] adjacentTreeBlocks;
+        private int baseIndexInPNG;
+
         public BlockLeaves(int i, int j)
             : base(i, j, Material.leaves, false)
         {
@@ -25,7 +27,7 @@ namespace CraftyServer.Core
                         for (int l1 = -l; l1 <= l; l1++)
                         {
                             int i2 = world.getBlockId(i + j1, j + k1, k + l1);
-                            if (i2 == Block.leaves.blockID)
+                            if (i2 == leaves.blockID)
                             {
                                 int j2 = world.getBlockMetadata(i + j1, j + k1, k + l1);
                                 world.setBlockMetadata(i + j1, j + k1, k + l1, j2 | 4);
@@ -63,12 +65,12 @@ namespace CraftyServer.Core
                             for (int i3 = -byte0; i3 <= byte0; i3++)
                             {
                                 int k3 = world.getBlockId(i + l1, j + k2, k + i3);
-                                if (k3 == Block.wood.blockID)
+                                if (k3 == wood.blockID)
                                 {
                                     adjacentTreeBlocks[(l1 + k1)*j1 + (k2 + k1)*byte1 + (i3 + k1)] = 0;
                                     continue;
                                 }
-                                if (k3 == Block.leaves.blockID)
+                                if (k3 == leaves.blockID)
                                 {
                                     adjacentTreeBlocks[(l1 + k1)*j1 + (k2 + k1)*byte1 + (i3 + k1)] = -2;
                                 }
@@ -146,7 +148,7 @@ namespace CraftyServer.Core
 
         public override int idDropped(int i, Random random)
         {
-            return Block.sapling.blockID;
+            return sapling.blockID;
         }
 
         public override bool isOpaqueCube()
@@ -170,8 +172,5 @@ namespace CraftyServer.Core
         {
             base.onEntityWalking(world, i, j, k, entity);
         }
-
-        private int baseIndexInPNG;
-        private int[] adjacentTreeBlocks;
     }
 }

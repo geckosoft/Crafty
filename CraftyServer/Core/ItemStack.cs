@@ -4,6 +4,11 @@ namespace CraftyServer.Core
 {
     public class ItemStack
     {
+        public int animationsToGo;
+        private int itemDamage;
+        public int itemID;
+        public int stackSize;
+
         public ItemStack(Block block)
             : this(block, 1)
         {
@@ -226,10 +231,5 @@ namespace CraftyServer.Core
                 (new StringBuilder()).append(stackSize).append("x").append(Item.itemsList[itemID].getItemName()).append(
                     "@").append(itemDamage).toString();
         }
-
-        public int stackSize;
-        public int animationsToGo;
-        public int itemID;
-        private int itemDamage;
     }
 }

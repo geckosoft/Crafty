@@ -2,6 +2,8 @@ namespace CraftyServer.Core
 {
     public class CraftingInventoryChestCB : CraftingInventoryCB
     {
+        private readonly IInventory field_20137_a;
+
         public CraftingInventoryChestCB(IInventory iinventory, IInventory iinventory1)
         {
             field_20137_a = iinventory1;
@@ -33,7 +35,5 @@ namespace CraftyServer.Core
         {
             return field_20137_a.canInteractWith(entityplayer);
         }
-
-        private IInventory field_20137_a;
     }
 }

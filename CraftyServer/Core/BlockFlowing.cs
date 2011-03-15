@@ -1,10 +1,13 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockFlowing : BlockFluids
     {
+        private readonly bool[] field_658_b;
+        private readonly int[] field_660_c;
+        private int field_659_a;
+
         protected internal BlockFlowing(int i, Material material) : base(i, material)
         {
             field_659_a = 0;
@@ -148,7 +151,7 @@ namespace CraftyServer.Core
                     }
                     else
                     {
-                        Block.blocksList[i1].dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k));
+                        blocksList[i1].dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k));
                     }
                 }
                 world.setBlockAndMetadataWithNotify(i, j, k, blockID, l);
@@ -265,8 +268,8 @@ namespace CraftyServer.Core
         private bool func_309_k(World world, int i, int j, int k)
         {
             int l = world.getBlockId(i, j, k);
-            if (l == Block.doorWood.blockID || l == Block.doorSteel.blockID || l == Block.signPost.blockID ||
-                l == Block.ladder.blockID || l == Block.reed.blockID)
+            if (l == doorWood.blockID || l == doorSteel.blockID || l == signPost.blockID ||
+                l == ladder.blockID || l == reed.blockID)
             {
                 return true;
             }
@@ -274,7 +277,7 @@ namespace CraftyServer.Core
             {
                 return false;
             }
-            Material material = Block.blocksList[l].blockMaterial;
+            Material material = blocksList[l].blockMaterial;
             return material.isSolid();
         }
 
@@ -321,9 +324,5 @@ namespace CraftyServer.Core
                 world.func_22074_c(i, j, k, blockID, tickRate());
             }
         }
-
-        private int field_659_a;
-        private bool[] field_658_b;
-        private int[] field_660_c;
     }
 }

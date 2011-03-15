@@ -4,6 +4,14 @@ namespace CraftyServer.Core
 {
     internal class MinecartTrackLogic
     {
+        private readonly List connectedTracks;
+        private readonly BlockMinecartTrack minecartTrack; /* synthetic field */
+        private readonly int trackX;
+        private readonly int trackY;
+        private readonly int trackZ;
+        private readonly World worldObj;
+        private int trackMetadata;
+
         public MinecartTrackLogic(BlockMinecartTrack blockminecarttrack, World world, int i, int j, int k)
         {
             minecartTrack = blockminecarttrack;
@@ -128,7 +136,7 @@ namespace CraftyServer.Core
         {
             for (int i = 0; i < connectedTracks.size(); i++)
             {
-                ChunkPosition chunkposition = (ChunkPosition) connectedTracks.get(i);
+                var chunkposition = (ChunkPosition) connectedTracks.get(i);
                 if (chunkposition.x == minecarttracklogic.trackX && chunkposition.z == minecarttracklogic.trackZ)
                 {
                     return true;
@@ -142,7 +150,7 @@ namespace CraftyServer.Core
         {
             for (int l = 0; l < connectedTracks.size(); l++)
             {
-                ChunkPosition chunkposition = (ChunkPosition) connectedTracks.get(l);
+                var chunkposition = (ChunkPosition) connectedTracks.get(l);
                 if (chunkposition.x == i && chunkposition.z == k)
                 {
                     return true;
@@ -188,7 +196,7 @@ namespace CraftyServer.Core
             {
                 return true;
             }
-            ChunkPosition chunkposition = (ChunkPosition) connectedTracks.get(0);
+            var chunkposition = (ChunkPosition) connectedTracks.get(0);
             return minecarttracklogic.trackY != trackY || chunkposition.y != trackY ? true : true;
         }
 
@@ -396,13 +404,5 @@ namespace CraftyServer.Core
         {
             return minecarttracklogic.getAdjacentTracks();
         }
-
-        private World worldObj;
-        private int trackX;
-        private int trackY;
-        private int trackZ;
-        private int trackMetadata;
-        private List connectedTracks;
-        private BlockMinecartTrack minecartTrack; /* synthetic field */
     }
 }

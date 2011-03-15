@@ -1,10 +1,11 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class WorldGenFlowers : WorldGenerator
     {
+        private readonly int plantBlockId;
+
         public WorldGenFlowers(int i)
         {
             plantBlockId = i;
@@ -18,7 +19,7 @@ namespace CraftyServer.Core
                 int j1 = (j + random.nextInt(4)) - random.nextInt(4);
                 int k1 = (k + random.nextInt(8)) - random.nextInt(8);
                 if (world.isAirBlock(i1, j1, k1) &&
-                    ((BlockFlower) Block.blocksList[plantBlockId]).canBlockStay(world, i1, j1, k1))
+                    (Block.blocksList[plantBlockId]).canBlockStay(world, i1, j1, k1))
                 {
                     world.setBlock(i1, j1, k1, plantBlockId);
                 }
@@ -26,7 +27,5 @@ namespace CraftyServer.Core
 
             return true;
         }
-
-        private int plantBlockId;
     }
 }

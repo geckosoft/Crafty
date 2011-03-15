@@ -2,6 +2,8 @@ namespace CraftyServer.Core
 {
     public class ItemMinecart : Item
     {
+        public int minecartType;
+
         public ItemMinecart(int i, int j)
             : base(i)
         {
@@ -17,8 +19,8 @@ namespace CraftyServer.Core
             {
                 if (!world.singleplayerWorld)
                 {
-                    world.entityJoinedWorld(new EntityMinecart(world, (float) i + 0.5F, (float) j + 0.5F,
-                                                               (float) k + 0.5F, minecartType));
+                    world.entityJoinedWorld(new EntityMinecart(world, i + 0.5F, j + 0.5F,
+                                                               k + 0.5F, minecartType));
                 }
                 itemstack.stackSize--;
                 return true;
@@ -28,7 +30,5 @@ namespace CraftyServer.Core
                 return false;
             }
         }
-
-        public int minecartType;
     }
 }

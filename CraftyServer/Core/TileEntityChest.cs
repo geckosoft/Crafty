@@ -3,10 +3,14 @@ namespace CraftyServer.Core
     public class TileEntityChest : TileEntity
                                    , IInventory
     {
+        private ItemStack[] chestContents;
+
         public TileEntityChest()
         {
             chestContents = new ItemStack[36];
         }
+
+        #region IInventory Members
 
         public int getSizeInventory()
         {
@@ -58,40 +62,6 @@ namespace CraftyServer.Core
             return "Chest";
         }
 
-        public override void readFromNBT(NBTTagCompound nbttagcompound)
-        {
-            base.readFromNBT(nbttagcompound);
-            NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
-            chestContents = new ItemStack[getSizeInventory()];
-            for (int i = 0; i < nbttaglist.tagCount(); i++)
-            {
-                NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
-                int j = nbttagcompound1.getByte("Slot") & 0xff;
-                if (j >= 0 && j < chestContents.Length)
-                {
-                    chestContents[j] = new ItemStack(nbttagcompound1);
-                }
-            }
-        }
-
-        public override void writeToNBT(NBTTagCompound nbttagcompound)
-        {
-            base.writeToNBT(nbttagcompound);
-            NBTTagList nbttaglist = new NBTTagList();
-            for (int i = 0; i < chestContents.Length; i++)
-            {
-                if (chestContents[i] != null)
-                {
-                    NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-                    nbttagcompound1.setByte("Slot", (byte) i);
-                    chestContents[i].writeToNBT(nbttagcompound1);
-                    nbttaglist.setTag(nbttagcompound1);
-                }
-            }
-
-            nbttagcompound.setTag("Items", nbttaglist);
-        }
-
         public int getInventoryStackLimit()
         {
             return 64;
@@ -103,10 +73,44 @@ namespace CraftyServer.Core
             {
                 return false;
             }
-            return entityplayer.getDistanceSq((double) xCoord + 0.5D, (double) yCoord + 0.5D, (double) zCoord + 0.5D) <=
+            return entityplayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <=
                    64D;
         }
 
-        private ItemStack[] chestContents;
+        #endregion
+
+        public override void readFromNBT(NBTTagCompound nbttagcompound)
+        {
+            base.readFromNBT(nbttagcompound);
+            NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
+            chestContents = new ItemStack[getSizeInventory()];
+            for (int i = 0; i < nbttaglist.tagCount(); i++)
+            {
+                var nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
+                int j = nbttagcompound1.getByte("Slot") & 0xff;
+                if (j >= 0 && j < chestContents.Length)
+                {
+                    chestContents[j] = new ItemStack(nbttagcompound1);
+                }
+            }
+        }
+
+        public override void writeToNBT(NBTTagCompound nbttagcompound)
+        {
+            base.writeToNBT(nbttagcompound);
+            var nbttaglist = new NBTTagList();
+            for (int i = 0; i < chestContents.Length; i++)
+            {
+                if (chestContents[i] != null)
+                {
+                    var nbttagcompound1 = new NBTTagCompound();
+                    nbttagcompound1.setByte("Slot", (byte) i);
+                    chestContents[i].writeToNBT(nbttagcompound1);
+                    nbttaglist.setTag(nbttagcompound1);
+                }
+            }
+
+            nbttagcompound.setTag("Items", nbttaglist);
+        }
     }
 }

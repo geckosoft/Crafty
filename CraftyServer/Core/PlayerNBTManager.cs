@@ -1,13 +1,18 @@
 using java.io;
+using java.lang;
 using java.util;
 using java.util.logging;
-using java.lang;
 
 namespace CraftyServer.Core
 {
     public class PlayerNBTManager
         : IPlayerFileData, ISaveHandler
     {
+        private static readonly Logger logger = Logger.getLogger("Minecraft");
+        private readonly File field_22099_b;
+        private readonly long field_22100_d = java.lang.System.currentTimeMillis();
+        private readonly File worldFile;
+
         public PlayerNBTManager(File file, string s, bool flag)
         {
             field_22099_b = new File(file, s);
@@ -20,39 +25,65 @@ namespace CraftyServer.Core
             func_22098_f();
         }
 
-        private void func_22098_f()
+        #region IPlayerFileData Members
+
+        public virtual void writePlayerData(EntityPlayer entityplayer)
         {
             try
             {
-                File file = new File(field_22099_b, "session.lock");
-                DataOutputStream dataoutputstream = new DataOutputStream(new FileOutputStream(file));
-                try
+                var nbttagcompound = new NBTTagCompound();
+                entityplayer.writeToNBT(nbttagcompound);
+                var file = new File(worldFile, "_tmp_.dat");
+                var file1 = new File(worldFile,
+                                     (new StringBuilder()).append(entityplayer.username).append(".dat").toString());
+                CompressedStreamTools.writeGzippedCompoundToOutputStream(nbttagcompound, new FileOutputStream(file));
+                if (file1.exists())
                 {
-                    dataoutputstream.writeLong(field_22100_d);
+                    file1.delete();
                 }
-                finally
-                {
-                    dataoutputstream.close();
-                }
+                file.renameTo(file1);
             }
-            catch (IOException ioexception)
+            catch (Exception)
             {
-                ioexception.printStackTrace();
-                throw new RuntimeException("Failed to check session lock, aborting");
+                logger.warning(
+                    (new StringBuilder()).append("Failed to save player data for ").append(entityplayer.username).
+                        toString());
             }
         }
 
-        protected File func_22097_a()
+        public virtual void readPlayerData(EntityPlayer entityplayer)
         {
-            return field_22099_b;
+            try
+            {
+                var file = new File(worldFile,
+                                    (new StringBuilder()).append(entityplayer.username).append(".dat").toString());
+                if (file.exists())
+                {
+                    NBTTagCompound nbttagcompound = CompressedStreamTools.func_770_a(new FileInputStream(file));
+                    if (nbttagcompound != null)
+                    {
+                        entityplayer.readFromNBT(nbttagcompound);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                logger.warning(
+                    (new StringBuilder()).append("Failed to load player data for ").append(entityplayer.username).
+                        toString());
+            }
         }
+
+        #endregion
+
+        #region ISaveHandler Members
 
         public void func_22091_b()
         {
             try
             {
-                File file = new File(field_22099_b, "session.lock");
-                DataInputStream datainputstream = new DataInputStream(new FileInputStream(file));
+                var file = new File(field_22099_b, "session.lock");
+                var datainputstream = new DataInputStream(new FileInputStream(file));
                 try
                 {
                     if (datainputstream.readLong() != field_22100_d)
@@ -75,7 +106,7 @@ namespace CraftyServer.Core
         {
             if (worldprovider is WorldProviderHell)
             {
-                File file = new File(field_22099_b, "DIM-1");
+                var file = new File(field_22099_b, "DIM-1");
                 file.mkdirs();
                 return new ChunkLoader(file, true);
             }
@@ -87,7 +118,7 @@ namespace CraftyServer.Core
 
         public virtual WorldInfo func_22096_c()
         {
-            File file = new File(field_22099_b, "level.dat");
+            var file = new File(field_22099_b, "level.dat");
             if (file.exists())
             {
                 try
@@ -107,13 +138,13 @@ namespace CraftyServer.Core
         public virtual void func_22095_a(WorldInfo worldinfo, List list)
         {
             NBTTagCompound nbttagcompound = worldinfo.func_22183_a(list);
-            NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+            var nbttagcompound1 = new NBTTagCompound();
             nbttagcompound1.setTag("Data", nbttagcompound);
             try
             {
-                File file = new File(field_22099_b, "level.dat_new");
-                File file1 = new File(field_22099_b, "level.dat_old");
-                File file2 = new File(field_22099_b, "level.dat");
+                var file = new File(field_22099_b, "level.dat_new");
+                var file1 = new File(field_22099_b, "level.dat_old");
+                var file2 = new File(field_22099_b, "level.dat");
                 CompressedStreamTools.writeGzippedCompoundToOutputStream(nbttagcompound1, new FileOutputStream(file));
                 if (file1.exists())
                 {
@@ -139,13 +170,13 @@ namespace CraftyServer.Core
         public virtual void func_22094_a(WorldInfo worldinfo)
         {
             NBTTagCompound nbttagcompound = worldinfo.func_22185_a();
-            NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+            var nbttagcompound1 = new NBTTagCompound();
             nbttagcompound1.setTag("Data", nbttagcompound);
             try
             {
-                File file = new File(field_22099_b, "level.dat_new");
-                File file1 = new File(field_22099_b, "level.dat_old");
-                File file2 = new File(field_22099_b, "level.dat");
+                var file = new File(field_22099_b, "level.dat_new");
+                var file1 = new File(field_22099_b, "level.dat_old");
+                var file2 = new File(field_22099_b, "level.dat");
                 CompressedStreamTools.writeGzippedCompoundToOutputStream(nbttagcompound1, new FileOutputStream(file));
                 if (file1.exists())
                 {
@@ -168,53 +199,6 @@ namespace CraftyServer.Core
             }
         }
 
-        public virtual void writePlayerData(EntityPlayer entityplayer)
-        {
-            try
-            {
-                NBTTagCompound nbttagcompound = new NBTTagCompound();
-                entityplayer.writeToNBT(nbttagcompound);
-                File file = new File(worldFile, "_tmp_.dat");
-                File file1 = new File(worldFile,
-                                      (new StringBuilder()).append(entityplayer.username).append(".dat").toString());
-                CompressedStreamTools.writeGzippedCompoundToOutputStream(nbttagcompound, new FileOutputStream(file));
-                if (file1.exists())
-                {
-                    file1.delete();
-                }
-                file.renameTo(file1);
-            }
-            catch (Exception)
-            {
-                logger.warning(
-                    (new StringBuilder()).append("Failed to save player data for ").append(entityplayer.username).
-                        toString());
-            }
-        }
-
-        public virtual void readPlayerData(EntityPlayer entityplayer)
-        {
-            try
-            {
-                File file = new File(worldFile,
-                                     (new StringBuilder()).append(entityplayer.username).append(".dat").toString());
-                if (file.exists())
-                {
-                    NBTTagCompound nbttagcompound = CompressedStreamTools.func_770_a(new FileInputStream(file));
-                    if (nbttagcompound != null)
-                    {
-                        entityplayer.readFromNBT(nbttagcompound);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                logger.warning(
-                    (new StringBuilder()).append("Failed to load player data for ").append(entityplayer.username).
-                        toString());
-            }
-        }
-
         public virtual IPlayerFileData func_22090_d()
         {
             return this;
@@ -224,9 +208,33 @@ namespace CraftyServer.Core
         {
         }
 
-        private static Logger logger = Logger.getLogger("Minecraft");
-        private File field_22099_b;
-        private File worldFile;
-        private long field_22100_d = java.lang.System.currentTimeMillis();
+        #endregion
+
+        private void func_22098_f()
+        {
+            try
+            {
+                var file = new File(field_22099_b, "session.lock");
+                var dataoutputstream = new DataOutputStream(new FileOutputStream(file));
+                try
+                {
+                    dataoutputstream.writeLong(field_22100_d);
+                }
+                finally
+                {
+                    dataoutputstream.close();
+                }
+            }
+            catch (IOException ioexception)
+            {
+                ioexception.printStackTrace();
+                throw new RuntimeException("Failed to check session lock, aborting");
+            }
+        }
+
+        protected File func_22097_a()
+        {
+            return field_22099_b;
+        }
     }
 }

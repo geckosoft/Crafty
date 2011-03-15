@@ -1,10 +1,15 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockStep : Block
     {
+        public static string[] field_22027_a = {
+                                                   "stone", "sand", "wood", "cobble"
+                                               };
+
+        private readonly bool blockType;
+
         public BlockStep(int i, bool flag)
             : base(i, 6, Material.rock)
         {
@@ -49,7 +54,7 @@ namespace CraftyServer.Core
 
         public override void onBlockAdded(World world, int i, int j, int k)
         {
-            if (this != Block.stairSingle)
+            if (this != stairSingle)
             {
                 base.onBlockAdded(world, i, j, k);
             }
@@ -63,13 +68,13 @@ namespace CraftyServer.Core
             if (l == stairSingle.blockID)
             {
                 world.setBlockWithNotify(i, j, k, 0);
-                world.setBlockAndMetadataWithNotify(i, j - 1, k, Block.stairDouble.blockID, i1);
+                world.setBlockAndMetadataWithNotify(i, j - 1, k, stairDouble.blockID, i1);
             }
         }
 
         public override int idDropped(int i, Random random)
         {
-            return Block.stairSingle.blockID;
+            return stairSingle.blockID;
         }
 
         public override int quantityDropped(Random random)
@@ -84,7 +89,7 @@ namespace CraftyServer.Core
 
         public override bool shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l)
         {
-            if (this != Block.stairSingle)
+            if (this != stairSingle)
             {
                 base.shouldSideBeRendered(iblockaccess, i, j, k, l);
             }
@@ -105,11 +110,5 @@ namespace CraftyServer.Core
                 return iblockaccess.getBlockId(i, j, k) != blockID;
             }
         }
-
-        public static string[] field_22027_a = {
-                                                   "stone", "sand", "wood", "cobble"
-                                               };
-
-        private bool blockType;
     }
 }

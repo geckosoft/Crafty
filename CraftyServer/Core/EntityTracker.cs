@@ -1,11 +1,16 @@
 using CraftyServer.Server;
-using java.util;
 using java.lang;
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class EntityTracker
     {
+        private readonly int maxTrackingDistanceThreshold;
+        private readonly MinecraftServer mcServer;
+        private readonly MCHashTable trackedEntityHashTable;
+        private readonly Set trackedEntitySet;
+
         public EntityTracker(MinecraftServer minecraftserver)
         {
             trackedEntitySet = new HashSet();
@@ -19,7 +24,7 @@ namespace CraftyServer.Core
             if (entity is EntityPlayerMP)
             {
                 trackEntity(entity, 512, 2);
-                EntityPlayerMP entityplayermp = (EntityPlayerMP) entity;
+                var entityplayermp = (EntityPlayerMP) entity;
                 Iterator iterator = trackedEntitySet.iterator();
                 do
                 {
@@ -27,7 +32,7 @@ namespace CraftyServer.Core
                     {
                         break;
                     }
-                    EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
+                    var entitytrackerentry = (EntityTrackerEntry) iterator.next();
                     if (entitytrackerentry.trackedEntity != entityplayermp)
                     {
                         entitytrackerentry.updatePlayerEntity(entityplayermp);
@@ -101,7 +106,7 @@ namespace CraftyServer.Core
             }
             else
             {
-                EntityTrackerEntry entitytrackerentry = new EntityTrackerEntry(entity, i, j, flag);
+                var entitytrackerentry = new EntityTrackerEntry(entity, i, j, flag);
                 trackedEntitySet.add(entitytrackerentry);
                 trackedEntityHashTable.addKey(entity.entityId, entitytrackerentry);
                 entitytrackerentry.updatePlayerEntities(mcServer.worldMngr.playerEntities);
@@ -113,7 +118,7 @@ namespace CraftyServer.Core
         {
             if (entity is EntityPlayerMP)
             {
-                EntityPlayerMP entityplayermp = (EntityPlayerMP) entity;
+                var entityplayermp = (EntityPlayerMP) entity;
                 EntityTrackerEntry entitytrackerentry1;
                 for (Iterator iterator = trackedEntitySet.iterator();
                      iterator.hasNext();
@@ -122,7 +127,7 @@ namespace CraftyServer.Core
                     entitytrackerentry1 = (EntityTrackerEntry) iterator.next();
                 }
             }
-            EntityTrackerEntry entitytrackerentry =
+            var entitytrackerentry =
                 (EntityTrackerEntry) trackedEntityHashTable.removeObject(entity.entityId);
             if (entitytrackerentry != null)
             {
@@ -133,7 +138,7 @@ namespace CraftyServer.Core
 
         public void updateTrackedEntities()
         {
-            ArrayList arraylist = new ArrayList();
+            var arraylist = new ArrayList();
             Iterator iterator = trackedEntitySet.iterator();
             do
             {
@@ -141,17 +146,17 @@ namespace CraftyServer.Core
                 {
                     break;
                 }
-                EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
+                var entitytrackerentry = (EntityTrackerEntry) iterator.next();
                 entitytrackerentry.updatePlayerList(mcServer.worldMngr.playerEntities);
                 if (entitytrackerentry.playerEntitiesUpdated && (entitytrackerentry.trackedEntity is EntityPlayerMP))
                 {
-                    arraylist.add((EntityPlayerMP) entitytrackerentry.trackedEntity);
+                    arraylist.add(entitytrackerentry.trackedEntity);
                 }
             } while (true);
 
             for (int i = 0; i < arraylist.size(); i++)
             {
-                EntityPlayerMP entityplayermp = (EntityPlayerMP) arraylist.get(i);
+                var entityplayermp = (EntityPlayerMP) arraylist.get(i);
                 Iterator iterator1 = trackedEntitySet.iterator();
                 do
                 {
@@ -159,7 +164,7 @@ namespace CraftyServer.Core
                     {
                         break;
                     }
-                    EntityTrackerEntry entitytrackerentry1 = (EntityTrackerEntry) iterator1.next();
+                    var entitytrackerentry1 = (EntityTrackerEntry) iterator1.next();
                     if (entitytrackerentry1.trackedEntity != entityplayermp)
                     {
                         entitytrackerentry1.updatePlayerEntity(entityplayermp);
@@ -170,7 +175,7 @@ namespace CraftyServer.Core
 
         public void sendPacketToTrackedPlayers(Entity entity, Packet packet)
         {
-            EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) trackedEntityHashTable.lookup(entity.entityId);
+            var entitytrackerentry = (EntityTrackerEntry) trackedEntityHashTable.lookup(entity.entityId);
             if (entitytrackerentry != null)
             {
                 entitytrackerentry.sendPacketToTrackedPlayers(packet);
@@ -179,7 +184,7 @@ namespace CraftyServer.Core
 
         public void sendPacketToTrackedPlayersAndTrackedEntity(Entity entity, Packet packet)
         {
-            EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) trackedEntityHashTable.lookup(entity.entityId);
+            var entitytrackerentry = (EntityTrackerEntry) trackedEntityHashTable.lookup(entity.entityId);
             if (entitytrackerentry != null)
             {
                 entitytrackerentry.sendPacketToTrackedPlayersAndTrackedEntity(packet);
@@ -196,10 +201,5 @@ namespace CraftyServer.Core
                 entitytrackerentry = (EntityTrackerEntry) iterator.next();
             }
         }
-
-        private Set trackedEntitySet;
-        private MCHashTable trackedEntityHashTable;
-        private MinecraftServer mcServer;
-        private int maxTrackingDistanceThreshold;
     }
 }

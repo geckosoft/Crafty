@@ -1,7 +1,15 @@
+using System;
+
 namespace CraftyServer.Core
 {
     public class MCHashTable
     {
+        [NonSerialized] private int count;
+        private float growFactor = 0.75F;
+        [NonSerialized] private HashEntry[] slots;
+        private int threshold;
+        [NonSerialized] private volatile int versionStamp;
+
         public MCHashTable()
         {
             threshold = 12;
@@ -83,10 +91,10 @@ namespace CraftyServer.Core
             }
             else
             {
-                HashEntry[] ahashentry1 = new HashEntry[i];
+                var ahashentry1 = new HashEntry[i];
                 copyTo(ahashentry1);
                 slots = ahashentry1;
-                threshold = (int) ((float) i*growFactor);
+                threshold = (int) (i*growFactor);
                 return;
             }
         }
@@ -176,11 +184,5 @@ namespace CraftyServer.Core
         {
             return computeHash(i);
         }
-
-        [System.NonSerialized] private HashEntry[] slots;
-        [System.NonSerialized] private int count;
-        private int threshold;
-        private float growFactor = 0.75F;
-        [System.NonSerialized] private volatile int versionStamp;
     }
 }

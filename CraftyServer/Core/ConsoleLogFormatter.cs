@@ -1,13 +1,15 @@
 using System.Diagnostics;
 using java.io;
+using java.lang;
 using java.text;
 using java.util.logging;
-using java.lang;
 
 namespace CraftyServer.Core
 {
     public class ConsoleLogFormatter : Formatter
     {
+        private readonly SimpleDateFormat dateFormat;
+
         public ConsoleLogFormatter()
         {
             dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -15,7 +17,7 @@ namespace CraftyServer.Core
 
         public override string format(LogRecord logrecord)
         {
-            StringBuilder stringbuilder = new StringBuilder();
+            var stringbuilder = new StringBuilder();
             stringbuilder.append(dateFormat.format(Long.valueOf(logrecord.getMillis())));
             Level level = logrecord.getLevel();
             if (level == Level.FINEST)
@@ -49,10 +51,10 @@ namespace CraftyServer.Core
             }
             stringbuilder.append(logrecord.getMessage());
             stringbuilder.append('\n');
-            Throwable throwable = logrecord.getThrown() as Throwable;
+            var throwable = logrecord.getThrown() as Throwable;
             if (throwable != null)
             {
-                StringWriter stringwriter = new StringWriter();
+                var stringwriter = new StringWriter();
                 throwable.printStackTrace(new PrintWriter(stringwriter));
                 stringbuilder.append(stringwriter.toString());
             }
@@ -60,7 +62,5 @@ namespace CraftyServer.Core
             Debug.WriteLine(stringbuilder.toString());
             return stringbuilder.toString();
         }
-
-        private SimpleDateFormat dateFormat;
     }
 }

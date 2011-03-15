@@ -4,6 +4,10 @@ namespace CraftyServer.Core
 {
     public class Packet106 : Packet
     {
+        public bool field_20035_c;
+        public short shortWindowId;
+        public int windowId;
+
         public Packet106()
         {
         }
@@ -38,9 +42,5 @@ namespace CraftyServer.Core
         {
             return 4;
         }
-
-        public int windowId;
-        public short shortWindowId;
-        public bool field_20035_c;
     }
 }

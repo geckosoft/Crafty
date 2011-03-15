@@ -1,14 +1,9 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class WorldGenDungeons : WorldGenerator
     {
-        public WorldGenDungeons()
-        {
-        }
-
         public override bool generate(World world, Random random, int i, int j, int k)
         {
             byte byte0 = 3;
@@ -111,7 +106,7 @@ namespace CraftyServer.Core
                         continue;
                     }
                     world.setBlockWithNotify(k3, l3, i4, Block.crate.blockID);
-                    TileEntityChest tileentitychest = (TileEntityChest) world.getBlockTileEntity(k3, l3, i4);
+                    var tileentitychest = (TileEntityChest) world.getBlockTileEntity(k3, l3, i4);
                     int k4 = 0;
                     do
                     {
@@ -134,7 +129,7 @@ namespace CraftyServer.Core
             }
 
             world.setBlockWithNotify(i, j, k, Block.mobSpawner.blockID);
-            TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner) world.getBlockTileEntity(i, j, k);
+            var tileentitymobspawner = (TileEntityMobSpawner) world.getBlockTileEntity(i, j, k);
             tileentitymobspawner.setMobID(pickMobSpawner(random));
             return true;
         }

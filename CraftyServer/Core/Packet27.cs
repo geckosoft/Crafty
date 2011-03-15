@@ -4,9 +4,12 @@ namespace CraftyServer.Core
 {
     public class Packet27 : Packet
     {
-        public Packet27()
-        {
-        }
+        private float field_22034_b;
+        private float field_22035_a;
+        private float field_22036_f;
+        private float field_22037_e;
+        private bool field_22038_d;
+        private bool field_22039_c;
 
         public override void readPacketData(DataInputStream datainputstream)
         {
@@ -67,12 +70,5 @@ namespace CraftyServer.Core
         {
             return field_22038_d;
         }
-
-        private float field_22035_a;
-        private float field_22034_b;
-        private bool field_22039_c;
-        private bool field_22038_d;
-        private float field_22037_e;
-        private float field_22036_f;
     }
 }

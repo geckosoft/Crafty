@@ -2,10 +2,6 @@ namespace CraftyServer.Core
 {
     public class NetHandler
     {
-        public NetHandler()
-        {
-        }
-
         public virtual void handleMapChunk(Packet51MapChunk packet51mapchunk)
         {
         }

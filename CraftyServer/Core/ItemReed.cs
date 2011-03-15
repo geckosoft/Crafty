@@ -2,6 +2,8 @@ namespace CraftyServer.Core
 {
     public class ItemReed : Item
     {
+        private readonly int field_253_a;
+
         public ItemReed(int i, Block block)
             : base(i)
         {
@@ -53,7 +55,7 @@ namespace CraftyServer.Core
                 {
                     Block.blocksList[field_253_a].onBlockPlaced(world, i, j, k, l);
                     Block.blocksList[field_253_a].onBlockPlacedBy(world, i, j, k, entityplayer);
-                    world.playSoundEffect((float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F,
+                    world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F,
                                           block.stepSound.func_737_c(), (block.stepSound.func_738_a() + 1.0F)/2.0F,
                                           block.stepSound.func_739_b()*0.8F);
                     itemstack.stackSize--;
@@ -61,7 +63,5 @@ namespace CraftyServer.Core
             }
             return true;
         }
-
-        private int field_253_a;
     }
 }

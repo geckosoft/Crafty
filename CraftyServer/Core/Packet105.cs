@@ -4,6 +4,10 @@ namespace CraftyServer.Core
 {
     public class Packet105 : Packet
     {
+        public int progressBar;
+        public int progressBarValue;
+        public int windowId;
+
         public Packet105()
         {
         }
@@ -38,9 +42,5 @@ namespace CraftyServer.Core
         {
             return 5;
         }
-
-        public int windowId;
-        public int progressBar;
-        public int progressBarValue;
     }
 }

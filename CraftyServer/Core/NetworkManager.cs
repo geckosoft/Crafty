@@ -1,12 +1,36 @@
 using java.io;
+using java.lang;
 using java.net;
 using java.util;
-using java.lang;
 
 namespace CraftyServer.Core
 {
     public class NetworkManager
     {
+        public static object threadSyncObject = new object();
+        public static int numReadThreads;
+        public static int numWriteThreads;
+        private readonly List chunkDataPackets;
+        private readonly List dataPackets;
+        private readonly List readPackets;
+        private readonly Thread readThread;
+        private readonly SocketAddress remoteSocketAddress;
+        private readonly object sendQueueLock;
+        private readonly Thread writeThread;
+        public int chunkDataSendCounter;
+        private int field_20175_w;
+        private object[] field_20176_t;
+        private bool isTerminating;
+        public bool m_isRunning;
+        public bool m_isServerTerminating;
+        private NetHandler netHandler;
+        private Socket networkSocket;
+        private int sendQueueByteLength;
+        private DataInputStream socketInputStream;
+        private DataOutputStream socketOutputStream;
+        private string terminationReason;
+        private int timeSinceLastRead;
+
         public NetworkManager(Socket socket, string s, NetHandler nethandler)
         {
             sendQueueLock = new object();
@@ -68,7 +92,7 @@ namespace CraftyServer.Core
                 if (!dataPackets.isEmpty() &&
                     (chunkDataSendCounter == 0 ||
                      java.lang.System.currentTimeMillis() - ((Packet) dataPackets.get(0)).creationTimeMillis >=
-                     (long) chunkDataSendCounter))
+                     chunkDataSendCounter))
                 {
                     flag = false;
                     Packet packet;
@@ -82,7 +106,7 @@ namespace CraftyServer.Core
                 if ((flag || field_20175_w-- <= 0) && !chunkDataPackets.isEmpty() &&
                     (chunkDataSendCounter == 0 ||
                      java.lang.System.currentTimeMillis() - ((Packet) chunkDataPackets.get(0)).creationTimeMillis >=
-                     (long) chunkDataSendCounter))
+                     chunkDataSendCounter))
                 {
                     flag = false;
                     Packet packet1;
@@ -256,29 +280,5 @@ namespace CraftyServer.Core
         {
             return networkmanager.writeThread;
         }
-
-        public static object threadSyncObject = new object();
-        public static int numReadThreads;
-        public static int numWriteThreads;
-        private object sendQueueLock;
-        private Socket networkSocket;
-        private SocketAddress remoteSocketAddress;
-        private DataInputStream socketInputStream;
-        private DataOutputStream socketOutputStream;
-        public bool m_isRunning;
-        private List readPackets;
-        private List dataPackets;
-        private List chunkDataPackets;
-        private NetHandler netHandler;
-        public bool m_isServerTerminating;
-        private Thread writeThread;
-        private Thread readThread;
-        private bool isTerminating;
-        private string terminationReason;
-        private object[] field_20176_t;
-        private int timeSinceLastRead;
-        private int sendQueueByteLength;
-        public int chunkDataSendCounter;
-        private int field_20175_w;
     }
 }

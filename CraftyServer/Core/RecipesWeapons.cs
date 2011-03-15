@@ -4,9 +4,16 @@ namespace CraftyServer.Core
 {
     public class RecipesWeapons
     {
+        private readonly object[][] recipeItems;
+
+        private readonly string[][] recipePatterns = new[]
+                                                     {
+                                                         new[] {"X", "X", "#"}
+                                                     };
+
         public RecipesWeapons()
         {
-            recipeItems = (new object[][]
+            recipeItems = (new[]
                            {
                                new object[]
                                {
@@ -26,8 +33,8 @@ namespace CraftyServer.Core
                 object obj = recipeItems[0][i];
                 for (int j = 0; j < recipeItems.Length - 1; j++)
                 {
-                    Item item = (Item) recipeItems[j + 1][i];
-                    craftingmanager.addRecipe(new ItemStack(item), new object[]
+                    var item = (Item) recipeItems[j + 1][i];
+                    craftingmanager.addRecipe(new ItemStack(item), new[]
                                                                    {
                                                                        recipePatterns[j], Character.valueOf('#'),
                                                                        Item.stick, Character.valueOf('X'), obj
@@ -47,12 +54,5 @@ namespace CraftyServer.Core
                                                                         , Character.valueOf('#'), Item.stick
                                                                     });
         }
-
-        private string[][] recipePatterns = new string[][]
-                                            {
-                                                new string[] {"X", "X", "#"}
-                                            };
-
-        private object[][] recipeItems;
     }
 }

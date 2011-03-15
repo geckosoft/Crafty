@@ -1,6 +1,5 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockButton : Block
@@ -179,7 +178,7 @@ namespace CraftyServer.Core
             }
             world.setBlockMetadataWithNotify(i, j, k, i1 + j1);
             world.markBlocksDirty(i, j, k, i, j, k);
-            world.playSoundEffect((double) i + 0.5D, (double) j + 0.5D, (double) k + 0.5D, "random.click", 0.3F, 0.6F);
+            world.playSoundEffect(i + 0.5D, j + 0.5D, k + 0.5D, "random.click", 0.3F, 0.6F);
             world.notifyBlocksOfNeighborChange(i, j, k, blockID);
             if (i1 == 1)
             {
@@ -307,7 +306,7 @@ namespace CraftyServer.Core
             {
                 world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
             }
-            world.playSoundEffect((double) i + 0.5D, (double) j + 0.5D, (double) k + 0.5D, "random.click", 0.3F, 0.5F);
+            world.playSoundEffect(i + 0.5D, j + 0.5D, k + 0.5D, "random.click", 0.3F, 0.5F);
             world.markBlocksDirty(i, j, k, i, j, k);
         }
     }

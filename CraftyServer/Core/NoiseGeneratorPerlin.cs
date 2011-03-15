@@ -1,10 +1,14 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class NoiseGeneratorPerlin : NoiseGenerator
     {
+        private readonly int[] permutations;
+        public double xCoord;
+        public double yCoord;
+        public double zCoord;
+
         public NoiseGeneratorPerlin() : this(new Random())
         {
         }
@@ -35,18 +39,18 @@ namespace CraftyServer.Core
             double d3 = d + xCoord;
             double d4 = d1 + yCoord;
             double d5 = d2 + zCoord;
-            int i = (int) d3;
-            int j = (int) d4;
-            int k = (int) d5;
-            if (d3 < (double) i)
+            var i = (int) d3;
+            var j = (int) d4;
+            var k = (int) d5;
+            if (d3 < i)
             {
                 i--;
             }
-            if (d4 < (double) j)
+            if (d4 < j)
             {
                 j--;
             }
-            if (d5 < (double) k)
+            if (d5 < k)
             {
                 k--;
             }
@@ -84,7 +88,7 @@ namespace CraftyServer.Core
         public double func_4102_a(int i, double d, double d1)
         {
             int j = i & 0xf;
-            double d2 = (double) (1 - ((j & 8) >> 3))*d;
+            double d2 = (1 - ((j & 8) >> 3))*d;
             double d3 = j >= 4 ? j != 12 && j != 14 ? d1 : d : 0.0D;
             return ((j & 1) != 0 ? -d2 : d2) + ((j & 2) != 0 ? -d3 : d3);
         }
@@ -118,9 +122,9 @@ namespace CraftyServer.Core
                 double d12 = 1.0D/d6;
                 for (int i4 = 0; i4 < i; i4++)
                 {
-                    double d14 = (d + (double) i4)*d3 + xCoord;
-                    int j4 = (int) d14;
-                    if (d14 < (double) j4)
+                    double d14 = (d + i4)*d3 + xCoord;
+                    var j4 = (int) d14;
+                    if (d14 < j4)
                     {
                         j4--;
                     }
@@ -129,9 +133,9 @@ namespace CraftyServer.Core
                     double d17 = d14*d14*d14*(d14*(d14*6D - 15D) + 10D);
                     for (int l4 = 0; l4 < k; l4++)
                     {
-                        double d19 = (d2 + (double) l4)*d5 + zCoord;
-                        int j5 = (int) d19;
-                        if (d19 < (double) j5)
+                        double d19 = (d2 + l4)*d5 + zCoord;
+                        var j5 = (int) d19;
+                        if (d19 < j5)
                         {
                             j5--;
                         }
@@ -168,9 +172,9 @@ namespace CraftyServer.Core
             double d18 = 0.0D;
             for (int i5 = 0; i5 < i; i5++)
             {
-                double d20 = (d + (double) i5)*d3 + xCoord;
-                int k5 = (int) d20;
-                if (d20 < (double) k5)
+                double d20 = (d + i5)*d3 + xCoord;
+                var k5 = (int) d20;
+                if (d20 < k5)
                 {
                     k5--;
                 }
@@ -179,9 +183,9 @@ namespace CraftyServer.Core
                 double d22 = d20*d20*d20*(d20*(d20*6D - 15D) + 10D);
                 for (int j6 = 0; j6 < k; j6++)
                 {
-                    double d24 = (d2 + (double) j6)*d5 + zCoord;
-                    int k6 = (int) d24;
-                    if (d24 < (double) k6)
+                    double d24 = (d2 + j6)*d5 + zCoord;
+                    var k6 = (int) d24;
+                    if (d24 < k6)
                     {
                         k6--;
                     }
@@ -190,9 +194,9 @@ namespace CraftyServer.Core
                     double d25 = d24*d24*d24*(d24*(d24*6D - 15D) + 10D);
                     for (int i7 = 0; i7 < j; i7++)
                     {
-                        double d26 = (d1 + (double) i7)*d4 + yCoord;
-                        int j7 = (int) d26;
-                        if (d26 < (double) j7)
+                        double d26 = (d1 + i7)*d4 + yCoord;
+                        var j7 = (int) d26;
+                        if (d26 < j7)
                         {
                             j7--;
                         }
@@ -225,10 +229,5 @@ namespace CraftyServer.Core
                 }
             }
         }
-
-        private int[] permutations;
-        public double xCoord;
-        public double yCoord;
-        public double zCoord;
     }
 }

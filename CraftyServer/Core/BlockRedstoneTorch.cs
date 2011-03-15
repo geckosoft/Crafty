@@ -4,11 +4,22 @@ namespace CraftyServer.Core
 {
     public class BlockRedstoneTorch : BlockTorch
     {
+        private static readonly List torchUpdates = new ArrayList();
+        private readonly bool torchActive;
+
+        public BlockRedstoneTorch(int i, int j, bool flag)
+            : base(i, j)
+        {
+            torchActive = false;
+            torchActive = flag;
+            setTickOnLoad(true);
+        }
+
         public override int func_22009_a(int i, int j)
         {
             if (i == 1)
             {
-                return Block.redstoneWire.func_22009_a(i, j);
+                return redstoneWire.func_22009_a(i, j);
             }
             else
             {
@@ -25,7 +36,7 @@ namespace CraftyServer.Core
             int l = 0;
             for (int i1 = 0; i1 < torchUpdates.size(); i1++)
             {
-                RedstoneUpdateInfo redstoneupdateinfo = (RedstoneUpdateInfo) torchUpdates.get(i1);
+                var redstoneupdateinfo = (RedstoneUpdateInfo) torchUpdates.get(i1);
                 if (redstoneupdateinfo.x == i && redstoneupdateinfo.y == j && redstoneupdateinfo.z == k && ++l >= 8)
                 {
                     return true;
@@ -33,14 +44,6 @@ namespace CraftyServer.Core
             }
 
             return false;
-        }
-
-        public BlockRedstoneTorch(int i, int j, bool flag)
-            : base(i, j)
-        {
-            torchActive = false;
-            torchActive = flag;
-            setTickOnLoad(true);
         }
 
         public override int tickRate()
@@ -139,17 +142,17 @@ namespace CraftyServer.Core
             {
                 if (flag)
                 {
-                    world.setBlockAndMetadataWithNotify(i, j, k, Block.torchRedstoneIdle.blockID,
+                    world.setBlockAndMetadataWithNotify(i, j, k, torchRedstoneIdle.blockID,
                                                         world.getBlockMetadata(i, j, k));
                     if (checkForBurnout(world, i, j, k, true))
                     {
-                        world.playSoundEffect((float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F, "random.fizz", 0.5F,
+                        world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, "random.fizz", 0.5F,
                                               2.6F + (world.rand.nextFloat() - world.rand.nextFloat())*0.8F);
                         for (int l = 0; l < 5; l++)
                         {
-                            double d = (double) i + random.nextDouble()*0.59999999999999998D + 0.20000000000000001D;
-                            double d1 = (double) j + random.nextDouble()*0.59999999999999998D + 0.20000000000000001D;
-                            double d2 = (double) k + random.nextDouble()*0.59999999999999998D + 0.20000000000000001D;
+                            double d = i + random.nextDouble()*0.59999999999999998D + 0.20000000000000001D;
+                            double d1 = j + random.nextDouble()*0.59999999999999998D + 0.20000000000000001D;
+                            double d2 = k + random.nextDouble()*0.59999999999999998D + 0.20000000000000001D;
                             world.spawnParticle("smoke", d, d1, d2, 0.0D, 0.0D, 0.0D);
                         }
                     }
@@ -157,7 +160,7 @@ namespace CraftyServer.Core
             }
             else if (!flag && !checkForBurnout(world, i, j, k, false))
             {
-                world.setBlockAndMetadataWithNotify(i, j, k, Block.torchRedstoneActive.blockID,
+                world.setBlockAndMetadataWithNotify(i, j, k, torchRedstoneActive.blockID,
                                                     world.getBlockMetadata(i, j, k));
             }
         }
@@ -182,15 +185,12 @@ namespace CraftyServer.Core
 
         public override int idDropped(int i, Random random)
         {
-            return Block.torchRedstoneActive.blockID;
+            return torchRedstoneActive.blockID;
         }
 
         public override bool canProvidePower()
         {
             return true;
         }
-
-        private bool torchActive;
-        private static List torchUpdates = new ArrayList();
     }
 }

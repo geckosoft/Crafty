@@ -1,12 +1,25 @@
-using java.util;
 using java.lang;
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class TileEntity
     {
-        public TileEntity()
+        private static readonly Map nameToClassMap = new HashMap();
+        private static readonly Map classToNameMap = new HashMap();
+        public World worldObj;
+        public int xCoord;
+        public int yCoord;
+        public int zCoord;
+
+        static TileEntity()
         {
+            addMapping(typeof (TileEntityFurnace), "Furnace");
+            addMapping(typeof (TileEntityChest), "Chest");
+            addMapping(typeof (TileEntityDispenser), "Trap");
+            addMapping(typeof (TileEntitySign), "Sign");
+            addMapping(typeof (TileEntityMobSpawner), "MobSpawner");
+            addMapping(typeof (TileEntityNote), "Music");
         }
 
         private static void addMapping(Class class1, string s)
@@ -32,7 +45,7 @@ namespace CraftyServer.Core
 
         public virtual void writeToNBT(NBTTagCompound nbttagcompound)
         {
-            string s = (string) classToNameMap.get((Class) GetType());
+            var s = (string) classToNameMap.get((Class) GetType());
             if (s == null)
             {
                 throw new RuntimeException(
@@ -57,7 +70,7 @@ namespace CraftyServer.Core
             TileEntity tileentity = null;
             try
             {
-                Class class1 = (Class) nameToClassMap.get(nbttagcompound.getString("id"));
+                var class1 = (Class) nameToClassMap.get(nbttagcompound.getString("id"));
                 if (class1 != null)
                 {
                     tileentity = (TileEntity) class1.newInstance();
@@ -91,24 +104,6 @@ namespace CraftyServer.Core
         public virtual Packet getDescriptionPacket()
         {
             return null;
-        }
-
-
-        private static Map nameToClassMap = new HashMap();
-        private static Map classToNameMap = new HashMap();
-        public World worldObj;
-        public int xCoord;
-        public int yCoord;
-        public int zCoord;
-
-        static TileEntity()
-        {
-            addMapping(typeof (TileEntityFurnace), "Furnace");
-            addMapping(typeof (TileEntityChest), "Chest");
-            addMapping(typeof (TileEntityDispenser), "Trap");
-            addMapping(typeof (TileEntitySign), "Sign");
-            addMapping(typeof (TileEntityMobSpawner), "MobSpawner");
-            addMapping(typeof (TileEntityNote), "Music");
         }
     }
 }

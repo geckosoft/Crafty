@@ -4,9 +4,9 @@ namespace CraftyServer.Core
 {
     public class Packet7 : Packet
     {
-        public Packet7()
-        {
-        }
+        public int isLeftClick;
+        public int playerEntityId;
+        public int targetEntity;
 
         public override void readPacketData(DataInputStream datainputstream)
         {
@@ -31,9 +31,5 @@ namespace CraftyServer.Core
         {
             return 9;
         }
-
-        public int playerEntityId;
-        public int targetEntity;
-        public int isLeftClick;
     }
 }

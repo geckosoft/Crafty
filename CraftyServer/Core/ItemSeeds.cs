@@ -2,6 +2,8 @@ namespace CraftyServer.Core
 {
     public class ItemSeeds : Item
     {
+        private readonly int field_271_a;
+
         public ItemSeeds(int i, int j) : base(i)
         {
             field_271_a = j;
@@ -26,7 +28,5 @@ namespace CraftyServer.Core
                 return false;
             }
         }
-
-        private int field_271_a;
     }
 }

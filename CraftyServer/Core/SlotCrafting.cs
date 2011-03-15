@@ -2,6 +2,8 @@ namespace CraftyServer.Core
 {
     public class SlotCrafting : Slot
     {
+        private readonly IInventory craftMatrix;
+
         public SlotCrafting(IInventory iinventory, IInventory iinventory1, int i, int j, int k)
             : base(iinventory1, i, j, k)
         {
@@ -29,7 +31,5 @@ namespace CraftyServer.Core
                 }
             }
         }
-
-        private IInventory craftMatrix;
     }
 }

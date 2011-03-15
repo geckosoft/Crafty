@@ -1,11 +1,13 @@
 using java.io;
-using java.util;
 using java.lang;
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class NBTTagCompound : NBTBase
     {
+        private readonly Map tagMap;
+
         public NBTTagCompound()
         {
             tagMap = new HashMap();
@@ -16,7 +18,7 @@ namespace CraftyServer.Core
             NBTBase nbtbase;
             for (Iterator iterator = tagMap.values().iterator();
                  iterator.hasNext();
-                 NBTBase.writeTag(nbtbase, dataoutput))
+                 writeTag(nbtbase, dataoutput))
             {
                 nbtbase = (NBTBase) iterator.next();
             }
@@ -28,7 +30,7 @@ namespace CraftyServer.Core
         {
             tagMap.clear();
             NBTBase nbtbase;
-            for (; (nbtbase = NBTBase.readTag(datainput)).getType() != 0; tagMap.put(nbtbase.getKey(), nbtbase))
+            for (; (nbtbase = readTag(datainput)).getType() != 0; tagMap.put(nbtbase.getKey(), nbtbase))
             {
             }
         }
@@ -227,7 +229,5 @@ namespace CraftyServer.Core
         {
             return (new StringBuilder()).append("").append(tagMap.size()).append(" entries").toString();
         }
-
-        private Map tagMap;
     }
 }

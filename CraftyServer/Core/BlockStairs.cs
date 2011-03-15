@@ -1,10 +1,11 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockStairs : Block
     {
+        private readonly Block modelBlock;
+
         public BlockStairs(int i, Block block)
             : base(i, block.blockIndexInTexture, block.blockMaterial)
         {
@@ -172,7 +173,7 @@ namespace CraftyServer.Core
 
         public override void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving)
         {
-            int l = MathHelper.floor_double((double) ((entityliving.rotationYaw*4F)/360F) + 0.5D) & 3;
+            int l = MathHelper.floor_double(((entityliving.rotationYaw*4F)/360F) + 0.5D) & 3;
             if (l == 0)
             {
                 world.setBlockMetadataWithNotify(i, j, k, 2);
@@ -190,7 +191,5 @@ namespace CraftyServer.Core
                 world.setBlockMetadataWithNotify(i, j, k, 0);
             }
         }
-
-        private Block modelBlock;
     }
 }

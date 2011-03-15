@@ -4,6 +4,9 @@ namespace CraftyServer.Core
 {
     public class Packet18ArmAnimation : Packet
     {
+        public int animate;
+        public int entityId;
+
         public Packet18ArmAnimation()
         {
         }
@@ -35,8 +38,5 @@ namespace CraftyServer.Core
         {
             return 5;
         }
-
-        public int entityId;
-        public int animate;
     }
 }

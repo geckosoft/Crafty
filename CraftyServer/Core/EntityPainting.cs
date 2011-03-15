@@ -4,6 +4,13 @@ namespace CraftyServer.Core
 {
     public class EntityPainting : Entity
     {
+        public EnumArt art;
+        public int direction;
+        private int field_452_ad;
+        public int xPosition;
+        public int yPosition;
+        public int zPosition;
+
         public EntityPainting(World world) : base(world)
         {
             field_452_ad = 0;
@@ -17,7 +24,7 @@ namespace CraftyServer.Core
             xPosition = i;
             yPosition = j;
             zPosition = k;
-            ArrayList arraylist = new ArrayList();
+            var arraylist = new ArrayList();
             EnumArt[] aenumart = EnumArt.values();
             int i1 = aenumart.Length;
             for (int j1 = 0; j1 < i1; j1++)
@@ -60,9 +67,9 @@ namespace CraftyServer.Core
             f /= 32F;
             f1 /= 32F;
             f2 /= 32F;
-            float f3 = (float) xPosition + 0.5F;
-            float f4 = (float) yPosition + 0.5F;
-            float f5 = (float) zPosition + 0.5F;
+            float f3 = xPosition + 0.5F;
+            float f4 = yPosition + 0.5F;
+            float f5 = zPosition + 0.5F;
             float f6 = 0.5625F;
             if (i == 0)
             {
@@ -137,21 +144,21 @@ namespace CraftyServer.Core
             int i1 = zPosition;
             if (direction == 0)
             {
-                k = MathHelper.floor_double(posX - (double) ((float) art.sizeX/32F));
+                k = MathHelper.floor_double(posX - (art.sizeX/32F));
             }
             if (direction == 1)
             {
-                i1 = MathHelper.floor_double(posZ - (double) ((float) art.sizeX/32F));
+                i1 = MathHelper.floor_double(posZ - (art.sizeX/32F));
             }
             if (direction == 2)
             {
-                k = MathHelper.floor_double(posX - (double) ((float) art.sizeX/32F));
+                k = MathHelper.floor_double(posX - (art.sizeX/32F));
             }
             if (direction == 3)
             {
-                i1 = MathHelper.floor_double(posZ - (double) ((float) art.sizeX/32F));
+                i1 = MathHelper.floor_double(posZ - (art.sizeX/32F));
             }
-            l = MathHelper.floor_double(posY - (double) ((float) art.sizeY/32F));
+            l = MathHelper.floor_double(posY - (art.sizeY/32F));
             for (int j1 = 0; j1 < i; j1++)
             {
                 for (int k1 = 0; k1 < j; k1++)
@@ -233,12 +240,5 @@ namespace CraftyServer.Core
             }
             func_179_a(direction);
         }
-
-        private int field_452_ad;
-        public int direction;
-        public int xPosition;
-        public int yPosition;
-        public int zPosition;
-        public EnumArt art;
     }
 }

@@ -1,10 +1,11 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockPressurePlate : Block
     {
+        private readonly EnumMobType triggerMobType;
+
         public BlockPressurePlate(int i, int j, EnumMobType enummobtype)
             : base(i, j, Material.rock)
         {
@@ -95,30 +96,30 @@ namespace CraftyServer.Core
             if (triggerMobType == EnumMobType.everything)
             {
                 list = world.getEntitiesWithinAABBExcludingEntity(null,
-                                                                  AxisAlignedBB.getBoundingBoxFromPool((float) i + f, j,
-                                                                                                       (float) k + f,
-                                                                                                       (float) (i + 1) -
+                                                                  AxisAlignedBB.getBoundingBoxFromPool(i + f, j,
+                                                                                                       k + f,
+                                                                                                       (i + 1) -
                                                                                                        f,
-                                                                                                       (double) j +
+                                                                                                       j +
                                                                                                        0.25D,
-                                                                                                       (float) (k + 1) -
+                                                                                                       (k + 1) -
                                                                                                        f));
             }
             if (triggerMobType == EnumMobType.mobs)
             {
                 list = world.getEntitiesWithinAABB(typeof (EntityLiving),
-                                                   AxisAlignedBB.getBoundingBoxFromPool((float) i + f, j, (float) k + f,
-                                                                                        (float) (i + 1) - f,
-                                                                                        (double) j + 0.25D,
-                                                                                        (float) (k + 1) - f));
+                                                   AxisAlignedBB.getBoundingBoxFromPool(i + f, j, k + f,
+                                                                                        (i + 1) - f,
+                                                                                        j + 0.25D,
+                                                                                        (k + 1) - f));
             }
             if (triggerMobType == EnumMobType.players)
             {
                 list = world.getEntitiesWithinAABB(typeof (EntityPlayer),
-                                                   AxisAlignedBB.getBoundingBoxFromPool((float) i + f, j, (float) k + f,
-                                                                                        (float) (i + 1) - f,
-                                                                                        (double) j + 0.25D,
-                                                                                        (float) (k + 1) - f));
+                                                   AxisAlignedBB.getBoundingBoxFromPool(i + f, j, k + f,
+                                                                                        (i + 1) - f,
+                                                                                        j + 0.25D,
+                                                                                        (k + 1) - f));
             }
             if (list.size() > 0)
             {
@@ -130,7 +131,7 @@ namespace CraftyServer.Core
                 world.notifyBlocksOfNeighborChange(i, j, k, blockID);
                 world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
                 world.markBlocksDirty(i, j, k, i, j, k);
-                world.playSoundEffect((double) i + 0.5D, (double) j + 0.10000000000000001D, (double) k + 0.5D,
+                world.playSoundEffect(i + 0.5D, j + 0.10000000000000001D, k + 0.5D,
                                       "random.click", 0.3F, 0.6F);
             }
             if (!flag1 && flag)
@@ -139,7 +140,7 @@ namespace CraftyServer.Core
                 world.notifyBlocksOfNeighborChange(i, j, k, blockID);
                 world.notifyBlocksOfNeighborChange(i, j - 1, k, blockID);
                 world.markBlocksDirty(i, j, k, i, j, k);
-                world.playSoundEffect((double) i + 0.5D, (double) j + 0.10000000000000001D, (double) k + 0.5D,
+                world.playSoundEffect(i + 0.5D, j + 0.10000000000000001D, k + 0.5D,
                                       "random.click", 0.3F, 0.5F);
             }
             if (flag1)
@@ -194,7 +195,5 @@ namespace CraftyServer.Core
         {
             return true;
         }
-
-        private EnumMobType triggerMobType;
     }
 }

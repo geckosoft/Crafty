@@ -16,7 +16,7 @@ namespace CraftyServer.Core
             if (!material.isSolid() && i1 == Block.grass.blockID || i1 == Block.dirt.blockID)
             {
                 Block block = Block.tilledField;
-                world.playSoundEffect((float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F, block.stepSound.func_737_c(),
+                world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, block.stepSound.func_737_c(),
                                       (block.stepSound.func_738_a() + 1.0F)/2.0F, block.stepSound.func_739_b()*0.8F);
                 if (world.singleplayerWorld)
                 {
@@ -33,8 +33,8 @@ namespace CraftyServer.Core
                         float f1 = world.rand.nextFloat()*f + (1.0F - f)*0.5F;
                         float f2 = 1.2F;
                         float f3 = world.rand.nextFloat()*f + (1.0F - f)*0.5F;
-                        EntityItem entityitem = new EntityItem(world, (float) i + f1, (float) j + f2, (float) k + f3,
-                                                               new ItemStack(Item.seeds));
+                        var entityitem = new EntityItem(world, i + f1, j + f2, k + f3,
+                                                        new ItemStack(seeds));
                         entityitem.delayBeforeCanPickup = 10;
                         world.entityJoinedWorld(entityitem);
                     }

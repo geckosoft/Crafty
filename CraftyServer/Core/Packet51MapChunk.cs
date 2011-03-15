@@ -5,6 +5,15 @@ namespace CraftyServer.Core
 {
     public class Packet51MapChunk : Packet
     {
+        public byte[] chunk;
+        private int chunkSize;
+        public int xPosition;
+        public int xSize;
+        public int yPosition;
+        public int ySize;
+        public int zPosition;
+        public int zSize;
+
         public Packet51MapChunk()
         {
             isChunkDataPacket = true;
@@ -20,7 +29,7 @@ namespace CraftyServer.Core
             ySize = i1;
             zSize = j1;
             byte[] abyte0 = world.getChunkData(i, j, k, l, i1, j1);
-            Deflater deflater = new Deflater(1);
+            var deflater = new Deflater(1);
             try
             {
                 deflater.setInput(abyte0);
@@ -43,10 +52,10 @@ namespace CraftyServer.Core
             ySize = datainputstream.read() + 1;
             zSize = datainputstream.read() + 1;
             chunkSize = datainputstream.readInt();
-            byte[] abyte0 = new byte[chunkSize];
+            var abyte0 = new byte[chunkSize];
             datainputstream.readFully(abyte0);
             chunk = new byte[(xSize*ySize*zSize*5)/2];
-            Inflater inflater = new Inflater();
+            var inflater = new Inflater();
             inflater.setInput(abyte0);
             try
             {
@@ -83,14 +92,5 @@ namespace CraftyServer.Core
         {
             return 17 + chunkSize;
         }
-
-        public int xPosition;
-        public int yPosition;
-        public int zPosition;
-        public int xSize;
-        public int ySize;
-        public int zSize;
-        public byte[] chunk;
-        private int chunkSize;
     }
 }

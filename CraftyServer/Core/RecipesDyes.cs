@@ -2,10 +2,6 @@ namespace CraftyServer.Core
 {
     public class RecipesDyes
     {
-        public RecipesDyes()
-        {
-        }
-
         public void addRecipes(CraftingManager craftingmanager)
         {
             for (int i = 0; i < 16; i++)

@@ -2,6 +2,8 @@ namespace CraftyServer.Core
 {
     public class ItemSword : Item
     {
+        private readonly int weaponDamage;
+
         public ItemSword(int i, EnumToolMaterial enumtoolmaterial)
             : base(i)
         {
@@ -29,7 +31,5 @@ namespace CraftyServer.Core
         {
             return weaponDamage;
         }
-
-        private int weaponDamage;
     }
 }

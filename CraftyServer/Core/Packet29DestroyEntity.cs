@@ -4,6 +4,8 @@ namespace CraftyServer.Core
 {
     public class Packet29DestroyEntity : Packet
     {
+        public int entityId;
+
         public Packet29DestroyEntity()
         {
         }
@@ -32,7 +34,5 @@ namespace CraftyServer.Core
         {
             return 4;
         }
-
-        public int entityId;
     }
 }

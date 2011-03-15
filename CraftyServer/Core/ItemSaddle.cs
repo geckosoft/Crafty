@@ -13,7 +13,7 @@ namespace CraftyServer.Core
         {
             if (entityliving is EntityPig)
             {
-                EntityPig entitypig = (EntityPig) entityliving;
+                var entitypig = (EntityPig) entityliving;
                 if (!entitypig.func_21065_K())
                 {
                     entitypig.func_21064_a(true);

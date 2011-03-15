@@ -1,6 +1,5 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockOre : Block
@@ -12,15 +11,15 @@ namespace CraftyServer.Core
 
         public override int idDropped(int i, Random random)
         {
-            if (blockID == Block.oreCoal.blockID)
+            if (blockID == oreCoal.blockID)
             {
                 return Item.coal.shiftedIndex;
             }
-            if (blockID == Block.oreDiamond.blockID)
+            if (blockID == oreDiamond.blockID)
             {
                 return Item.diamond.shiftedIndex;
             }
-            if (blockID == Block.oreLapis.blockID)
+            if (blockID == oreLapis.blockID)
             {
                 return Item.dyePowder.shiftedIndex;
             }
@@ -32,7 +31,7 @@ namespace CraftyServer.Core
 
         public override int quantityDropped(Random random)
         {
-            if (blockID == Block.oreLapis.blockID)
+            if (blockID == oreLapis.blockID)
             {
                 return 4 + random.nextInt(5);
             }
@@ -44,7 +43,7 @@ namespace CraftyServer.Core
 
         protected override int damageDropped(int i)
         {
-            return blockID != Block.oreLapis.blockID ? 0 : 4;
+            return blockID != oreLapis.blockID ? 0 : 4;
         }
     }
 }

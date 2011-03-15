@@ -5,6 +5,11 @@ namespace CraftyServer.Core
 {
     public class GuiLogOutputHandler : Handler
     {
+        private readonly JTextArea field_1000_d;
+        private readonly int[] field_998_b;
+        private readonly Formatter field_999_a;
+        private int field_1001_c;
+
         public GuiLogOutputHandler(JTextArea jtextarea)
         {
             field_998_b = new int[1024];
@@ -35,10 +40,5 @@ namespace CraftyServer.Core
             field_998_b[field_1001_c] = j;
             field_1001_c = (field_1001_c + 1)%1024;
         }
-
-        private int[] field_998_b;
-        private int field_1001_c;
-        private Formatter field_999_a;
-        private JTextArea field_1000_d;
     }
 }

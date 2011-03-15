@@ -2,6 +2,9 @@ namespace CraftyServer.Core
 {
     public class SlotArmor : Slot
     {
+        private readonly int field_20102_a; /* synthetic field */
+        private CraftingInventoryPlayerCB field_20101_b; /* synthetic field */
+
         public SlotArmor(CraftingInventoryPlayerCB craftinginventoryplayercb, IInventory iinventory, int i, int j, int k,
                          int l)
             : base(iinventory, i, j, k)
@@ -30,8 +33,5 @@ namespace CraftyServer.Core
                 return false;
             }
         }
-
-        private int field_20102_a; /* synthetic field */
-        private CraftingInventoryPlayerCB field_20101_b; /* synthetic field */
     }
 }

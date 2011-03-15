@@ -1,10 +1,29 @@
-using java.util;
 using java.lang;
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class AxisAlignedBB
     {
+        private static readonly List boundingBoxes = new ArrayList();
+        private static int numBoundingBoxesInUse;
+        public double maxX;
+        public double maxY;
+        public double maxZ;
+        public double minX;
+        public double minY;
+        public double minZ;
+
+        private AxisAlignedBB(double d, double d1, double d2, double d3, double d4, double d5)
+        {
+            minX = d;
+            minY = d1;
+            minZ = d2;
+            maxX = d3;
+            maxY = d4;
+            maxZ = d5;
+        }
+
         public static AxisAlignedBB getBoundingBox(double d, double d1, double d2, double d3,
                                                    double d4, double d5)
         {
@@ -24,16 +43,6 @@ namespace CraftyServer.Core
                 boundingBoxes.add(getBoundingBox(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D));
             }
             return ((AxisAlignedBB) boundingBoxes.get(numBoundingBoxesInUse++)).setBounds(d, d1, d2, d3, d4, d5);
-        }
-
-        private AxisAlignedBB(double d, double d1, double d2, double d3, double d4, double d5)
-        {
-            minX = d;
-            minY = d1;
-            minZ = d2;
-            maxX = d3;
-            maxY = d4;
-            maxZ = d5;
         }
 
         public AxisAlignedBB setBounds(double d, double d1, double d2, double d3, double d4, double d5)
@@ -391,14 +400,5 @@ namespace CraftyServer.Core
                     append(" -> ").append(maxX).append(", ").append(maxY).append(", ").append(maxZ).append("]").toString
                     ();
         }
-
-        private static List boundingBoxes = new ArrayList();
-        private static int numBoundingBoxesInUse = 0;
-        public double minX;
-        public double minY;
-        public double minZ;
-        public double maxX;
-        public double maxY;
-        public double maxZ;
     }
 }

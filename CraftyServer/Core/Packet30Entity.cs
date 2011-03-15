@@ -4,6 +4,14 @@ namespace CraftyServer.Core
 {
     public class Packet30Entity : Packet
     {
+        public int entityId;
+        public byte pitch;
+        public bool rotating;
+        public byte xPosition;
+        public byte yPosition;
+        public byte yaw;
+        public byte zPosition;
+
         public Packet30Entity()
         {
             rotating = false;
@@ -34,13 +42,5 @@ namespace CraftyServer.Core
         {
             return 4;
         }
-
-        public int entityId;
-        public byte xPosition;
-        public byte yPosition;
-        public byte zPosition;
-        public byte yaw;
-        public byte pitch;
-        public bool rotating;
     }
 }

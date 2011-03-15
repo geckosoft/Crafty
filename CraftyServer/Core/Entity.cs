@@ -1,11 +1,72 @@
-using java.util;
 using java.lang;
-
+using java.util;
 
 namespace CraftyServer.Core
 {
-    public abstract class Entity : java.lang.Object
+    public abstract class Entity : Object
     {
+        private static int nextEntityID;
+        public bool addedToChunk;
+        public int air;
+        public bool beenAttacked;
+        public AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+        public int chunkCoordX;
+        public int chunkCoordY;
+        public int chunkCoordZ;
+        protected DataWatcher dataWatcher;
+        public float distanceWalkedModified;
+        public float entityCollisionReduction;
+        public int entityId;
+        private double entityRiderPitchDelta;
+        private double entityRiderYawDelta;
+        protected bool entityWalks;
+        protected float fallDistance;
+        private bool field_4131_c;
+        public bool field_9065_V;
+        public bool field_9077_F;
+        public int field_9083_ac;
+        public int fire;
+        public int fireResistance;
+        public float height;
+        protected bool inWater;
+        public bool isCollided;
+        public bool isCollidedHorizontally;
+        public bool isCollidedVertically;
+        public bool isDead;
+        protected bool isImmuneToFire;
+        public double lastTickPosX;
+        public double lastTickPosY;
+        public double lastTickPosZ;
+        protected int maxAir;
+        public double motionX;
+        public double motionY;
+        public double motionZ;
+        private int nextStepDistance;
+        public bool noClip;
+        public bool onGround;
+        public double posX;
+        public double posY;
+        public double posZ;
+        public float prevDistanceWalkedModified;
+        public double prevPosX;
+        public double prevPosY;
+        public double prevPosZ;
+        public float prevRotationPitch;
+        public float prevRotationYaw;
+        public bool preventEntitySpawning;
+        protected Random rand;
+        public double renderDistanceWeight;
+        public Entity riddenByEntity;
+        public Entity ridingEntity;
+        public float rotationPitch;
+        public float rotationYaw;
+        public float stepHeight;
+        public int ticksExisted;
+        public float width;
+        public World worldObj;
+        public float yOffset;
+        public float ySize;
+
         public Entity(World world)
         {
             entityId = nextEntityID++;
@@ -43,7 +104,7 @@ namespace CraftyServer.Core
             addedToChunk = false;
             worldObj = world;
             setPosition(0.0D, 0.0D, 0.0D);
-            dataWatcher.addObject(0, Byte.valueOf((byte) 0));
+            dataWatcher.addObject(0, Byte.valueOf(0));
             entityInit();
         }
 
@@ -95,9 +156,9 @@ namespace CraftyServer.Core
             posZ = d2;
             float f = width/2.0F;
             float f1 = height;
-            boundingBox.setBounds(d - (double) f, (d1 - (double) yOffset) + (double) ySize, d2 - (double) f,
-                                  d + (double) f, (d1 - (double) yOffset) + (double) ySize + (double) f1,
-                                  d2 + (double) f);
+            boundingBox.setBounds(d - f, (d1 - yOffset) + ySize, d2 - f,
+                                  d + f, (d1 - yOffset) + ySize + f1,
+                                  d2 + f);
         }
 
         public virtual void onUpdate()
@@ -132,19 +193,19 @@ namespace CraftyServer.Core
                     worldObj.playSoundAtEntity(this, "random.splash", f,
                                                1.0F + (rand.nextFloat() - rand.nextFloat())*0.4F);
                     float f1 = MathHelper.floor_double(boundingBox.minY);
-                    for (int i = 0; (float) i < 1.0F + width*20F; i++)
+                    for (int i = 0; i < 1.0F + width*20F; i++)
                     {
                         float f2 = (rand.nextFloat()*2.0F - 1.0F)*width;
                         float f4 = (rand.nextFloat()*2.0F - 1.0F)*width;
-                        worldObj.spawnParticle("bubble", posX + (double) f2, f1 + 1.0F, posZ + (double) f4, motionX,
-                                               motionY - (double) (rand.nextFloat()*0.2F), motionZ);
+                        worldObj.spawnParticle("bubble", posX + f2, f1 + 1.0F, posZ + f4, motionX,
+                                               motionY - (rand.nextFloat()*0.2F), motionZ);
                     }
 
-                    for (int j = 0; (float) j < 1.0F + width*20F; j++)
+                    for (int j = 0; j < 1.0F + width*20F; j++)
                     {
                         float f3 = (rand.nextFloat()*2.0F - 1.0F)*width;
                         float f5 = (rand.nextFloat()*2.0F - 1.0F)*width;
-                        worldObj.spawnParticle("splash", posX + (double) f3, f1 + 1.0F, posZ + (double) f5, motionX,
+                        worldObj.spawnParticle("splash", posX + f3, f1 + 1.0F, posZ + f5, motionX,
                                                motionY, motionZ);
                     }
                 }
@@ -226,7 +287,7 @@ namespace CraftyServer.Core
             {
                 boundingBox.offset(d, d1, d2);
                 posX = (boundingBox.minX + boundingBox.maxX)/2D;
-                posY = (boundingBox.minY + (double) yOffset) - (double) ySize;
+                posY = (boundingBox.minY + yOffset) - ySize;
                 posZ = (boundingBox.minZ + boundingBox.maxZ)/2D;
                 return;
             }
@@ -367,7 +428,7 @@ namespace CraftyServer.Core
                 }
             }
             posX = (boundingBox.minX + boundingBox.maxX)/2D;
-            posY = (boundingBox.minY + (double) yOffset) - (double) ySize;
+            posY = (boundingBox.minY + yOffset) - ySize;
             posZ = (boundingBox.minZ + boundingBox.maxZ)/2D;
             isCollidedHorizontally = d5 != d || d7 != d2;
             isCollidedVertically = d6 != d1;
@@ -391,12 +452,12 @@ namespace CraftyServer.Core
             if (entityWalks && !flag)
             {
                 distanceWalkedModified +=
-                    (float) ((double) MathHelper.sqrt_double(d10*d10 + d12*d12)*0.59999999999999998D);
+                    (float) (MathHelper.sqrt_double(d10*d10 + d12*d12)*0.59999999999999998D);
                 int l = MathHelper.floor_double(posX);
-                int j1 = MathHelper.floor_double(posY - 0.20000000298023224D - (double) yOffset);
+                int j1 = MathHelper.floor_double(posY - 0.20000000298023224D - yOffset);
                 int l1 = MathHelper.floor_double(posZ);
                 int i3 = worldObj.getBlockId(l, j1, l1);
-                if (distanceWalkedModified > (float) nextStepDistance && i3 > 0)
+                if (distanceWalkedModified > nextStepDistance && i3 > 0)
                 {
                     nextStepDistance++;
                     StepSound stepsound = Block.blocksList[i3].stepSound;
@@ -503,7 +564,7 @@ namespace CraftyServer.Core
 
         public virtual bool isInsideOfMaterial(Material material)
         {
-            double d = posY + (double) getEyeHeight();
+            double d = posY + getEyeHeight();
             int i = MathHelper.floor_double(posX);
             int j = MathHelper.floor_float(MathHelper.floor_double(d));
             int k = MathHelper.floor_double(posZ);
@@ -511,8 +572,8 @@ namespace CraftyServer.Core
             if (l != 0 && Block.blocksList[l].blockMaterial == material)
             {
                 float f = BlockFluids.setFluidHeight(worldObj.getBlockMetadata(i, j, k)) - 0.1111111F;
-                float f1 = (float) (j + 1) - f;
-                return d < (double) f1;
+                float f1 = (j + 1) - f;
+                return d < f1;
             }
             else
             {
@@ -557,7 +618,7 @@ namespace CraftyServer.Core
         {
             int i = MathHelper.floor_double(posX);
             double d = (boundingBox.maxY - boundingBox.minY)*0.66000000000000003D;
-            int j = MathHelper.floor_double((posY - (double) yOffset) + d);
+            int j = MathHelper.floor_double((posY - yOffset) + d);
             int k = MathHelper.floor_double(posZ);
             if (worldObj.checkChunksExist(MathHelper.floor_double(boundingBox.minX),
                                           MathHelper.floor_double(boundingBox.minY),
@@ -600,7 +661,7 @@ namespace CraftyServer.Core
                                          float f1)
         {
             lastTickPosX = prevPosX = posX = d;
-            lastTickPosY = prevPosY = posY = d1 + (double) yOffset;
+            lastTickPosY = prevPosY = posY = d1 + yOffset;
             lastTickPosZ = prevPosZ = posZ = d2;
             rotationYaw = f;
             rotationPitch = f1;
@@ -609,9 +670,9 @@ namespace CraftyServer.Core
 
         public float getDistanceToEntity(Entity entity)
         {
-            float f = (float) (posX - entity.posX);
-            float f1 = (float) (posY - entity.posY);
-            float f2 = (float) (posZ - entity.posZ);
+            var f = (float) (posX - entity.posX);
+            var f1 = (float) (posY - entity.posY);
+            var f2 = (float) (posZ - entity.posZ);
             return MathHelper.sqrt_float(f*f + f1*f1 + f2*f2);
         }
 
@@ -628,7 +689,7 @@ namespace CraftyServer.Core
             double d3 = posX - d;
             double d4 = posY - d1;
             double d5 = posZ - d2;
-            return (double) MathHelper.sqrt_double(d3*d3 + d4*d4 + d5*d5);
+            return MathHelper.sqrt_double(d3*d3 + d4*d4 + d5*d5);
         }
 
         public double getDistanceSqToEntity(Entity entity)
@@ -722,15 +783,15 @@ namespace CraftyServer.Core
 
         public virtual void writeToNBT(NBTTagCompound nbttagcompound)
         {
-            nbttagcompound.setTag("Pos", newDoubleNBTList(new double[]
+            nbttagcompound.setTag("Pos", newDoubleNBTList(new[]
                                                           {
                                                               posX, posY, posZ
                                                           }));
-            nbttagcompound.setTag("Motion", newDoubleNBTList(new double[]
+            nbttagcompound.setTag("Motion", newDoubleNBTList(new[]
                                                              {
                                                                  motionX, motionY, motionZ
                                                              }));
-            nbttagcompound.setTag("Rotation", newFloatNBTList(new float[]
+            nbttagcompound.setTag("Rotation", newFloatNBTList(new[]
                                                               {
                                                                   rotationYaw, rotationPitch
                                                               }));
@@ -786,7 +847,7 @@ namespace CraftyServer.Core
 
         protected NBTTagList newDoubleNBTList(double[] ad)
         {
-            NBTTagList nbttaglist = new NBTTagList();
+            var nbttaglist = new NBTTagList();
             double[] ad1 = ad;
             int i = ad1.Length;
             for (int j = 0; j < i; j++)
@@ -800,7 +861,7 @@ namespace CraftyServer.Core
 
         protected NBTTagList newFloatNBTList(float[] af)
         {
-            NBTTagList nbttaglist = new NBTTagList();
+            var nbttaglist = new NBTTagList();
             float[] af1 = af;
             int i = af1.Length;
             for (int j = 0; j < i; j++)
@@ -824,7 +885,7 @@ namespace CraftyServer.Core
 
         public virtual EntityItem entityDropItem(ItemStack itemstack, float f)
         {
-            EntityItem entityitem = new EntityItem(worldObj, posX, posY + (double) f, posZ, itemstack);
+            var entityitem = new EntityItem(worldObj, posX, posY + f, posZ, itemstack);
             entityitem.delayBeforeCanPickup = 10;
             worldObj.entityJoinedWorld(entityitem);
             return entityitem;
@@ -838,7 +899,7 @@ namespace CraftyServer.Core
         public virtual bool func_91_u()
         {
             int i = MathHelper.floor_double(posX);
-            int j = MathHelper.floor_double(posY + (double) getEyeHeight());
+            int j = MathHelper.floor_double(posY + getEyeHeight());
             int k = MathHelper.floor_double(posZ);
             return worldObj.isBlockOpaqueCube(i, j, k);
         }
@@ -882,19 +943,19 @@ namespace CraftyServer.Core
             double d = entityRiderYawDelta*0.5D;
             double d1 = entityRiderPitchDelta*0.5D;
             float f = 10F;
-            if (d > (double) f)
+            if (d > f)
             {
                 d = f;
             }
-            if (d < (double) (-f))
+            if (d < (-f))
             {
                 d = -f;
             }
-            if (d1 > (double) f)
+            if (d1 > f)
             {
                 d1 = f;
             }
-            if (d1 < (double) (-f))
+            if (d1 < (-f))
             {
                 d1 = -f;
             }
@@ -911,12 +972,12 @@ namespace CraftyServer.Core
 
         public virtual double getYOffset()
         {
-            return (double) yOffset;
+            return yOffset;
         }
 
         public virtual double getMountedYOffset()
         {
-            return (double) height*0.75D;
+            return height*0.75D;
         }
 
         public virtual void mountEntity(Entity entity)
@@ -927,7 +988,7 @@ namespace CraftyServer.Core
             {
                 if (ridingEntity != null)
                 {
-                    setLocationAndAngles(ridingEntity.posX, ridingEntity.boundingBox.minY + (double) ridingEntity.height,
+                    setLocationAndAngles(ridingEntity.posX, ridingEntity.boundingBox.minY + ridingEntity.height,
                                          ridingEntity.posZ, rotationYaw, rotationPitch);
                     ridingEntity.riddenByEntity = null;
                 }
@@ -938,7 +999,7 @@ namespace CraftyServer.Core
             {
                 ridingEntity.riddenByEntity = null;
                 ridingEntity = null;
-                setLocationAndAngles(entity.posX, entity.boundingBox.minY + (double) entity.height, entity.posZ,
+                setLocationAndAngles(entity.posX, entity.boundingBox.minY + entity.height, entity.posZ,
                                      rotationYaw, rotationPitch);
                 return;
             }
@@ -995,67 +1056,5 @@ namespace CraftyServer.Core
                 dataWatcher.updateObject(0, Byte.valueOf((byte) (byte0 & ~(1 << i))));
             }
         }
-
-        private static int nextEntityID = 0;
-        public int entityId;
-        public double renderDistanceWeight;
-        public bool preventEntitySpawning;
-        public Entity riddenByEntity;
-        public Entity ridingEntity;
-        public World worldObj;
-        public double prevPosX;
-        public double prevPosY;
-        public double prevPosZ;
-        public double posX;
-        public double posY;
-        public double posZ;
-        public double motionX;
-        public double motionY;
-        public double motionZ;
-        public float rotationYaw;
-        public float rotationPitch;
-        public float prevRotationYaw;
-        public float prevRotationPitch;
-        public AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-        public bool onGround;
-        public bool isCollidedHorizontally;
-        public bool isCollidedVertically;
-        public bool isCollided;
-        public bool beenAttacked;
-        public bool field_9077_F;
-        public bool isDead;
-        public float yOffset;
-        public float width;
-        public float height;
-        public float prevDistanceWalkedModified;
-        public float distanceWalkedModified;
-        protected bool entityWalks;
-        protected float fallDistance;
-        private int nextStepDistance;
-        public double lastTickPosX;
-        public double lastTickPosY;
-        public double lastTickPosZ;
-        public float ySize;
-        public float stepHeight;
-        public bool noClip;
-        public float entityCollisionReduction;
-        public bool field_9065_V;
-        protected Random rand;
-        public int ticksExisted;
-        public int fireResistance;
-        public int fire;
-        protected int maxAir;
-        protected bool inWater;
-        public int field_9083_ac;
-        public int air;
-        private bool field_4131_c;
-        protected bool isImmuneToFire;
-        protected DataWatcher dataWatcher;
-        private double entityRiderPitchDelta;
-        private double entityRiderYawDelta;
-        public bool addedToChunk;
-        public int chunkCoordX;
-        public int chunkCoordY;
-        public int chunkCoordZ;
     }
 }

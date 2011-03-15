@@ -14,8 +14,8 @@ namespace CraftyServer.Core
                 return false;
             }
             j++;
-            BlockBed blockbed = (BlockBed) Block.bed;
-            int i1 = MathHelper.floor_double((double) ((entityplayer.rotationYaw*4F)/360F) + 0.5D) & 3;
+            var blockbed = (BlockBed) Block.bed;
+            int i1 = MathHelper.floor_double(((entityplayer.rotationYaw*4F)/360F) + 0.5D) & 3;
             sbyte byte0 = 0;
             sbyte byte1 = 0;
             if (i1 == 0)

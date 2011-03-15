@@ -2,20 +2,6 @@ namespace CraftyServer.Core
 {
     public class EnumArt
     {
-        public static EnumArt[] values()
-        {
-            return (EnumArt[]) field_863_D.Clone();
-        }
-
-        private EnumArt(string s, int i, string s1, int j, int k, int l, int i1)
-        {
-            title = s1;
-            sizeX = j;
-            sizeY = k;
-            offsetX = l;
-            offsetY = i1;
-        }
-
         public static EnumArt Kebab;
         public static EnumArt Aztec;
         public static EnumArt Alban;
@@ -41,13 +27,13 @@ namespace CraftyServer.Core
         public static EnumArt BurningSkull;
         public static EnumArt Skeleton;
         public static EnumArt DonkeyKong;
+        private static readonly EnumArt[] field_863_D;
 
-        public string title;
-        public int sizeX;
-        public int sizeY;
         public int offsetX;
         public int offsetY;
-        private static EnumArt[] field_863_D;
+        public int sizeX;
+        public int sizeY;
+        public string title;
 
         static EnumArt()
         {
@@ -76,12 +62,26 @@ namespace CraftyServer.Core
             BurningSkull = new EnumArt("BurningSkull", 22, "BurningSkull", 64, 64, 128, 192);
             Skeleton = new EnumArt("Skeleton", 23, "Skeleton", 64, 48, 192, 64);
             DonkeyKong = new EnumArt("DonkeyKong", 24, "DonkeyKong", 64, 48, 192, 112);
-            field_863_D = (new EnumArt[]
+            field_863_D = (new[]
                            {
                                Kebab, Aztec, Alban, Aztec2, Bomb, Plant, Wasteland, Pool, Courbet, Sea,
                                Sunset, Creebet, Wanderer, Graham, Match, Bust, Stage, Void, SkullAndRoses, Fighters,
                                Pointer, Pigscene, BurningSkull, Skeleton, DonkeyKong
                            });
+        }
+
+        private EnumArt(string s, int i, string s1, int j, int k, int l, int i1)
+        {
+            title = s1;
+            sizeX = j;
+            sizeY = k;
+            offsetX = l;
+            offsetY = i1;
+        }
+
+        public static EnumArt[] values()
+        {
+            return (EnumArt[]) field_863_D.Clone();
         }
     }
 }

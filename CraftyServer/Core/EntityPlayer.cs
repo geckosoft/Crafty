@@ -1,11 +1,35 @@
-using java.util;
 using java.lang;
-
+using java.util;
 
 namespace CraftyServer.Core
 {
     public abstract class EntityPlayer : EntityLiving
     {
+        public CraftingInventoryCB currentCraftingInventory;
+        private int damageRemainder;
+        public int dimension;
+        public double field_20046_az;
+        public double field_20047_ay;
+        public double field_20048_aD;
+        public double field_20049_aC;
+        public double field_20050_aB;
+        public double field_20051_aA;
+        public float field_22066_z;
+        public float field_22067_A;
+        public float field_9149_ap;
+        public float field_9150_ao;
+        public byte field_9152_am;
+        public EntityFish fishEntity;
+        public InventoryPlayer inventory;
+        public bool isSwinging;
+        public CraftingInventoryCB personalCraftingInventory;
+        private ChunkCoordinates playerLocation;
+        public int score;
+        private int sleepTimer;
+        private bool sleeping;
+        public int swingProgressInt;
+        public string username;
+
         public EntityPlayer(World world) : base(world)
         {
             inventory = new InventoryPlayer(this);
@@ -19,8 +43,8 @@ namespace CraftyServer.Core
             currentCraftingInventory = personalCraftingInventory;
             yOffset = 1.62F;
             ChunkCoordinates chunkcoordinates = world.func_22078_l();
-            setLocationAndAngles((double) chunkcoordinates.posX + 0.5D, chunkcoordinates.posY + 1,
-                                 (double) chunkcoordinates.posZ + 0.5D, 0.0F, 0.0F);
+            setLocationAndAngles(chunkcoordinates.posX + 0.5D, chunkcoordinates.posY + 1,
+                                 chunkcoordinates.posZ + 0.5D, 0.0F, 0.0F);
             health = 20;
             entityType = "humanoid";
             field_9117_aI = 180F;
@@ -31,7 +55,7 @@ namespace CraftyServer.Core
         protected override void entityInit()
         {
             base.entityInit();
-            dataWatcher.addObject(16, Byte.valueOf((byte) 0));
+            dataWatcher.addObject(16, Byte.valueOf(0));
         }
 
         public override void onUpdate()
@@ -135,7 +159,7 @@ namespace CraftyServer.Core
             {
                 swingProgressInt = 0;
             }
-            swingProgress = (float) swingProgressInt/8F;
+            swingProgress = swingProgressInt/8F;
         }
 
         public override void onLivingUpdate()
@@ -170,7 +194,7 @@ namespace CraftyServer.Core
                 {
                     for (int i = 0; i < list.size(); i++)
                     {
-                        Entity entity = (Entity) list.get(i);
+                        var entity = (Entity) list.get(i);
                         if (!entity.isDead)
                         {
                             func_171_h(entity);
@@ -229,9 +253,9 @@ namespace CraftyServer.Core
             {
                 return;
             }
-            EntityItem entityitem = new EntityItem(worldObj, posX,
-                                                   (posY - 0.30000001192092896D) + (double) getEyeHeight(), posZ,
-                                                   itemstack);
+            var entityitem = new EntityItem(worldObj, posX,
+                                            (posY - 0.30000001192092896D) + getEyeHeight(), posZ,
+                                            itemstack);
             entityitem.delayBeforeCanPickup = 40;
             float f = 0.1F;
             if (flag)
@@ -253,9 +277,9 @@ namespace CraftyServer.Core
                 f1 = 0.02F;
                 float f3 = rand.nextFloat()*3.141593F*2.0F;
                 f1 *= rand.nextFloat();
-                entityitem.motionX += Math.cos(f3)*(double) f1;
+                entityitem.motionX += Math.cos(f3)*f1;
                 entityitem.motionY += (rand.nextFloat() - rand.nextFloat())*0.1F;
-                entityitem.motionZ += Math.sin(f3)*(double) f1;
+                entityitem.motionZ += Math.sin(f3)*f1;
             }
             joinEntityItemWithWorld(entityitem);
         }
@@ -419,7 +443,7 @@ namespace CraftyServer.Core
 
         public override double getYOffset()
         {
-            return (double) (yOffset - 0.5F);
+            return (yOffset - 0.5F);
         }
 
         public virtual void swingItem()
@@ -480,7 +504,7 @@ namespace CraftyServer.Core
             {
                 return false;
             }
-            if (Math.abs(posX - (double) i) > 3D || Math.abs(posY - (double) j) > 2D || Math.abs(posZ - (double) k) > 3D)
+            if (Math.abs(posX - i) > 3D || Math.abs(posY - j) > 2D || Math.abs(posZ - k) > 3D)
             {
                 return false;
             }
@@ -511,11 +535,11 @@ namespace CraftyServer.Core
                         break;
                 }
                 func_22059_e(i1);
-                setPosition((float) i + f, (float) j + 0.9375F, (float) k + f1);
+                setPosition(i + f, j + 0.9375F, k + f1);
             }
             else
             {
-                setPosition((float) i + 0.5F, (float) j + 0.9375F, (float) k + 0.5F);
+                setPosition(i + 0.5F, j + 0.9375F, k + 0.5F);
             }
             sleeping = true;
             sleepTimer = 0;
@@ -566,8 +590,8 @@ namespace CraftyServer.Core
                 ChunkCoordinates chunkcoordinates1 = BlockBed.func_22021_g(worldObj, chunkcoordinates.posX,
                                                                            chunkcoordinates.posY, chunkcoordinates.posZ,
                                                                            0);
-                setPosition((float) chunkcoordinates1.posX + 0.5F, (float) chunkcoordinates1.posY + yOffset + 0.1F,
-                            (float) chunkcoordinates1.posZ + 0.5F);
+                setPosition(chunkcoordinates1.posX + 0.5F, chunkcoordinates1.posY + yOffset + 0.1F,
+                            chunkcoordinates1.posZ + 0.5F);
             }
             sleeping = false;
             if (!worldObj.singleplayerWorld && flag1)
@@ -603,30 +627,5 @@ namespace CraftyServer.Core
         public void func_22061_a(string s)
         {
         }
-
-        public InventoryPlayer inventory;
-        public CraftingInventoryCB personalCraftingInventory;
-        public CraftingInventoryCB currentCraftingInventory;
-        public byte field_9152_am;
-        public int score;
-        public float field_9150_ao;
-        public float field_9149_ap;
-        public bool isSwinging;
-        public int swingProgressInt;
-        public string username;
-        public int dimension;
-        public double field_20047_ay;
-        public double field_20046_az;
-        public double field_20051_aA;
-        public double field_20050_aB;
-        public double field_20049_aC;
-        public double field_20048_aD;
-        private bool sleeping;
-        private ChunkCoordinates playerLocation;
-        private int sleepTimer;
-        public float field_22066_z;
-        public float field_22067_A;
-        private int damageRemainder;
-        public EntityFish fishEntity;
     }
 }

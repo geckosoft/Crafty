@@ -1,16 +1,20 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class TileEntityDispenser : TileEntity
                                        , IInventory
     {
+        private readonly Random dispenserRandom;
+        private ItemStack[] dispenserContents;
+
         public TileEntityDispenser()
         {
             dispenserContents = new ItemStack[9];
             dispenserRandom = new Random();
         }
+
+        #region IInventory Members
 
         public int getSizeInventory()
         {
@@ -47,6 +51,38 @@ namespace CraftyServer.Core
             }
         }
 
+        public void setInventorySlotContents(int i, ItemStack itemstack)
+        {
+            dispenserContents[i] = itemstack;
+            if (itemstack != null && itemstack.stackSize > getInventoryStackLimit())
+            {
+                itemstack.stackSize = getInventoryStackLimit();
+            }
+            onInventoryChanged();
+        }
+
+        public string getInvName()
+        {
+            return "Trap";
+        }
+
+        public int getInventoryStackLimit()
+        {
+            return 64;
+        }
+
+        public virtual bool canInteractWith(EntityPlayer entityplayer)
+        {
+            if (worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this)
+            {
+                return false;
+            }
+            return entityplayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <=
+                   64D;
+        }
+
+        #endregion
+
         public ItemStack getRandomStackFromInventory()
         {
             int i = -1;
@@ -70,21 +106,6 @@ namespace CraftyServer.Core
             }
         }
 
-        public void setInventorySlotContents(int i, ItemStack itemstack)
-        {
-            dispenserContents[i] = itemstack;
-            if (itemstack != null && itemstack.stackSize > getInventoryStackLimit())
-            {
-                itemstack.stackSize = getInventoryStackLimit();
-            }
-            onInventoryChanged();
-        }
-
-        public string getInvName()
-        {
-            return "Trap";
-        }
-
         public override void readFromNBT(NBTTagCompound nbttagcompound)
         {
             base.readFromNBT(nbttagcompound);
@@ -92,7 +113,7 @@ namespace CraftyServer.Core
             dispenserContents = new ItemStack[getSizeInventory()];
             for (int i = 0; i < nbttaglist.tagCount(); i++)
             {
-                NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
+                var nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
                 int j = nbttagcompound1.getByte("Slot") & 0xff;
                 if (j >= 0 && j < dispenserContents.Length)
                 {
@@ -104,12 +125,12 @@ namespace CraftyServer.Core
         public override void writeToNBT(NBTTagCompound nbttagcompound)
         {
             base.writeToNBT(nbttagcompound);
-            NBTTagList nbttaglist = new NBTTagList();
+            var nbttaglist = new NBTTagList();
             for (int i = 0; i < dispenserContents.Length; i++)
             {
                 if (dispenserContents[i] != null)
                 {
-                    NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                    var nbttagcompound1 = new NBTTagCompound();
                     nbttagcompound1.setByte("Slot", (byte) i);
                     dispenserContents[i].writeToNBT(nbttagcompound1);
                     nbttaglist.setTag(nbttagcompound1);
@@ -118,23 +139,5 @@ namespace CraftyServer.Core
 
             nbttagcompound.setTag("Items", nbttaglist);
         }
-
-        public int getInventoryStackLimit()
-        {
-            return 64;
-        }
-
-        public virtual bool canInteractWith(EntityPlayer entityplayer)
-        {
-            if (worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this)
-            {
-                return false;
-            }
-            return entityplayer.getDistanceSq((double) xCoord + 0.5D, (double) yCoord + 0.5D, (double) zCoord + 0.5D) <=
-                   64D;
-        }
-
-        private ItemStack[] dispenserContents;
-        private Random dispenserRandom;
     }
 }

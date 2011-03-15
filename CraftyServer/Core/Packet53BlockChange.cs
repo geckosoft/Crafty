@@ -4,6 +4,12 @@ namespace CraftyServer.Core
 {
     public class Packet53BlockChange : Packet
     {
+        public int metadata;
+        public int type;
+        public int xPosition;
+        public int yPosition;
+        public int zPosition;
+
         public Packet53BlockChange()
         {
             isChunkDataPacket = true;
@@ -46,11 +52,5 @@ namespace CraftyServer.Core
         {
             return 11;
         }
-
-        public int xPosition;
-        public int yPosition;
-        public int zPosition;
-        public int type;
-        public int metadata;
     }
 }

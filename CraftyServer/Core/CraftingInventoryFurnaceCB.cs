@@ -2,6 +2,11 @@ namespace CraftyServer.Core
 {
     public class CraftingInventoryFurnaceCb : CraftingInventoryCB
     {
+        private readonly TileEntityFurnace furnace;
+        private int lastBurnTime;
+        private int lastCookTime;
+        private int lastItemBurnTime;
+
         public CraftingInventoryFurnaceCb(IInventory iinventory, TileEntityFurnace tileentityfurnace)
         {
             lastCookTime = 0;
@@ -38,7 +43,7 @@ namespace CraftyServer.Core
             base.updateCraftingMatrix();
             for (int i = 0; i < crafters.size(); i++)
             {
-                ICrafting icrafting = (ICrafting) crafters.get(i);
+                var icrafting = (ICrafting) crafters.get(i);
                 if (lastCookTime != furnace.furnaceCookTime)
                 {
                     icrafting.updateCraftingInventoryInfo(this, 0, furnace.furnaceCookTime);
@@ -62,10 +67,5 @@ namespace CraftyServer.Core
         {
             return furnace.canInteractWith(entityplayer);
         }
-
-        private TileEntityFurnace furnace;
-        private int lastCookTime;
-        private int lastBurnTime;
-        private int lastItemBurnTime;
     }
 }

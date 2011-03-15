@@ -1,59 +1,22 @@
 using java.io;
-using java.util;
 using java.lang;
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class ChunkLoader
         : IChunkLoader
     {
+        private readonly bool createIfNecessary;
+        private readonly File saveDir;
+
         public ChunkLoader(File file, bool flag)
         {
             saveDir = file;
             createIfNecessary = flag;
         }
 
-        private File chunkFileForXZ(int i, int j)
-        {
-            string s =
-                (new StringBuilder()).append("c.").append(java.lang.Integer.toString(i, 36)).append(".").append(
-                    java.lang.Integer.toString(j, 36)).append(".dat").toString();
-            string s1 = java.lang.Integer.toString(i & 0x3f, 36);
-            string s2 = java.lang.Integer.toString(j & 0x3f, 36);
-            File file = new File(saveDir, s1);
-            if (!file.exists())
-            {
-                if (createIfNecessary)
-                {
-                    file.mkdir();
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            file = new File(file, s2);
-            if (!file.exists())
-            {
-                if (createIfNecessary)
-                {
-                    file.mkdir();
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            file = new File(file, s);
-            if (!file.exists() && !createIfNecessary)
-            {
-                return null;
-            }
-            else
-            {
-                return file;
-            }
-        }
+        #region IChunkLoader Members
 
         public Chunk loadChunk(World world, int i, int j)
         {
@@ -62,7 +25,7 @@ namespace CraftyServer.Core
             {
                 try
                 {
-                    FileInputStream fileinputstream = new FileInputStream(file);
+                    var fileinputstream = new FileInputStream(file);
                     NBTTagCompound nbttagcompound = CompressedStreamTools.func_770_a(fileinputstream);
                     if (!nbttagcompound.hasKey("Level"))
                     {
@@ -111,10 +74,10 @@ namespace CraftyServer.Core
             }
             try
             {
-                File file1 = new File(saveDir, "tmp_chunk.dat");
-                FileOutputStream fileoutputstream = new FileOutputStream(file1);
-                NBTTagCompound nbttagcompound = new NBTTagCompound();
-                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                var file1 = new File(saveDir, "tmp_chunk.dat");
+                var fileoutputstream = new FileOutputStream(file1);
+                var nbttagcompound = new NBTTagCompound();
+                var nbttagcompound1 = new NBTTagCompound();
                 nbttagcompound.setTag("Level", nbttagcompound1);
                 storeChunkInCompound(chunk, world, nbttagcompound1);
                 CompressedStreamTools.writeGzippedCompoundToOutputStream(nbttagcompound, fileoutputstream);
@@ -133,6 +96,62 @@ namespace CraftyServer.Core
             }
         }
 
+        public void func_661_a()
+        {
+        }
+
+        public void saveExtraData()
+        {
+        }
+
+        public void saveExtraChunkData(World world, Chunk chunk)
+        {
+        }
+
+        #endregion
+
+        private File chunkFileForXZ(int i, int j)
+        {
+            string s =
+                (new StringBuilder()).append("c.").append(Integer.toString(i, 36)).append(".").append(
+                    Integer.toString(j, 36)).append(".dat").toString();
+            string s1 = Integer.toString(i & 0x3f, 36);
+            string s2 = Integer.toString(j & 0x3f, 36);
+            var file = new File(saveDir, s1);
+            if (!file.exists())
+            {
+                if (createIfNecessary)
+                {
+                    file.mkdir();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            file = new File(file, s2);
+            if (!file.exists())
+            {
+                if (createIfNecessary)
+                {
+                    file.mkdir();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            file = new File(file, s);
+            if (!file.exists() && !createIfNecessary)
+            {
+                return null;
+            }
+            else
+            {
+                return file;
+            }
+        }
+
         public static void storeChunkInCompound(Chunk chunk, World world, NBTTagCompound nbttagcompound)
         {
             world.checkSessionLock();
@@ -146,7 +165,7 @@ namespace CraftyServer.Core
             nbttagcompound.setByteArray("HeightMap", chunk.heightMap);
             nbttagcompound.setBoolean("TerrainPopulated", chunk.isTerrainPopulated);
             chunk.hasEntities = false;
-            NBTTagList nbttaglist = new NBTTagList();
+            var nbttaglist = new NBTTagList();
 
             for (int i = 0; i < chunk.entities.Length; i++)
             {
@@ -157,9 +176,9 @@ namespace CraftyServer.Core
                     {
                         goto label0;
                     }
-                    Entity entity = (Entity) iterator.next();
+                    var entity = (Entity) iterator.next();
                     chunk.hasEntities = true;
-                    NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                    var nbttagcompound1 = new NBTTagCompound();
                     if (entity.addEntityID(nbttagcompound1))
                     {
                         nbttaglist.setTag(nbttagcompound1);
@@ -169,13 +188,13 @@ namespace CraftyServer.Core
             label0:
 
             nbttagcompound.setTag("Entities", nbttaglist);
-            NBTTagList nbttaglist1 = new NBTTagList();
+            var nbttaglist1 = new NBTTagList();
             NBTTagCompound nbttagcompound2;
             for (Iterator iterator1 = chunk.chunkTileEntityMap.values().iterator();
                  iterator1.hasNext();
                  nbttaglist1.setTag(nbttagcompound2))
             {
-                TileEntity tileentity = (TileEntity) iterator1.next();
+                var tileentity = (TileEntity) iterator1.next();
                 nbttagcompound2 = new NBTTagCompound();
                 tileentity.writeToNBT(nbttagcompound2);
             }
@@ -187,7 +206,7 @@ namespace CraftyServer.Core
         {
             int i = nbttagcompound.getInteger("xPos");
             int j = nbttagcompound.getInteger("zPos");
-            Chunk chunk = new Chunk(world, i, j);
+            var chunk = new Chunk(world, i, j);
             chunk.blocks = nbttagcompound.getByteArray("Blocks");
             chunk.data = new NibbleArray(nbttagcompound.getByteArray("Data"));
             chunk.skylightMap = new NibbleArray(nbttagcompound.getByteArray("SkyLight"));
@@ -214,7 +233,7 @@ namespace CraftyServer.Core
             {
                 for (int k = 0; k < nbttaglist.tagCount(); k++)
                 {
-                    NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(k);
+                    var nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(k);
                     Entity entity = EntityList.createEntityFromNBT(nbttagcompound1, world);
                     chunk.hasEntities = true;
                     if (entity != null)
@@ -228,7 +247,7 @@ namespace CraftyServer.Core
             {
                 for (int l = 0; l < nbttaglist1.tagCount(); l++)
                 {
-                    NBTTagCompound nbttagcompound2 = (NBTTagCompound) nbttaglist1.tagAt(l);
+                    var nbttagcompound2 = (NBTTagCompound) nbttaglist1.tagAt(l);
                     TileEntity tileentity = TileEntity.createAndLoadEntity(nbttagcompound2);
                     if (tileentity != null)
                     {
@@ -238,20 +257,5 @@ namespace CraftyServer.Core
             }
             return chunk;
         }
-
-        public void func_661_a()
-        {
-        }
-
-        public void saveExtraData()
-        {
-        }
-
-        public void saveExtraChunkData(World world, Chunk chunk)
-        {
-        }
-
-        private File saveDir;
-        private bool createIfNecessary;
     }
 }

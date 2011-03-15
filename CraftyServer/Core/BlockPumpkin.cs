@@ -2,6 +2,8 @@ namespace CraftyServer.Core
 {
     public class BlockPumpkin : Block
     {
+        private readonly bool blockType;
+
         public BlockPumpkin(int i, int j, bool flag)
             : base(i, Material.pumpkin)
         {
@@ -75,15 +77,13 @@ namespace CraftyServer.Core
         public override bool canPlaceBlockAt(World world, int i, int j, int k)
         {
             int l = world.getBlockId(i, j, k);
-            return (l == 0 || Block.blocksList[l].blockMaterial.getIsLiquid()) && world.isBlockOpaqueCube(i, j - 1, k);
+            return (l == 0 || blocksList[l].blockMaterial.getIsLiquid()) && world.isBlockOpaqueCube(i, j - 1, k);
         }
 
         public override void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving)
         {
-            int l = MathHelper.floor_double((double) ((entityliving.rotationYaw*4F)/360F) + 0.5D) & 3;
+            int l = MathHelper.floor_double(((entityliving.rotationYaw*4F)/360F) + 0.5D) & 3;
             world.setBlockMetadataWithNotify(i, j, k, l);
         }
-
-        private bool blockType;
     }
 }

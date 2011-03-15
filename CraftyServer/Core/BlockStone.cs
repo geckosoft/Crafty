@@ -1,6 +1,5 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class BlockStone : Block
@@ -12,7 +11,7 @@ namespace CraftyServer.Core
 
         public override int idDropped(int i, Random random)
         {
-            return Block.cobblestone.blockID;
+            return cobblestone.blockID;
         }
     }
 }

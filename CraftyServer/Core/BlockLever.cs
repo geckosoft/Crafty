@@ -157,7 +157,7 @@ namespace CraftyServer.Core
             int j1 = 8 - (l & 8);
             world.setBlockMetadataWithNotify(i, j, k, i1 + j1);
             world.markBlocksDirty(i, j, k, i, j, k);
-            world.playSoundEffect((double) i + 0.5D, (double) j + 0.5D, (double) k + 0.5D, "random.click", 0.3F,
+            world.playSoundEffect(i + 0.5D, j + 0.5D, k + 0.5D, "random.click", 0.3F,
                                   j1 <= 0 ? 0.5F : 0.6F);
             world.notifyBlocksOfNeighborChange(i, j, k, blockID);
             if (i1 == 1)

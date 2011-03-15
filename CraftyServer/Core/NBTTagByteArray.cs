@@ -5,6 +5,8 @@ namespace CraftyServer.Core
 {
     public class NBTTagByteArray : NBTBase
     {
+        public byte[] byteArray;
+
         public NBTTagByteArray()
         {
         }
@@ -36,7 +38,5 @@ namespace CraftyServer.Core
         {
             return (new StringBuilder()).append("[").append(byteArray.Length).append(" bytes]").toString();
         }
-
-        public byte[] byteArray;
     }
 }

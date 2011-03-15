@@ -3,10 +3,14 @@ namespace CraftyServer.Core
     public class InventoryCraftResult
         : IInventory
     {
+        private readonly ItemStack[] stackResult;
+
         public InventoryCraftResult()
         {
             stackResult = new ItemStack[1];
         }
+
+        #region IInventory Members
 
         public int getSizeInventory()
         {
@@ -56,6 +60,6 @@ namespace CraftyServer.Core
             return true;
         }
 
-        private ItemStack[] stackResult;
+        #endregion
     }
 }

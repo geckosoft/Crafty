@@ -3,6 +3,11 @@ namespace CraftyServer.Core
     public class TileEntityFurnace : TileEntity
                                      , IInventory
     {
+        public int currentItemBurnTime;
+        public int furnaceBurnTime;
+        public int furnaceCookTime;
+        private ItemStack[] furnaceItemStacks;
+
         public TileEntityFurnace()
         {
             furnaceItemStacks = new ItemStack[3];
@@ -10,6 +15,8 @@ namespace CraftyServer.Core
             currentItemBurnTime = 0;
             furnaceCookTime = 0;
         }
+
+        #region IInventory Members
 
         public int getSizeInventory()
         {
@@ -58,6 +65,23 @@ namespace CraftyServer.Core
             return "Furnace";
         }
 
+        public int getInventoryStackLimit()
+        {
+            return 64;
+        }
+
+        public bool canInteractWith(EntityPlayer entityplayer)
+        {
+            if (worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this)
+            {
+                return false;
+            }
+            return entityplayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <=
+                   64D;
+        }
+
+        #endregion
+
         public override void readFromNBT(NBTTagCompound nbttagcompound)
         {
             base.readFromNBT(nbttagcompound);
@@ -65,7 +89,7 @@ namespace CraftyServer.Core
             furnaceItemStacks = new ItemStack[getSizeInventory()];
             for (int i = 0; i < nbttaglist.tagCount(); i++)
             {
-                NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
+                var nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
                 byte byte0 = nbttagcompound1.getByte("Slot");
                 if (byte0 >= 0 && byte0 < furnaceItemStacks.Length)
                 {
@@ -83,12 +107,12 @@ namespace CraftyServer.Core
             base.writeToNBT(nbttagcompound);
             nbttagcompound.setShort("BurnTime", (short) furnaceBurnTime);
             nbttagcompound.setShort("CookTime", (short) furnaceCookTime);
-            NBTTagList nbttaglist = new NBTTagList();
+            var nbttaglist = new NBTTagList();
             for (int i = 0; i < furnaceItemStacks.Length; i++)
             {
                 if (furnaceItemStacks[i] != null)
                 {
-                    NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                    var nbttagcompound1 = new NBTTagCompound();
                     nbttagcompound1.setByte("Slot", (byte) i);
                     furnaceItemStacks[i].writeToNBT(nbttagcompound1);
                     nbttaglist.setTag(nbttagcompound1);
@@ -96,11 +120,6 @@ namespace CraftyServer.Core
             }
 
             nbttagcompound.setTag("Items", nbttaglist);
-        }
-
-        public int getInventoryStackLimit()
-        {
-            return 64;
         }
 
         public bool isBurning()
@@ -232,20 +251,5 @@ namespace CraftyServer.Core
             }
             return i != Item.bucketLava.shiftedIndex ? 0 : 20000;
         }
-
-        public bool canInteractWith(EntityPlayer entityplayer)
-        {
-            if (worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this)
-            {
-                return false;
-            }
-            return entityplayer.getDistanceSq((double) xCoord + 0.5D, (double) yCoord + 0.5D, (double) zCoord + 0.5D) <=
-                   64D;
-        }
-
-        private ItemStack[] furnaceItemStacks;
-        public int furnaceBurnTime;
-        public int currentItemBurnTime;
-        public int furnaceCookTime;
     }
 }

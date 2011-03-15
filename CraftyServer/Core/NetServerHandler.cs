@@ -1,13 +1,27 @@
 using CraftyServer.Server;
+using java.lang;
 using java.util;
 using java.util.logging;
-using java.lang;
 
 namespace CraftyServer.Core
 {
     public class NetServerHandler : NetHandler
                                     , ICommandListener
     {
+        public static Logger logger = Logger.getLogger("Minecraft");
+        private readonly Map field_10_k;
+        private readonly MinecraftServer mcServer;
+        public bool connectionClosed;
+        private int field_15_f;
+        private bool field_22003_h;
+        private int field_22004_g;
+        private bool hasMoved;
+        private double lastPosX;
+        private double lastPosY;
+        private double lastPosZ;
+        public NetworkManager netManager;
+        private EntityPlayerMP playerEntity;
+
         public NetServerHandler(MinecraftServer minecraftserver, NetworkManager networkmanager,
                                 EntityPlayerMP entityplayermp)
         {
@@ -20,6 +34,20 @@ namespace CraftyServer.Core
             playerEntity = entityplayermp;
             entityplayermp.playerNetServerHandler = this;
         }
+
+        #region ICommandListener Members
+
+        public void log(string s)
+        {
+            sendPacket(new Packet3Chat((new StringBuilder()).append("§7").append(s).toString()));
+        }
+
+        public string getUsername()
+        {
+            return playerEntity.username;
+        }
+
+        #endregion
 
         public void handlePackets()
         {
@@ -217,9 +245,9 @@ namespace CraftyServer.Core
             int k = packet14blockdig.zPosition;
             if (flag1)
             {
-                double d = playerEntity.posX - ((double) i + 0.5D);
-                double d1 = playerEntity.posY - ((double) j + 0.5D);
-                double d3 = playerEntity.posZ - ((double) k + 0.5D);
+                double d = playerEntity.posX - (i + 0.5D);
+                double d1 = playerEntity.posY - (j + 0.5D);
+                double d3 = playerEntity.posZ - (k + 0.5D);
                 double d5 = d*d + d1*d1 + d3*d3;
                 if (d5 > 36D)
                 {
@@ -227,8 +255,8 @@ namespace CraftyServer.Core
                 }
             }
             ChunkCoordinates chunkcoordinates = mcServer.worldMngr.func_22078_l();
-            int l = (int) MathHelper.abs(i - chunkcoordinates.posX);
-            int i1 = (int) MathHelper.abs(k - chunkcoordinates.posZ);
+            var l = (int) MathHelper.abs(i - chunkcoordinates.posX);
+            var i1 = (int) MathHelper.abs(k - chunkcoordinates.posZ);
             if (l > i1)
             {
                 i1 = l;
@@ -246,9 +274,9 @@ namespace CraftyServer.Core
             }
             else if (packet14blockdig.status == 3)
             {
-                double d2 = playerEntity.posX - ((double) i + 0.5D);
-                double d4 = playerEntity.posY - ((double) j + 0.5D);
-                double d6 = playerEntity.posZ - ((double) k + 0.5D);
+                double d2 = playerEntity.posX - (i + 0.5D);
+                double d4 = playerEntity.posY - (j + 0.5D);
+                double d6 = playerEntity.posZ - (k + 0.5D);
                 double d7 = d2*d2 + d4*d4 + d6*d6;
                 if (d7 < 256D)
                 {
@@ -277,8 +305,8 @@ namespace CraftyServer.Core
                 int k = packet15place.zPosition;
                 int l = packet15place.direction;
                 ChunkCoordinates chunkcoordinates = mcServer.worldMngr.func_22078_l();
-                int i1 = (int) MathHelper.abs(i - chunkcoordinates.posX);
-                int j1 = (int) MathHelper.abs(k - chunkcoordinates.posZ);
+                var i1 = (int) MathHelper.abs(i - chunkcoordinates.posX);
+                var j1 = (int) MathHelper.abs(k - chunkcoordinates.posZ);
                 if (i1 > j1)
                 {
                     j1 = i1;
@@ -476,16 +504,6 @@ namespace CraftyServer.Core
             return netManager.getNumChunkDataPackets();
         }
 
-        public void log(string s)
-        {
-            sendPacket(new Packet3Chat((new StringBuilder()).append("§7").append(s).toString()));
-        }
-
-        public string getUsername()
-        {
-            return playerEntity.username;
-        }
-
         public override void func_6006_a(Packet7 packet7)
         {
             Entity entity = mcServer.worldMngr.func_6158_a(packet7.targetEntity);
@@ -538,12 +556,12 @@ namespace CraftyServer.Core
                 }
                 else
                 {
-                    field_10_k.put(java.lang.Integer.valueOf(playerEntity.currentCraftingInventory.windowId),
+                    field_10_k.put(Integer.valueOf(playerEntity.currentCraftingInventory.windowId),
                                    Short.valueOf(packet102.action));
                     playerEntity.playerNetServerHandler.sendPacket(new Packet106(packet102.window_Id, packet102.action,
                                                                                  false));
                     playerEntity.currentCraftingInventory.setCanCraft(playerEntity, false);
-                    ArrayList arraylist = new ArrayList();
+                    var arraylist = new ArrayList();
                     for (int i = 0; i < playerEntity.currentCraftingInventory.inventorySlots.size(); i++)
                     {
                         arraylist.add(((Slot) playerEntity.currentCraftingInventory.inventorySlots.get(i)).getStack());
@@ -556,8 +574,8 @@ namespace CraftyServer.Core
 
         public override void func_20008_a(Packet106 packet106)
         {
-            Short short1 =
-                (Short) field_10_k.get(java.lang.Integer.valueOf(playerEntity.currentCraftingInventory.windowId));
+            var short1 =
+                (Short) field_10_k.get(Integer.valueOf(playerEntity.currentCraftingInventory.windowId));
             if (short1 != null && packet106.shortWindowId == short1.shortValue() &&
                 playerEntity.currentCraftingInventory.windowId == packet106.windowId &&
                 !playerEntity.currentCraftingInventory.getCanCraft(playerEntity))
@@ -600,7 +618,7 @@ namespace CraftyServer.Core
                     int j = packet130.xPosition;
                     int k = packet130.yPosition;
                     int i1 = packet130.zPosition;
-                    TileEntitySign tileentitysign = (TileEntitySign) tileentity;
+                    var tileentitysign = (TileEntitySign) tileentity;
                     for (int j1 = 0; j1 < 4; j1++)
                     {
                         tileentitysign.signText[j1] = packet130.signLines[j1];
@@ -611,19 +629,5 @@ namespace CraftyServer.Core
                 }
             }
         }
-
-        public static Logger logger = Logger.getLogger("Minecraft");
-        public NetworkManager netManager;
-        public bool connectionClosed;
-        private MinecraftServer mcServer;
-        private EntityPlayerMP playerEntity;
-        private int field_15_f;
-        private int field_22004_g;
-        private bool field_22003_h;
-        private double lastPosX;
-        private double lastPosY;
-        private double lastPosZ;
-        private bool hasMoved;
-        private Map field_10_k;
     }
 }

@@ -4,6 +4,9 @@ namespace CraftyServer.Core
 {
     public class Packet38 : Packet
     {
+        public int entityId;
+        public byte entityStatus;
+
         public Packet38()
         {
         }
@@ -35,8 +38,5 @@ namespace CraftyServer.Core
         {
             return 5;
         }
-
-        public int entityId;
-        public byte entityStatus;
     }
 }

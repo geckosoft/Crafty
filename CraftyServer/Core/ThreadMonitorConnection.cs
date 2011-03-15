@@ -2,8 +2,10 @@ using java.lang;
 
 namespace CraftyServer.Core
 {
-    public class ThreadMonitorConnection : java.lang.Thread
+    public class ThreadMonitorConnection : Thread
     {
+        private readonly NetworkManager netManager; /* synthetic field */
+
         public ThreadMonitorConnection(NetworkManager networkmanager)
         {
             netManager = networkmanager;
@@ -14,7 +16,7 @@ namespace CraftyServer.Core
         {
             try
             {
-                Thread.sleep(2000L);
+                sleep(2000L);
                 if (NetworkManager.isRunning(netManager))
                 {
                     NetworkManager.getWriteThread(netManager).interrupt();
@@ -26,7 +28,5 @@ namespace CraftyServer.Core
                 exception.printStackTrace();
             }
         }
-
-        private NetworkManager netManager; /* synthetic field */
     }
 }

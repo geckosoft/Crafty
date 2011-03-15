@@ -1,10 +1,11 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class WorldGenLakes : WorldGenerator
     {
+        private readonly int field_15005_a;
+
         public WorldGenLakes(int i)
         {
             field_15005_a = i;
@@ -17,7 +18,7 @@ namespace CraftyServer.Core
             {
             }
             j -= 4;
-            bool[] aflag = new bool[2048];
+            var aflag = new bool[2048];
             int l = random.nextInt(4) + 4;
             for (int i1 = 0; i1 < l; i1++)
             {
@@ -33,9 +34,9 @@ namespace CraftyServer.Core
                     {
                         for (int l4 = 1; l4 < 7; l4++)
                         {
-                            double d6 = ((double) j4 - d3)/(d/2D);
-                            double d7 = ((double) l4 - d4)/(d1/2D);
-                            double d8 = ((double) k4 - d5)/(d2/2D);
+                            double d6 = (j4 - d3)/(d/2D);
+                            double d7 = (l4 - d4)/(d1/2D);
+                            double d8 = (k4 - d5)/(d2/2D);
                             double d9 = d6*d6 + d7*d7 + d8*d8;
                             if (d9 < 1.0D)
                             {
@@ -132,7 +133,5 @@ namespace CraftyServer.Core
             }
             return true;
         }
-
-        private int field_15005_a;
     }
 }

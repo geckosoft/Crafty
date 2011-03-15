@@ -1,11 +1,58 @@
-using java.util;
 using java.lang;
-
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class NoiseGenerator2
     {
+        private static readonly int[][] field_4317_d = new[]
+                                                       {
+                                                           new[]
+                                                           {
+                                                               1, 1, 0
+                                                           }, new[]
+                                                              {
+                                                                  -1, 1, 0
+                                                              }, new[]
+                                                                 {
+                                                                     1, -1, 0
+                                                                 }, new[]
+                                                                    {
+                                                                        -1, -1, 0
+                                                                    }, new[]
+                                                                       {
+                                                                           1, 0, 1
+                                                                       }, new[]
+                                                                          {
+                                                                              -1, 0, 1
+                                                                          }, new[]
+                                                                             {
+                                                                                 1, 0, -1
+                                                                             }, new[]
+                                                                                {
+                                                                                    -1, 0, -1
+                                                                                }, new[]
+                                                                                   {
+                                                                                       0, 1, 1
+                                                                                   }, new[]
+                                                                                      {
+                                                                                          0, -1, 1
+                                                                                      }, new[]
+                                                                                         {
+                                                                                             0, 1, -1
+                                                                                         }, new[]
+                                                                                            {
+                                                                                                0, -1, -1
+                                                                                            }
+                                                       };
+
+        private static readonly double field_4315_f = 0.5D*(Math.sqrt(3D) - 1.0D);
+        private static readonly double field_4314_g = (3D - Math.sqrt(3D))/6D;
+        private readonly int[] field_4316_e;
+        public double field_4312_b;
+        public double field_4313_a;
+        public double field_4318_c;
+
         public NoiseGenerator2()
             : this(new Random())
         {
@@ -39,7 +86,7 @@ namespace CraftyServer.Core
 
         private static double func_4114_a(int[] ai, double d, double d1)
         {
-            return (double) ai[0]*d + (double) ai[1]*d1;
+            return ai[0]*d + ai[1]*d1;
         }
 
         public void func_4115_a(double[] ad, double d, double d1, int i, int j,
@@ -48,16 +95,16 @@ namespace CraftyServer.Core
             int k = 0;
             for (int l = 0; l < i; l++)
             {
-                double d5 = (d + (double) l)*d2 + field_4313_a;
+                double d5 = (d + l)*d2 + field_4313_a;
                 for (int i1 = 0; i1 < j; i1++)
                 {
-                    double d6 = (d1 + (double) i1)*d3 + field_4312_b;
+                    double d6 = (d1 + i1)*d3 + field_4312_b;
                     double d10 = (d5 + d6)*field_4315_f;
                     int j1 = wrap(d5 + d10);
                     int k1 = wrap(d6 + d10);
-                    double d11 = (double) (j1 + k1)*field_4314_g;
-                    double d12 = (double) j1 - d11;
-                    double d13 = (double) k1 - d11;
+                    double d11 = (j1 + k1)*field_4314_g;
+                    double d12 = j1 - d11;
+                    double d13 = k1 - d11;
                     double d14 = d5 - d12;
                     double d15 = d6 - d13;
                     int l1;
@@ -72,8 +119,8 @@ namespace CraftyServer.Core
                         l1 = 0;
                         i2 = 1;
                     }
-                    double d16 = (d14 - (double) l1) + field_4314_g;
-                    double d17 = (d15 - (double) i2) + field_4314_g;
+                    double d16 = (d14 - l1) + field_4314_g;
+                    double d17 = (d15 - i2) + field_4314_g;
                     double d18 = (d14 - 1.0D) + 2D*field_4314_g;
                     double d19 = (d15 - 1.0D) + 2D*field_4314_g;
                     int j2 = j1 & 0xff;
@@ -118,53 +165,5 @@ namespace CraftyServer.Core
                 }
             }
         }
-
-        private static int[][] field_4317_d = new int[][]
-                                              {
-                                                  new int[]
-                                                  {
-                                                      1, 1, 0
-                                                  }, new int[]
-                                                     {
-                                                         -1, 1, 0
-                                                     }, new int[]
-                                                        {
-                                                            1, -1, 0
-                                                        }, new int[]
-                                                           {
-                                                               -1, -1, 0
-                                                           }, new int[]
-                                                              {
-                                                                  1, 0, 1
-                                                              }, new int[]
-                                                                 {
-                                                                     -1, 0, 1
-                                                                 }, new int[]
-                                                                    {
-                                                                        1, 0, -1
-                                                                    }, new int[]
-                                                                       {
-                                                                           -1, 0, -1
-                                                                       }, new int[]
-                                                                          {
-                                                                              0, 1, 1
-                                                                          }, new int[]
-                                                                             {
-                                                                                 0, -1, 1
-                                                                             }, new int[]
-                                                                                {
-                                                                                    0, 1, -1
-                                                                                }, new int[]
-                                                                                   {
-                                                                                       0, -1, -1
-                                                                                   }
-                                              };
-
-        private int[] field_4316_e;
-        public double field_4313_a;
-        public double field_4312_b;
-        public double field_4318_c;
-        private static double field_4315_f = 0.5D*(Math.sqrt(3D) - 1.0D);
-        private static double field_4314_g = (3D - Math.sqrt(3D))/6D;
     }
 }

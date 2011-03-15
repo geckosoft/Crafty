@@ -1,10 +1,17 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class WorldChunkManager
     {
+        private readonly NoiseGeneratorOctaves2 field_4253_g;
+        private readonly NoiseGeneratorOctaves2 field_4254_f;
+        private readonly NoiseGeneratorOctaves2 field_4255_e;
+        public MobSpawnerBase[] field_4256_d;
+        public double[] field_4257_c;
+        public double[] humidity;
+        public double[] temperature;
+
         protected WorldChunkManager()
         {
         }
@@ -115,13 +122,5 @@ namespace CraftyServer.Core
 
             return amobspawnerbase;
         }
-
-        private NoiseGeneratorOctaves2 field_4255_e;
-        private NoiseGeneratorOctaves2 field_4254_f;
-        private NoiseGeneratorOctaves2 field_4253_g;
-        public double[] temperature;
-        public double[] humidity;
-        public double[] field_4257_c;
-        public MobSpawnerBase[] field_4256_d;
     }
 }

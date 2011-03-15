@@ -2,6 +2,9 @@ namespace CraftyServer.Core
 {
     public class EntityFallingSand : Entity
     {
+        public int blockID;
+        public int fallTime;
+
         public EntityFallingSand(World world)
             : base(world)
         {
@@ -86,8 +89,5 @@ namespace CraftyServer.Core
         {
             blockID = nbttagcompound.getByte("Tile") & 0xff;
         }
-
-        public int blockID;
-        public int fallTime;
     }
 }

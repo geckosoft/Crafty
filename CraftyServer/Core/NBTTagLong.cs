@@ -5,6 +5,8 @@ namespace CraftyServer.Core
 {
     public class NBTTagLong : NBTBase
     {
+        public long longValue;
+
         public NBTTagLong()
         {
         }
@@ -33,7 +35,5 @@ namespace CraftyServer.Core
         {
             return (new StringBuilder()).append("").append(longValue).toString();
         }
-
-        public long longValue;
     }
 }

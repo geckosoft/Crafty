@@ -525,6 +525,17 @@
     <Compile Include="Server\MinecraftServer.cs" />
     <Compile Include="SupportClass.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="font.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\font.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\font1.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

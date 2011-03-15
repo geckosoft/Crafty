@@ -5,6 +5,8 @@ namespace CraftyServer.Core
 {
     public class NBTTagDouble : NBTBase
     {
+        public double doubleValue;
+
         public NBTTagDouble()
         {
         }
@@ -33,7 +35,5 @@ namespace CraftyServer.Core
         {
             return (new StringBuilder()).append("").append(doubleValue).toString();
         }
-
-        public double doubleValue;
     }
 }

@@ -5,6 +5,12 @@ namespace CraftyServer.Core
 {
     public class WorldServer : World
     {
+        private readonly MCHashTable field_20912_E;
+        private readonly MinecraftServer field_6160_D;
+        public ChunkProviderServer field_20911_y;
+        public bool field_819_z;
+        public bool levelSaving;
+
         public WorldServer(MinecraftServer minecraftserver, ISaveHandler isavehandler, string s, int i)
             : base(isavehandler, s, (new Random()).nextLong(), WorldProvider.func_4091_a(i))
         {
@@ -39,10 +45,10 @@ namespace CraftyServer.Core
 
         public List getTileEntityList(int i, int j, int k, int l, int i1, int j1)
         {
-            ArrayList arraylist = new ArrayList();
+            var arraylist = new ArrayList();
             for (int k1 = 0; k1 < loadedTileEntityList.size(); k1++)
             {
-                TileEntity tileentity = (TileEntity) loadedTileEntityList.get(k1);
+                var tileentity = (TileEntity) loadedTileEntityList.get(k1);
                 if (tileentity.xCoord >= i && tileentity.yCoord >= j && tileentity.zCoord >= k && tileentity.xCoord < l &&
                     tileentity.yCoord < i1 && tileentity.zCoord < j1)
                 {
@@ -55,8 +61,8 @@ namespace CraftyServer.Core
 
         public override bool canMineBlock(EntityPlayer entityplayer, int i, int j, int k)
         {
-            int l = (int) MathHelper.abs(i - worldInfo.getSpawnX());
-            int i1 = (int) MathHelper.abs(k - worldInfo.getSpawnZ());
+            var l = (int) MathHelper.abs(i - worldInfo.getSpawnX());
+            var i1 = (int) MathHelper.abs(k - worldInfo.getSpawnZ());
             if (l > i1)
             {
                 i1 = l;
@@ -83,7 +89,7 @@ namespace CraftyServer.Core
 
         public override void func_9206_a(Entity entity, byte byte0)
         {
-            Packet38 packet38 = new Packet38(entity.entityId, byte0);
+            var packet38 = new Packet38(entity.entityId, byte0);
             field_6160_D.entityTracker.sendPacketToTrackedPlayersAndTrackedEntity(entity, packet38);
         }
 
@@ -106,11 +112,5 @@ namespace CraftyServer.Core
         {
             worldFile.func_22093_e();
         }
-
-        public ChunkProviderServer field_20911_y;
-        public bool field_819_z;
-        public bool levelSaving;
-        private MinecraftServer field_6160_D;
-        private MCHashTable field_20912_E;
     }
 }

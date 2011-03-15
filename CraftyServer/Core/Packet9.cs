@@ -4,10 +4,6 @@ namespace CraftyServer.Core
 {
     public class Packet9 : Packet
     {
-        public Packet9()
-        {
-        }
-
         public override void processPacket(NetHandler nethandler)
         {
             nethandler.handleRespawnPacket(this);

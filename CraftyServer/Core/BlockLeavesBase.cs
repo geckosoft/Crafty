@@ -2,6 +2,8 @@ namespace CraftyServer.Core
 {
     public class BlockLeavesBase : Block
     {
+        protected bool graphicsLevel;
+
         public BlockLeavesBase(int i, int j, Material material, bool flag)
             : base(i, j, material)
         {
@@ -25,7 +27,5 @@ namespace CraftyServer.Core
                 return base.shouldSideBeRendered(iblockaccess, i, j, k, l);
             }
         }
-
-        protected bool graphicsLevel;
     }
 }

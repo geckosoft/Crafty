@@ -5,11 +5,27 @@ namespace CraftyServer.Core
     public class RecipeSorter
         : Comparator
     {
+        private CraftingManager craftingManager; /* synthetic field */
+
         public RecipeSorter(CraftingManager craftingmanager)
         {
             craftingManager = craftingmanager;
 //        
         }
+
+        #region Comparator Members
+
+        public int compare(object obj, object obj1)
+        {
+            return compareRecipes((IRecipe) obj, (IRecipe) obj1);
+        }
+
+        public bool equals(object obj)
+        {
+            return obj == this;
+        }
+
+        #endregion
 
         public int compareRecipes(IRecipe irecipe, IRecipe irecipe1)
         {
@@ -27,21 +43,5 @@ namespace CraftyServer.Core
             }
             return irecipe1.getRecipeSize() <= irecipe.getRecipeSize() ? 0 : 1;
         }
-
-        public int compare(object obj, object obj1)
-        {
-            return compareRecipes((IRecipe) obj, (IRecipe) obj1);
-        }
-
-        private CraftingManager craftingManager; /* synthetic field */
-
-        #region Comparator Members
-
-        public bool equals(object obj)
-        {
-            return obj == this;
-        }
-
-        #endregion
     }
 }

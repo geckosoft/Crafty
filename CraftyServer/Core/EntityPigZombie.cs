@@ -1,10 +1,18 @@
 using java.util;
 
-
 namespace CraftyServer.Core
 {
     public class EntityPigZombie : EntityZombie
     {
+        private static ItemStack defaultHeldItem;
+        private int angerLevel;
+        private int randomSoundDelay;
+
+        static EntityPigZombie()
+        {
+            defaultHeldItem = new ItemStack(Item.swordGold, 1);
+        }
+
         public EntityPigZombie(World world)
             : base(world)
         {
@@ -70,10 +78,10 @@ namespace CraftyServer.Core
                 List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(32D, 32D, 32D));
                 for (int j = 0; j < list.size(); j++)
                 {
-                    Entity entity1 = (Entity) list.get(j);
+                    var entity1 = (Entity) list.get(j);
                     if (entity1 is EntityPigZombie)
                     {
-                        EntityPigZombie entitypigzombie = (EntityPigZombie) entity1;
+                        var entitypigzombie = (EntityPigZombie) entity1;
                         entitypigzombie.becomeAngryAt(entity);
                     }
                 }
@@ -108,15 +116,6 @@ namespace CraftyServer.Core
         protected override int getDropItemId()
         {
             return Item.porkCooked.shiftedIndex;
-        }
-
-        private int angerLevel;
-        private int randomSoundDelay;
-        private static ItemStack defaultHeldItem;
-
-        static EntityPigZombie()
-        {
-            defaultHeldItem = new ItemStack(Item.swordGold, 1);
         }
     }
 }

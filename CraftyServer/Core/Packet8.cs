@@ -4,6 +4,8 @@ namespace CraftyServer.Core
 {
     public class Packet8 : Packet
     {
+        public int healthMP;
+
         public Packet8()
         {
         }
@@ -32,7 +34,5 @@ namespace CraftyServer.Core
         {
             return 2;
         }
-
-        public int healthMP;
     }
 }

@@ -5,6 +5,16 @@ namespace CraftyServer.Core
 {
     public class Packet24MobSpawn : Packet
     {
+        private readonly DataWatcher metaData;
+        public int entityId;
+        public byte pitch;
+        private List receivedMetadata;
+        public byte type;
+        public int xPosition;
+        public int yPosition;
+        public byte yaw;
+        public int zPosition;
+
         public Packet24MobSpawn()
         {
         }
@@ -54,15 +64,5 @@ namespace CraftyServer.Core
         {
             return 20;
         }
-
-        public int entityId;
-        public byte type;
-        public int xPosition;
-        public int yPosition;
-        public int zPosition;
-        public byte yaw;
-        public byte pitch;
-        private DataWatcher metaData;
-        private List receivedMetadata;
     }
 }

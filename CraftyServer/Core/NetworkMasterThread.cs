@@ -4,6 +4,8 @@ namespace CraftyServer.Core
 {
     internal class NetworkMasterThread : Thread
     {
+        private readonly NetworkManager netManager; /* synthetic field */
+
         public NetworkMasterThread(NetworkManager networkmanager)
         {
             netManager = networkmanager;
@@ -13,7 +15,7 @@ namespace CraftyServer.Core
         {
             try
             {
-                Thread.sleep(5000L);
+                sleep(5000L);
                 if (NetworkManager.getReadThread(netManager).isAlive())
                 {
                     try
@@ -40,7 +42,5 @@ namespace CraftyServer.Core
                 interruptedexception.printStackTrace();
             }
         }
-
-        private NetworkManager netManager; /* synthetic field */
     }
 }

@@ -1,11 +1,47 @@
-using java.util;
 using java.lang;
-
+using java.util;
 
 namespace CraftyServer.Core
 {
     public class EntitySheep : EntityAnimals
     {
+        public static float[,] field_21071_a = new[,]
+                                               {
+                                                   {
+                                                       1.0F, 1.0F, 1.0F
+                                                   }, {
+                                                          0.95F, 0.7F, 0.2F
+                                                      }, {
+                                                             0.9F, 0.5F, 0.85F
+                                                         }, {
+                                                                0.6F, 0.7F, 0.95F
+                                                            }, {
+                                                                   0.9F, 0.9F, 0.2F
+                                                               }, {
+                                                                      0.5F, 0.8F, 0.1F
+                                                                  }, {
+                                                                         0.95F, 0.7F, 0.8F
+                                                                     }, {
+                                                                            0.3F, 0.3F, 0.3F
+                                                                        }, {
+                                                                               0.6F, 0.6F, 0.6F
+                                                                           }, {
+                                                                                  0.3F, 0.6F, 0.7F
+                                                                              }, {
+                                                                                     0.7F, 0.4F, 0.9F
+                                                                                 }, {
+                                                                                        0.2F, 0.4F, 0.8F
+                                                                                    }, {
+                                                                                           0.5F, 0.4F, 0.3F
+                                                                                       }, {
+                                                                                              0.4F, 0.5F, 0.2F
+                                                                                          }, {
+                                                                                                 0.8F, 0.3F, 0.3F
+                                                                                             }, {
+                                                                                                    0.1F, 0.1F, 0.1F
+                                                                                                }
+                                               };
+
         public EntitySheep(World world)
             : base(world)
         {
@@ -16,7 +52,7 @@ namespace CraftyServer.Core
         protected override void entityInit()
         {
             base.entityInit();
-            dataWatcher.addObject(16, new Byte((byte) 0));
+            dataWatcher.addObject(16, new Byte(0));
         }
 
         public override bool attackEntityFrom(Entity entity, int i)
@@ -107,42 +143,5 @@ namespace CraftyServer.Core
             }
             return i >= 15 ? 0 : 8;
         }
-
-        public static float[,] field_21071_a = new float[,]
-                                               {
-                                                   {
-                                                       1.0F, 1.0F, 1.0F
-                                                   }, {
-                                                          0.95F, 0.7F, 0.2F
-                                                      }, {
-                                                             0.9F, 0.5F, 0.85F
-                                                         }, {
-                                                                0.6F, 0.7F, 0.95F
-                                                            }, {
-                                                                   0.9F, 0.9F, 0.2F
-                                                               }, {
-                                                                      0.5F, 0.8F, 0.1F
-                                                                  }, {
-                                                                         0.95F, 0.7F, 0.8F
-                                                                     }, {
-                                                                            0.3F, 0.3F, 0.3F
-                                                                        }, {
-                                                                               0.6F, 0.6F, 0.6F
-                                                                           }, {
-                                                                                  0.3F, 0.6F, 0.7F
-                                                                              }, {
-                                                                                     0.7F, 0.4F, 0.9F
-                                                                                 }, {
-                                                                                        0.2F, 0.4F, 0.8F
-                                                                                    }, {
-                                                                                           0.5F, 0.4F, 0.3F
-                                                                                       }, {
-                                                                                              0.4F, 0.5F, 0.2F
-                                                                                          }, {
-                                                                                                 0.8F, 0.3F, 0.3F
-                                                                                             }, {
-                                                                                                    0.1F, 0.1F, 0.1F
-                                                                                                }
-                                               };
     }
 }

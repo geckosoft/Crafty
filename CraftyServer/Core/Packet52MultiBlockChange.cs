@@ -4,6 +4,13 @@ namespace CraftyServer.Core
 {
     public class Packet52MultiBlockChange : Packet
     {
+        public short[] coordinateArray;
+        public byte[] metadataArray;
+        public int size;
+        public byte[] typeArray;
+        public int xPosition;
+        public int zPosition;
+
         public Packet52MultiBlockChange()
         {
             isChunkDataPacket = true;
@@ -70,12 +77,5 @@ namespace CraftyServer.Core
         {
             return 10 + size*4;
         }
-
-        public int xPosition;
-        public int zPosition;
-        public short[] coordinateArray;
-        public byte[] typeArray;
-        public byte[] metadataArray;
-        public int size;
     }
 }

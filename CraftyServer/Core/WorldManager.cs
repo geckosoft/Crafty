@@ -5,10 +5,14 @@ namespace CraftyServer.Core
     public class WorldManager
         : IWorldAccess
     {
+        private readonly MinecraftServer mcServer;
+
         public WorldManager(MinecraftServer minecraftserver)
         {
             mcServer = minecraftserver;
         }
+
+        #region IWorldAccess Members
 
         public void spawnParticle(string s, double d, double d1, double d2,
                                   double d3, double d4, double d5)
@@ -52,6 +56,6 @@ namespace CraftyServer.Core
             mcServer.configManager.sentTileEntityToPlayer(i, j, k, tileentity);
         }
 
-        private MinecraftServer mcServer;
+        #endregion
     }
 }

@@ -1,11 +1,64 @@
-using java.util;
 using java.lang;
-
+using java.util;
 
 namespace CraftyServer.Core
 {
     public abstract class EntityLiving : Entity
     {
+        protected int age;
+        public int attackTime;
+        public float attackedAtYaw;
+        private Entity currentTarget;
+        public int deathTime;
+        protected float defaultPitch;
+        protected string entityType;
+        public float field_386_ba;
+        private int field_4099_a;
+        public float field_9096_ay;
+        public float field_9098_aw;
+        public int field_9099_av;
+        protected bool field_9100_aZ;
+        public float field_9101_aY;
+        public float field_9102_aX;
+        public bool field_9112_aN;
+        protected float field_9113_aM;
+        protected float field_9115_aK;
+        protected float field_9117_aI;
+        protected bool field_9118_aH;
+        protected bool field_9120_aF;
+        protected float field_9121_aE;
+        protected float field_9122_aD;
+        protected float field_9123_aC;
+        protected float field_9124_aB;
+        protected int field_9133_bm;
+        private float field_9134_bl;
+        protected double field_9135_bk;
+        protected double field_9136_bj;
+        protected double field_9137_bi;
+        protected double field_9138_bh;
+        protected double field_9139_bg;
+        protected int field_9140_bf;
+        public float field_9141_bd;
+        public float field_9142_bc;
+        public float field_9143_bb;
+        public int field_9144_ba;
+        public int health;
+        public int hurtTime;
+        protected bool isJumping;
+        public int maxHurtTime;
+        protected float moveForward;
+        protected float moveSpeed;
+        protected float moveStrafing;
+        private int numTicksToChaseTarget;
+        public int prevHealth;
+        public float prevRenderYawOffset;
+        public float prevSwingProgress;
+        protected float randomYawVelocity;
+        public float renderYawOffset;
+        protected int scoreValue;
+        public float swingProgress;
+        protected string texture;
+
         public EntityLiving(World world) : base(world)
         {
             field_9099_av = 20;
@@ -49,8 +102,8 @@ namespace CraftyServer.Core
         public bool canEntityBeSeen(Entity entity)
         {
             return
-                worldObj.rayTraceBlocks(Vec3D.createVector(posX, posY + (double) getEyeHeight(), posZ),
-                                        Vec3D.createVector(entity.posX, entity.posY + (double) entity.getEyeHeight(),
+                worldObj.rayTraceBlocks(Vec3D.createVector(posX, posY + getEyeHeight(), posZ),
+                                        Vec3D.createVector(entity.posX, entity.posY + entity.getEyeHeight(),
                                                            entity.posZ)) == null;
         }
 
@@ -111,7 +164,7 @@ namespace CraftyServer.Core
                         float f = rand.nextFloat() - rand.nextFloat();
                         float f1 = rand.nextFloat() - rand.nextFloat();
                         float f2 = rand.nextFloat() - rand.nextFloat();
-                        worldObj.spawnParticle("bubble", posX + (double) f, posY + (double) f1, posZ + (double) f2,
+                        worldObj.spawnParticle("bubble", posX + f, posY + f1, posZ + f2,
                                                motionX, motionY, motionZ);
                     }
 
@@ -149,9 +202,9 @@ namespace CraftyServer.Core
                         double d1 = rand.nextGaussian()*0.02D;
                         double d2 = rand.nextGaussian()*0.02D;
                         worldObj.spawnParticle("explode",
-                                               (posX + (double) (rand.nextFloat()*width*2.0F)) - (double) width,
-                                               posY + (double) (rand.nextFloat()*height),
-                                               (posZ + (double) (rand.nextFloat()*width*2.0F)) - (double) width, d, d1,
+                                               (posX + (rand.nextFloat()*width*2.0F)) - width,
+                                               posY + (rand.nextFloat()*height),
+                                               (posZ + (rand.nextFloat()*width*2.0F)) - width, d, d1,
                                                d2);
                     }
                 }
@@ -171,9 +224,9 @@ namespace CraftyServer.Core
                 double d2 = rand.nextGaussian()*0.02D;
                 double d3 = 10D;
                 worldObj.spawnParticle("explode",
-                                       (posX + (double) (rand.nextFloat()*width*2.0F)) - (double) width - d*d3,
-                                       (posY + (double) (rand.nextFloat()*height)) - d1*d3,
-                                       (posZ + (double) (rand.nextFloat()*width*2.0F)) - (double) width - d2*d3, d, d1,
+                                       (posX + (rand.nextFloat()*width*2.0F)) - width - d*d3,
+                                       (posY + (rand.nextFloat()*height)) - d1*d3,
+                                       (posZ + (rand.nextFloat()*width*2.0F)) - width - d2*d3, d, d1,
                                        d2);
             }
         }
@@ -297,7 +350,7 @@ namespace CraftyServer.Core
             }
             field_9141_bd = 1.5F;
             bool flag = true;
-            if ((float) field_9083_ac > (float) field_9099_av/2.0F)
+            if (field_9083_ac > field_9099_av/2.0F)
             {
                 if (i <= field_9133_bm)
                 {
@@ -318,7 +371,7 @@ namespace CraftyServer.Core
             attackedAtYaw = 0.0F;
             if (flag)
             {
-                worldObj.func_9206_a(this, (byte) 2);
+                worldObj.func_9206_a(this, 2);
                 setBeenAttacked();
                 if (entity != null)
                 {
@@ -386,9 +439,9 @@ namespace CraftyServer.Core
             motionX /= 2D;
             motionY /= 2D;
             motionZ /= 2D;
-            motionX -= (d/(double) f)*(double) f1;
+            motionX -= (d/f)*f1;
             motionY += 0.40000000596046448D;
-            motionZ -= (d1/(double) f)*(double) f1;
+            motionZ -= (d1/f)*f1;
             if (motionY > 0.40000000596046448D)
             {
                 motionY = 0.40000000596046448D;
@@ -406,7 +459,7 @@ namespace CraftyServer.Core
             {
                 func_21047_g_();
             }
-            worldObj.func_9206_a(this, (byte) 3);
+            worldObj.func_9206_a(this, 3);
         }
 
         public virtual void func_21047_g_()
@@ -429,12 +482,12 @@ namespace CraftyServer.Core
 
         public override void fall(float f)
         {
-            int i = (int) Math.ceil(f - 3F);
+            var i = (int) Math.ceil(f - 3F);
             if (i > 0)
             {
                 attackEntityFrom(null, i);
                 int j = worldObj.getBlockId(MathHelper.floor_double(posX),
-                                            MathHelper.floor_double(posY - 0.20000000298023224D - (double) yOffset),
+                                            MathHelper.floor_double(posY - 0.20000000298023224D - yOffset),
                                             MathHelper.floor_double(posZ));
                 if (j > 0)
                 {
@@ -578,18 +631,18 @@ namespace CraftyServer.Core
         {
             if (field_9140_bf > 0)
             {
-                double d = posX + (field_9139_bg - posX)/(double) field_9140_bf;
-                double d1 = posY + (field_9138_bh - posY)/(double) field_9140_bf;
-                double d2 = posZ + (field_9137_bi - posZ)/(double) field_9140_bf;
+                double d = posX + (field_9139_bg - posX)/field_9140_bf;
+                double d1 = posY + (field_9138_bh - posY)/field_9140_bf;
+                double d2 = posZ + (field_9137_bi - posZ)/field_9140_bf;
                 double d3;
-                for (d3 = field_9136_bj - (double) rotationYaw; d3 < -180D; d3 += 360D)
+                for (d3 = field_9136_bj - rotationYaw; d3 < -180D; d3 += 360D)
                 {
                 }
                 for (; d3 >= 180D; d3 -= 360D)
                 {
                 }
-                rotationYaw += (float) (d3/(double) field_9140_bf);
-                rotationPitch += (float) ((field_9135_bk - (double) rotationPitch)/(double) field_9140_bf);
+                rotationYaw += (float) (d3/field_9140_bf);
+                rotationPitch += (float) ((field_9135_bk - rotationPitch)/field_9140_bf);
                 field_9140_bf--;
                 setPosition(d, d1, d2);
                 setRotation(rotationYaw, rotationPitch);
@@ -633,7 +686,7 @@ namespace CraftyServer.Core
             {
                 for (int i = 0; i < list.size(); i++)
                 {
-                    Entity entity = (Entity) list.get(i);
+                    var entity = (Entity) list.get(i);
                     if (entity.canBePushed())
                     {
                         entity.applyEntityCollision(this);
@@ -658,9 +711,9 @@ namespace CraftyServer.Core
             EntityPlayer entityplayer = worldObj.getClosestPlayerToEntity(this, -1D);
             if (entityplayer != null)
             {
-                double d = ((Entity) (entityplayer)).posX - posX;
-                double d1 = ((Entity) (entityplayer)).posY - posY;
-                double d2 = ((Entity) (entityplayer)).posZ - posZ;
+                double d = ((entityplayer)).posX - posX;
+                double d1 = ((entityplayer)).posY - posY;
+                double d2 = ((entityplayer)).posZ - posZ;
                 double d3 = d*d + d1*d1 + d2*d2;
                 if (d3 > 16384D)
                 {
@@ -698,7 +751,7 @@ namespace CraftyServer.Core
             {
                 faceEntity(currentTarget, 10F);
                 if (numTicksToChaseTarget-- <= 0 || currentTarget.isDead ||
-                    currentTarget.getDistanceSqToEntity(this) > (double) (f*f))
+                    currentTarget.getDistanceSqToEntity(this) > (f*f))
                 {
                     currentTarget = null;
                 }
@@ -727,16 +780,16 @@ namespace CraftyServer.Core
             double d1;
             if (entity is EntityLiving)
             {
-                EntityLiving entityliving = (EntityLiving) entity;
-                d1 = (entityliving.posY + (double) entityliving.getEyeHeight()) - (posY + (double) getEyeHeight());
+                var entityliving = (EntityLiving) entity;
+                d1 = (entityliving.posY + entityliving.getEyeHeight()) - (posY + getEyeHeight());
             }
             else
             {
-                d1 = (entity.boundingBox.minY + entity.boundingBox.maxY)/2D - (posY + (double) getEyeHeight());
+                d1 = (entity.boundingBox.minY + entity.boundingBox.maxY)/2D - (posY + getEyeHeight());
             }
             double d3 = MathHelper.sqrt_double(d*d + d2*d2);
             float f1 = (float) ((Math.atan2(d2, d)*180D)/3.1415927410125732D) - 90F;
-            float f2 = (float) ((Math.atan2(d1, d3)*180D)/3.1415927410125732D);
+            var f2 = (float) ((Math.atan2(d1, d3)*180D)/3.1415927410125732D);
             rotationPitch = -updateRotation(rotationPitch, f2, f);
             rotationYaw = updateRotation(rotationYaw, f1, f);
         }
@@ -813,59 +866,5 @@ namespace CraftyServer.Core
         {
             return false;
         }
-
-        public int field_9099_av;
-        public float field_9098_aw;
-        public float field_9096_ay;
-        public float renderYawOffset;
-        public float prevRenderYawOffset;
-        protected float field_9124_aB;
-        protected float field_9123_aC;
-        protected float field_9122_aD;
-        protected float field_9121_aE;
-        protected bool field_9120_aF;
-        protected string texture;
-        protected bool field_9118_aH;
-        protected float field_9117_aI;
-        protected string entityType;
-        protected float field_9115_aK;
-        protected int scoreValue;
-        protected float field_9113_aM;
-        public bool field_9112_aN;
-        public float prevSwingProgress;
-        public float swingProgress;
-        public int health;
-        public int prevHealth;
-        private int field_4099_a;
-        public int hurtTime;
-        public int maxHurtTime;
-        public float attackedAtYaw;
-        public int deathTime;
-        public int attackTime;
-        public float field_9102_aX;
-        public float field_9101_aY;
-        protected bool field_9100_aZ;
-        public int field_9144_ba;
-        public float field_9143_bb;
-        public float field_9142_bc;
-        public float field_9141_bd;
-        public float field_386_ba;
-        protected int field_9140_bf;
-        protected double field_9139_bg;
-        protected double field_9138_bh;
-        protected double field_9137_bi;
-        protected double field_9136_bj;
-        protected double field_9135_bk;
-        private float field_9134_bl;
-        protected int field_9133_bm;
-        protected int age;
-        protected float moveStrafing;
-        protected float moveForward;
-        protected float randomYawVelocity;
-        protected bool isJumping;
-        protected float defaultPitch;
-        protected float moveSpeed;
-        private Entity currentTarget;
-        private int numTicksToChaseTarget;
     }
 }
